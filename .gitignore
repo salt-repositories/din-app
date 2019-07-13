@@ -1,10 +1,16 @@
-# Don't check auto-generated stuff into git
-coverage
-build
-node_modules
-stats.json
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 
-# Cruft
-.DS_Store
-npm-debug.log
-.idea
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+
+### NextJS ###
+.next
+
+### Node/ NPM ###
+node_modules
