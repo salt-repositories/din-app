@@ -6,6 +6,57 @@
       "dom.iterable",
       "esnext"
     ],
+    "baseUrl": ".",
+    "paths": {
+      "@Actions": [
+        "./src/Actions"
+      ],
+      "@Actions/*": [
+        "./src/Actions/*"
+      ],
+      "@Definitions": [
+        "./src/Definitions"
+      ],
+      "@Definitions/*": [
+        "./src/Definitions/*"
+      ],
+      "@Layouts": [
+        "./Layouts"
+      ],
+      "@Layouts/*": [
+        "./Layouts/*"
+      ],
+      "@Client": [
+        "./src/Client"
+      ],
+      "@Client/*": [
+        "./src/Client/*"
+      ],
+      "@Components/*": [
+        "./src/Components/*"
+      ],
+      "@Components": [
+        "./src/Components"
+      ],
+      "@Interfaces": [
+        "./src/Interfaces"
+      ],
+      "@Interfaces/*": [
+        "./src/Interfaces/*"
+      ],
+      "@Models": [
+        "./src/Models"
+      ],
+      "@Models/*": [
+        "./src/Models/*"
+      ],
+      "@Redux": [
+        "./src/Redux"
+      ],
+      "@Redux/*": [
+        "./src/Redux/*"
+      ]
+    },
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
@@ -16,8 +67,8 @@
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "isolatedModules": true
   },
   "exclude": [
     "node_modules"
