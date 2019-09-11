@@ -1,34 +1,31 @@
 import "reflect-metadata";
 
-import {HomeActions} from "@Actions/HomeActions";
-import FullScreenCarousel from "@Components/FullScreenCarousel";
-import {IHomePage} from "@Interfaces/Pages/Home";
-import {IStore} from "@Interfaces/Redux/Store";
-import ForgotPasswordModal from "@Layouts/Index/ForgotPasswordModal";
-import LoginForm from "@Layouts/Index/LoginForm";
-import Layout from "@Layouts/Layout";
+import FullScreenCarousel from "../../src/Components/FullScreenCarousel";
+import ForgotPasswordModal from "../../Layouts/Index/ForgotPasswordModal";
+import LoginForm from "../../Layouts/Index/LoginForm";
+import Layout from "../../Layouts/Layout";
 import Head from "next/head";
-import {Component, Dispatch} from "react";
-import {connect, DispatchProp} from "react-redux";
-import {bindActionCreators} from "redux";
+import React, {Component} from "react";
 
-class HomePage extends Component<IHomePage.IProps, IHomePage.IState> {
-    constructor(props: IHomePage.IProps) {
+class HomePage extends Component {
+
+    public static getInitialProps({ store, req }) {
+        const isServer = !!req;
+
+        return {};
+    }
+
+    constructor(props) {
         super(props);
     }
 
     public render(): JSX.Element {
-
-        const props = this.props;
-        // tslint:disable-next-line:no-console
-        console.log(props);
-
         return (
             <Layout>
                 <Head>
                     <title>Login</title>
                 </Head>
-                <FullScreenCarousel images={this.props.backgrounds}/>
+                <FullScreenCarousel images={null}/>
                 <LoginForm handleShow/>
                 <ForgotPasswordModal
                     show
@@ -41,11 +38,7 @@ class HomePage extends Component<IHomePage.IProps, IHomePage.IState> {
     }
 }
 
-const mapStateToProps = (state: IStore) => state.home;
-const mapDispatchToProps = (dispatch: Dispatch) => ({Map: bindActionCreators(HomeActions.Map, dispatch)});
-
-export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
-
+export default HomePage;
 
 // export const Index2: NextPage = (props: any): JSX.Element => {
 //     const [show, setShow] = useState(false);

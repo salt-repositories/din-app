@@ -1,27 +1,30 @@
-import { IApp } from "@Interfaces";
-import store from "@Redux/store";
+import {configureStore} from "../src/Store/configureStore";
 import withRedux from "next-redux-wrapper";
-import App, { AppContext, Container } from "next/app";
-import * as React from "react";
+import App, { Container } from "next/app";
+import React from "react";
 import { Provider } from "react-redux";
 
-class MyApp extends App<IApp.IProps> {
-    public static async getInitialProps(props: AppContext) {
-        let pageProps = {};
 
-        if (props.Component.getInitialProps) {
-            pageProps = await props.Component.getInitialProps(props.ctx);
-        }
+interface IProps {
+    Component: React.Component;
+    store: any;
+}
+
+class MyApp extends App<IProps> {
+    public static async getInitialProps({Component, ctx}) {
+        const pageProps = Component.getInitialProps
+            ? await Component.getInitialProps(ctx)
+            : {};
 
         return { pageProps };
     }
 
     public render(): JSX.Element {
-        const { Component, pageProps, reduxStore } = this.props;
+        const { store, Component, pageProps } = this.props;
 
         return (
             <Container>
-                <Provider store={reduxStore}>
+                <Provider store={store}>
                     <Component {...pageProps} />
                 </Provider>
             </Container>
@@ -29,4 +32,4 @@ class MyApp extends App<IApp.IProps> {
     }
 }
 
-export default withRedux(store)(MyApp);
+export default withRedux(configureStore())(MyApp);

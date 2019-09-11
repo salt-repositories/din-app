@@ -1,4 +1,4 @@
-import Spinner from "@Components/Spinner";
+import Spinner from "../../src/Components/Spinner";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faEnvelope, faFingerprint, faKey, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
