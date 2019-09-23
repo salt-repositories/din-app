@@ -1,8 +1,9 @@
+import { Endpoints } from "..";
 import { Account, AddedContent } from "../../../Models";
-import { Endpoints } from "../index";
+import {ApiVersions} from "../../Versions/Concrete/Versions";
 
 export class AccountEndpoints extends Endpoints {
-    constructor(version: string) {
+    constructor(version: ApiVersions) {
         super(version, "accounts");
     }
 

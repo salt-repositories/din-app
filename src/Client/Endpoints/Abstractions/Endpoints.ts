@@ -1,13 +1,14 @@
-import { plainToClass } from "class-transformer";
-import { ClassType } from "class-transformer/ClassTransformer";
+import {plainToClass} from "class-transformer";
+import {ClassType} from "class-transformer/ClassTransformer";
 import fetch from "isomorphic-unfetch";
+import {ApiVersions} from "../../Versions/Concrete/Versions";
 
 export abstract class Endpoints {
-    private baseUrl: string;
-    private version: string;
-    private endpoint: string;
+    private readonly baseUrl: string;
+    private readonly version: ApiVersions;
+    private readonly endpoint: string;
 
-    constructor(version: string, endpoint: string) {
+    constructor(version: ApiVersions, endpoint: string) {
         this.baseUrl = "https://api-nightly.thedin.nl";
         this.version = version;
         this.endpoint = endpoint;

@@ -1,9 +1,10 @@
+import { Endpoints } from "..";
 import { BackgroundImage, Gif } from "../../../Models";
-import { Endpoints } from "../index";
+import {ApiVersions} from "../../Versions/Concrete/Versions";
 
 export class MediaEndpoints extends Endpoints {
 
-    constructor(version: string) {
+    constructor(version: ApiVersions) {
         super(version, "media");
     }
 

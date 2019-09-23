@@ -1,3 +1,4 @@
+import React from "react";
 
 const ToggleSwitch = (props: any): JSX.Element => {
     return (

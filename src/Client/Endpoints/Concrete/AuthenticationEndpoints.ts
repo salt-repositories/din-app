@@ -1,8 +1,9 @@
+import { Endpoints } from "..";
 import { Token } from "../../../Models";
-import { Endpoints } from "../index";
+import {ApiVersions} from "../../Versions/Concrete/Versions";
 
 export class AuthenticationEndpoints extends Endpoints {
-    constructor(version: string) {
+    constructor(version: ApiVersions) {
         super(version, "authentication");
     }
 

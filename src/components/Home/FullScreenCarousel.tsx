@@ -1,6 +1,12 @@
+import React from "react";
 import { Carousel } from "react-bootstrap";
+import {BackgroundImage} from "../Models";
 
-const FullScreenCarousel = (props: any): JSX.Element => {
+interface IProps {
+    backgrounds: BackgroundImage[];
+}
+
+const FullScreenCarousel = (props: IProps): JSX.Element => {
     return (
         <div className="full-screen-carousel-container">
             <Carousel
@@ -11,13 +17,13 @@ const FullScreenCarousel = (props: any): JSX.Element => {
                 pauseOnHover={false}
                 interval={10000}
             >
-                {props.images.map((image: any, index: number) => (
+                {props.backgrounds.map((image: any, index: number) => (
                     <Carousel.Item key={index}>
-                        <img className="full-image" src={image.regular} key={index}/>
+                        <img className="full-image" src={image.regular} key={index} alt="error"/>
                     </Carousel.Item>
                 ))}
             </Carousel>
-            <div className="overlay"></div>
+            <div className="overlay"/>
             <style jsx>
                 {`
                     .full-screen-carousel-container {
