@@ -1,13 +1,21 @@
-import Spinner from "../../src/Components/Spinner";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faEnvelope, faFingerprint, faKey, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { Button, Form, Modal, Tab, Tabs } from "react-bootstrap";
+import Spinner from "../Shared/Spinner";
 
 library.add(faUser, faKey, faEnvelope, faFingerprint);
 
+interface IProps {
+    handler: any;
+    show: boolean;
+}
+
 export const ForgotPasswordModal = (props) => {
+    const [key, setKey] = useState<string>("first");
+
+
     const [loading, setLoading] = useState(false);
 
     const [email, setEmail] = useState("");
@@ -18,8 +26,8 @@ export const ForgotPasswordModal = (props) => {
     const [authorizationCode, setAuthorizationCode] = useState("");
 
     const handleClose = () => {
-        props.setKey("first");
-        props.setShow(false);
+        setKey("first");
+        props.handler(false);
     };
     
     const sendForgotPasswordEmail = (event) => {
@@ -55,7 +63,7 @@ export const ForgotPasswordModal = (props) => {
             <Modal.Header closeButton>
                 <Modal.Title>Forgot password</Modal.Title>
             </Modal.Header>
-            <Tabs id="tabs" activeKey={props.keyElement} onSelect={(k: string) => props.setKey(k)} hidden="true">
+            <Tabs id="tabs" activeKey={key} onSelect={(k: string) => setKey(k)} hidden="true">
                 <Tab eventKey="first" title="first">
                     <Form noValidate validated={emailValid} onSubmit={sendForgotPasswordEmail}>
                         <Modal.Body>

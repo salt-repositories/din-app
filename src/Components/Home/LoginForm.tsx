@@ -3,11 +3,15 @@ import { faEnvelope, faFingerprint, faKey, faUser } from "@fortawesome/free-soli
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { Badge, Button, Col, Container, Form, Row } from "react-bootstrap";
-import ToggleSwitch from "../../src/Components/ToggleSwitch";
+import ToggleSwitch from "../Shared/ToggleSwitch";
 
 library.add(faUser, faKey, faEnvelope, faFingerprint);
 
-export const LoginForm = (props) => {
+interface IProps {
+    handler: any;
+}
+
+export const LoginForm = (props: IProps) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
@@ -23,7 +27,7 @@ export const LoginForm = (props) => {
                         <Form.Group className="input-wrapper">
                             <Form.Label>Username / Email</Form.Label>
                             <Form.Control type="text" placeholder="Type your username or email"/>
-                            <FontAwesomeIcon icon={["fas", "user"]} className="icon" />
+                            <FontAwesomeIcon icon={["fas", "user"]} size="lg" className="icon" />
                         </Form.Group>
                         <Form.Group className="input-wrapper">
                             <Form.Label>Password</Form.Label>
@@ -31,7 +35,7 @@ export const LoginForm = (props) => {
                             <FontAwesomeIcon icon={["fas", "key"]} className="icon" />
                         </Form.Group>
                         <div className="text-right link-wrapper">
-                            <span onClick={props.handleShow}>Forgot Password?</span>
+                            <span onClick={() => props.handler(true)}>Forgot Password?</span>
                         </div>
                         <Form.Group className="box-wrapper">
                             <ToggleSwitch text="Remember username / email"/>
@@ -163,6 +167,7 @@ export const LoginForm = (props) => {
                     }
 
                     :global(.icon) {
+                        width: 15px;
                         color: #d9d9d9;
                         position: absolute;
                         top: 60%;
