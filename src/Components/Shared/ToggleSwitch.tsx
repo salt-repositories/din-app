@@ -9,15 +9,20 @@ interface IProps {
 const ToggleSwitch = (props: IProps): JSX.Element => {
     const [value, setValue] = useState<boolean>(props.value);
 
-    // tslint:disable-next-line:no-shadowed-variable
     const onChange = (event) => {
         setValue(event.target.checked);
-        cookie.set("remember", event.target.checked);
+        cookie.set("rememberUsername", event.target.checked);
     };
 
     return (
         <span className="switch switch-sm">
-            <input type="checkbox" className="switch" id="switch-sm" checked={value} onChange={onChange}/>
+            <input
+                type="checkbox"
+                className="switch"
+                id="switch-sm"
+                checked={value}
+                onChange={onChange}
+            />
             <label htmlFor="switch-sm">{props.text}</label>
             <style jsx >
             {`

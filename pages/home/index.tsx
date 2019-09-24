@@ -14,13 +14,13 @@ import { BackgroundImage } from "../../src/Models";
 const apiClient = ApiClientProvider.getClient();
 
 interface IProps {
-    cookie: Record<string, string | undefined>;
+    username: string;
+    rememberUsername: string;
     backgrounds: BackgroundImage[];
 }
 
 const HomePage: NextPage = (props: IProps): JSX.Element => {
     const [showPasswordModal, setShowPasswordModal] = useState<boolean>(false);
-    const { remember } = props.cookie;
 
     return (
         <Layout>
@@ -28,7 +28,11 @@ const HomePage: NextPage = (props: IProps): JSX.Element => {
                 <title>Login</title>
             </Head>
             <FullScreenCarousel backgrounds={props.backgrounds}/>
-            <LoginForm remember={remember === "true"} modalHandler={setShowPasswordModal}/>
+            <LoginForm
+                username={props.username}
+                rememberUsername={props.rememberUsername === "true"}
+                modalHandler={setShowPasswordModal}
+            />
             <ForgotPasswordModal visible={showPasswordModal} modalHandler={setShowPasswordModal}/>
         </Layout>
     );
@@ -37,9 +41,9 @@ const HomePage: NextPage = (props: IProps): JSX.Element => {
 export default HomePage;
 
 HomePage.getInitialProps = async (context: NextPageContext): Promise<IProps> => {
-    const cookie = nextCookie(context);
+    const { rememberUsername, username } = nextCookie(context);
     const backgrounds = await apiClient.v1.media.getBackgrounds();
-    
-    return { cookie, backgrounds };
+
+    return { username, rememberUsername, backgrounds };
 };
 

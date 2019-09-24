@@ -52,7 +52,7 @@ export const PasswordTab = (props: IProps): JSX.Element => {
                 authorizationCode: "",
             }}
         >
-            {({handleSubmit, handleChange, values, errors}) => (
+            {({handleSubmit, handleChange, handleBlur, values, errors, touched}) => (
                 <Form noValidate onSubmit={handleSubmit}>
                     <Modal.Body>
                         <Form.Group className="input-wrapper">
@@ -63,7 +63,9 @@ export const PasswordTab = (props: IProps): JSX.Element => {
                                 placeholder="Type your new password"
                                 value={values.password}
                                 onChange={handleChange}
-                                isInvalid={!!errors.password}
+                                onBlur={handleBlur}
+                                isValid={!errors.password && !!touched.password}
+                                isInvalid={!!errors.password && !!touched.password}
                             />
                             <Form.Control.Feedback type="invalid">
                                 {errors.password}
@@ -78,7 +80,9 @@ export const PasswordTab = (props: IProps): JSX.Element => {
                                 placeholder="Type your new password"
                                 value={values.repeatPassword}
                                 onChange={handleChange}
-                                isInvalid={!!errors.repeatPassword}
+                                onBlur={handleBlur}
+                                isValid={!errors.repeatPassword && !!touched.repeatPassword}
+                                isInvalid={!!errors.repeatPassword && !!touched.repeatPassword}
                             />
                             <Form.Control.Feedback type="invalid">
                                 {errors.repeatPassword}
@@ -93,7 +97,9 @@ export const PasswordTab = (props: IProps): JSX.Element => {
                                 placeholder="Type your authorization code"
                                 value={values.authorizationCode}
                                 onChange={handleChange}
-                                isInvalid={!!errors.authorizationCode}
+                                onBlur={handleBlur}
+                                isValid={!errors.authorizationCode && !!touched.authorizationCode}
+                                isInvalid={!!errors.authorizationCode && !!touched.authorizationCode}
                             />
                             <Form.Control.Feedback type="invalid">
                                 {errors.authorizationCode}

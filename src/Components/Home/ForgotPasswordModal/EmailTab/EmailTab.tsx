@@ -44,7 +44,7 @@ export const EmailTab = (props: IProps): JSX.Element => {
                 email: "",
             }}
         >
-            {({handleSubmit, handleChange, values, errors, touched}) => (
+            {({handleSubmit, handleChange, handleBlur, values, errors, touched}) => (
                 <Form noValidate onSubmit={handleSubmit}>
                     <Modal.Body>
                         <p>To request a new password, an authorization code will be
@@ -58,7 +58,9 @@ export const EmailTab = (props: IProps): JSX.Element => {
                                 placeholder="Type your email"
                                 value={values.email}
                                 onChange={handleChange}
-                                isInvalid={!!errors.email}
+                                onBlur={handleBlur}
+                                isValid={!errors.email && !!touched.email}
+                                isInvalid={!!errors.email && !!touched.email}
                             />
                             <Form.Control.Feedback type="invalid">
                                 {errors.email}

@@ -12,7 +12,7 @@ export abstract class Endpoints {
     private readonly endpoint: string;
 
     protected constructor(version: ApiVersions, endpoint: string) {
-        this.baseUrl = "http://localhost:5000";
+        this.baseUrl = process.env.API_URL;
         this.version = version;
         this.endpoint = endpoint;
     }
@@ -29,7 +29,6 @@ export abstract class Endpoints {
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
-                "X-Real-Ip": "192.179.1.1",
             },
             method,
         });

@@ -2,6 +2,7 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faEnvelope, faFingerprint, faKey, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Formik, FormikActions } from "formik";
+import cookie from "js-cookie";
 import React, { useState } from "react";
 import { Badge, Button, Col, Container, Form, Row } from "react-bootstrap";
 import { ApiClientProvider } from "../../../Client";
@@ -13,7 +14,8 @@ import { ILoginSchema, loginSchema } from "./Schema";
 library.add(faUser, faKey, faEnvelope, faFingerprint);
 
 interface IProps {
-    remember: boolean;
+    username: string;
+    rememberUsername: boolean;
     modalHandler(visible: true): void;
 }
 
@@ -27,6 +29,7 @@ export const LoginForm = (props: IProps) => {
 
         try {
             setLoading(true);
+            cookie.set("username", values.username);
 
             response = await apiClient.v1.authentication.getTokenByCredentials(values.username, values.password);
         } catch (error) {
@@ -51,11 +54,12 @@ export const LoginForm = (props: IProps) => {
                         validationSchema={loginSchema}
                         onSubmit={handleLogin}
                         initialValues={{
-                            username: "",
+                            username: props.rememberUsername ? props.username : "",
                             password: "",
                         }}
                     >
-                        {({handleSubmit, handleChange, values, errors, touched}) => (
+                        {({handleSubmit, handleChange, handleBlur, values, errors, touched}) => (
+
                             <Form noValidate onSubmit={handleSubmit} className="login-form">
                                 <div className="title-wrapper">
                                     <Badge variant="light" className="title">DIN</Badge>
@@ -68,7 +72,9 @@ export const LoginForm = (props: IProps) => {
                                         placeholder="Type your username or email"
                                         value={values.username}
                                         onChange={handleChange}
-                                        isInvalid={!!errors.username}
+                                        onBlur={handleBlur}
+                                        isValid={!errors.username && !!touched.username}
+                                        isInvalid={!!errors.username && !!touched.username}
                                     />
                                     <Form.Control.Feedback type="invalid">
                                         {errors.username}
@@ -83,7 +89,9 @@ export const LoginForm = (props: IProps) => {
                                         placeholder="Type your password"
                                         value={values.password}
                                         onChange={handleChange}
-                                        isInvalid={!!errors.password}
+                                        onBlur={handleBlur}
+                                        isValid={!errors.password && !!touched.password}
+                                        isInvalid={!!errors.password && !!touched.password}
                                     />
                                     <Form.Control.Feedback type="invalid">
                                         {errors.password}
@@ -96,7 +104,7 @@ export const LoginForm = (props: IProps) => {
                                 <Form.Group className="box-wrapper">
                                     <ToggleSwitch
                                         text="Remember username / email"
-                                        value={props.remember}
+                                        value={props.rememberUsername}
                                     />
                                 </Form.Group>
                                 <Form.Group className="button-wrapper">
