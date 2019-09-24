@@ -4,6 +4,8 @@
         "max-line-length": {
             "options": [120]
         },
+        "object-literal-sort-keys": false,
+        "whitespace": [true, "check-module"],
         "indent": [true, "spaces", 4],
         "new-parens": true,
         "curly": true,

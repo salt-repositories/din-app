@@ -1,42 +1,48 @@
-import {plainToClass} from "class-transformer";
-import {ClassType} from "class-transformer/ClassTransformer";
+import { plainToClass } from "class-transformer";
+import { ClassType } from "class-transformer/ClassTransformer";
 import fetch from "isomorphic-unfetch";
-import {ApiVersions} from "../../Versions/Concrete/Versions";
+import { ApiException } from "../../Exceptions/ApiException";
+import { ApiVersions } from "../../Versions/Concrete/Versions";
+
+type Method = "GET" | "POST" | "PATCH" | "PUT" | "DELETE";
 
 export abstract class Endpoints {
     private readonly baseUrl: string;
     private readonly version: ApiVersions;
     private readonly endpoint: string;
 
-    constructor(version: ApiVersions, endpoint: string) {
-        this.baseUrl = "https://api-nightly.thedin.nl";
+    protected constructor(version: ApiVersions, endpoint: string) {
+        this.baseUrl = "http://localhost:5000";
         this.version = version;
         this.endpoint = endpoint;
     }
 
-    protected async call<T>(path: string, type: ClassType<T>, array?: boolean): Promise<T | T[]> {
-        const options: RequestInit = {
+    protected async call<T>(
+        method: Method,
+        path: string,
+        body?: any,
+        returnType?: ClassType<T>,
+        returnArray?: boolean,
+    ): Promise<T | T[]> {
+        const response = await fetch(this.buildUrl(path), {
+            body,
             headers: {
-                "User-Agent": "DinApp",
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-Real-Ip": "192.179.1.1",
             },
-            method: "get",
-        };
-
-        const response = await this.performRequest(`${this.buildUrl(path)}`, options);
-
-        return (array && true)
-            ? plainToClass(type, await response.json() as [])
-            : plainToClass(type, await response.json());
-    }
-
-    private async performRequest(url: string, options: RequestInit): Promise<Response> {
-        const response = await fetch(url, options);
+            method,
+        });
 
         if (!response.ok) {
-            throw new Error("Api call failed");
+            throw new ApiException("Api call failed", await response.json());
         }
 
-        return response;
+        return !returnType
+            ? null
+            : returnArray
+                ? plainToClass(returnType, await response.json() as [])
+                : plainToClass(returnType, await response.json());
     }
 
     private buildUrl(path: string): string {

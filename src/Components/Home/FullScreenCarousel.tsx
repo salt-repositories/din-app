@@ -1,6 +1,6 @@
 import React from "react";
 import { Carousel } from "react-bootstrap";
-import {BackgroundImage} from "../../Models";
+import { BackgroundImage } from "../../Models";
 
 interface IProps {
     backgrounds: BackgroundImage[];

@@ -6,7 +6,7 @@ import {
     MovieEndpoints,
     TvShowEndpoints,
 } from "../../Endpoints";
-import {ApiVersions} from "./Versions";
+import { ApiVersions } from "./Versions";
 
 export class V1 implements IApiVersion {
     public accounts: AccountEndpoints;

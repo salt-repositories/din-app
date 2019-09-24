@@ -1,4 +1,4 @@
-import {BackgroundImage} from "../../Models";
+import { BackgroundImage } from "../../Models";
 
 export interface IHomeState {
     backgroundImages: BackgroundImage[];

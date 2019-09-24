@@ -1,8 +1,8 @@
 export * from "./Abstractions/Endpoints";
 
-export * from "./Concrete/AccountEndpoints";
-export * from "./Concrete/AccountEndpoints";
-export * from "./Concrete/AuthenticationEndpoints";
-export * from "./Concrete/MediaEndpoints";
-export * from "./Concrete/MovieEndpoints";
-export * from "./Concrete/TvShowEndpoints";
+export * from "./Concrete/V1/AccountEndpoints";
+export * from "./Concrete/V1/AccountEndpoints";
+export * from "./Concrete/V1/AuthenticationEndpoints";
+export * from "./Concrete/V1/MediaEndpoints";
+export * from "./Concrete/V1/MovieEndpoints";
+export * from "./Concrete/V1/TvShowEndpoints";

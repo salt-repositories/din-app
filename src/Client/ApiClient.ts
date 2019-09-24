@@ -1,4 +1,4 @@
-import {IApiVersion, V1} from "./Versions";
+import { IApiVersion, V1 } from "./Versions";
 
 export default class ApiClient {
     public v1: IApiVersion;

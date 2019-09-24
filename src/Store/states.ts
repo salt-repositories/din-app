@@ -1,4 +1,4 @@
-import {HomeInitialState, IHomeState} from "./Home/states";
+import { HomeInitialState, IHomeState } from "./Home/states";
 
 export interface IInitialState {
     home: Readonly<IHomeState>;

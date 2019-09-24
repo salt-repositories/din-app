@@ -1,6 +1,6 @@
-import {combinedReducers} from "./reducers";
-import {InitialState} from "./states";
-import {applyMiddleware, createStore} from "redux";
+import { applyMiddleware, createStore } from "redux";
+import { combinedReducers } from "./reducers";
+import { InitialState } from "./states";
 
 export function configureStore(initialState = InitialState) {
     return createStore(combinedReducers, initialState, applyMiddleware());
