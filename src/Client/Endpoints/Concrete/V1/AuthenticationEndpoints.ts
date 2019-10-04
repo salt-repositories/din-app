@@ -18,19 +18,19 @@ export class AuthenticationEndpoints extends Endpoints {
                 password,
             };
 
-        return await this.call("POST", "token", JSON.stringify(body), Token) as Token;
+        return await this.call("POST", false, "token", JSON.stringify(body), Token) as Token;
     }
 
-    public async getTokenByRefreshToken(refreshToken: string) {
-        throw new Error("Not yet implemented");
+    public async getTokenByRefreshToken(refreshToken: string): Promise<Token> {
+        return await this.call("GET",false, `refresh/${refreshToken}`, null, Token) as Token;
     }
 
     public async getAuthorizationCode(email: string): Promise<void> {
-        await this.call("GET", `authorization_code?email=${email}`);
+        await this.call("GET", false,`authorization_code?email=${email}`);
     }
 
     public async changeAccountPassword(email: string, password: string, authorizationCode: string) {
-        await this.call("POST", "change_password", JSON.stringify( {
+        await this.call("POST", false,"change_password", JSON.stringify( {
             email,
             password,
             authorization_code: authorizationCode,

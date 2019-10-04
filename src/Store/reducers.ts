@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
-import homeReducers from "./Home/reducers";
+import mainReducers from "./Main/reducers";
 import { IInitialState } from "./states";
 
 export const combinedReducers = combineReducers<IInitialState>({
-    home: homeReducers,
+    main: mainReducers,
 });

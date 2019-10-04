@@ -1,4 +1,4 @@
-import cookie from "js-cookie";
+import { setCookie } from "nookies";
 import React, { useState } from "react";
 
 interface IProps {
@@ -11,7 +11,7 @@ const ToggleSwitch = (props: IProps): JSX.Element => {
 
     const onChange = (event) => {
         setValue(event.target.checked);
-        cookie.set("rememberUsername", event.target.checked);
+        setCookie({}, "rememberUsername", event.target.checked, {});
     };
 
     return (

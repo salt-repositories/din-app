@@ -1,9 +1,9 @@
-import { HomeInitialState, IHomeState } from "./Home/states";
+import { IMainState, MainInitialState } from "./Main/states";
 
 export interface IInitialState {
-    home: Readonly<IHomeState>;
+    main: Readonly<IMainState>;
 }
 
 export const InitialState: IInitialState = {
-    home: HomeInitialState,
+    main: MainInitialState,
 };

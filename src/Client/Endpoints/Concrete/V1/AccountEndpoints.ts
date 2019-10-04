@@ -1,4 +1,4 @@
-import { Endpoints } from "../../index";
+import { Endpoints } from "../..";
 import { Account, AddedContent } from "../../../../Models";
 import { ApiVersions } from "../../../Versions/Concrete/Versions";
 

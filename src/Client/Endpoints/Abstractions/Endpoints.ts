@@ -1,12 +1,15 @@
 import { plainToClass } from "class-transformer";
 import { ClassType } from "class-transformer/ClassTransformer";
 import fetch from "isomorphic-unfetch";
+import { getToken } from "../../../Authentication/Authentication";
 import { ApiException } from "../../Exceptions/ApiException";
 import { ApiVersions } from "../../Versions/Concrete/Versions";
+import { logException } from "../../../Utils/Analytics";
 
 type Method = "GET" | "POST" | "PATCH" | "PUT" | "DELETE";
 
 export abstract class Endpoints {
+    public static token: string;
     private readonly baseUrl: string;
     private readonly version: ApiVersions;
     private readonly endpoint: string;
@@ -19,6 +22,7 @@ export abstract class Endpoints {
 
     protected async call<T>(
         method: Method,
+        secure: boolean,
         path: string,
         body?: any,
         returnType?: ClassType<T>,
@@ -29,12 +33,22 @@ export abstract class Endpoints {
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
+                "Authorization": secure ? `Bearer ${(await getToken()).accessToken}` : null,
             },
             method,
         });
 
         if (!response.ok) {
-            throw new ApiException("Api call failed", await response.json());
+            let jsonResponse = null;
+
+            try {
+                jsonResponse = await response.json();
+            } catch (error) {
+                logException(error.message, true);
+            }
+
+            logException(JSON.stringify(jsonResponse), true);
+            throw new ApiException("API call failed", jsonResponse);
         }
 
         return !returnType

@@ -14,3 +14,10 @@
 
 ### Node/ NPM ###
 node_modules
+
+### IDE ###
+.idea
+.vscode
+
+### .env ###
+.env
