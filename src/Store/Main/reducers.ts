@@ -27,4 +27,15 @@ export default reducerWithInitialState(MainInitialState)
                 draft.carouselIndex = index;
             });
         },
+    )
+    .case(
+        MainActions.setActiveMenuItem,
+        (
+            state: Readonly<IMainState>,
+            payload: string,
+        ): IMainState => {
+            return produce(state, (draft: IMainState) => {
+                draft.activeMenuItem = payload;
+            });
+        },
     );

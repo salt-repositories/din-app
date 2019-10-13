@@ -14,4 +14,5 @@ export interface ISetCarouselIndexPayload {
 export const MainActions = {
     setBackgroundImages: actionCreator<ISetBackgroundsPayload>("SET_BACKGROUNDS"),
     setCarouselIndex: actionCreator<ISetCarouselIndexPayload>("SET_CAROUSEL_INDEX"),
+    setActiveMenuItem: actionCreator<string>("SET_ACTIVE_MENU_ITEM"),
 };

@@ -1,6 +1,6 @@
 import { Expose } from "class-transformer";
 
-export class QueryResult<T> {
+export abstract class QueryResult<T> {
     public items: T[];
     @Expose({ name: "total_count" })
     public totalCount: number;

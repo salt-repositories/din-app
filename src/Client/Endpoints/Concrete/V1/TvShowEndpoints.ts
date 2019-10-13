@@ -1,6 +1,6 @@
 import { Endpoints } from "../..";
-import { QueryParameters, QueryResult } from "../../../../Models/Querying";
-import { TvShow } from "../../../../Models/TvShow";
+import { Filters, QueryParameters } from "../../../../Models/Querying";
+import { TvShowQueryResult } from "../../../../Models/TvShow";
 import { ApiClientUtils } from "../../../ApiClientUtils";
 import { ApiVersions } from "../../../Versions/Concrete/Versions";
 
@@ -9,14 +9,14 @@ export class TvShowEndpoints extends Endpoints {
         super(version, "tvshows");
     }
     
-    public async getTvShows(queryParameters: QueryParameters, title?: string): Promise<QueryResult<TvShow>> {
+    public async getTvShows(queryParameters: QueryParameters, filters?: Filters): Promise<TvShowQueryResult> {
         return await this.call(
             "GET",
             true,
-            `${ApiClientUtils.QueryParamsToPath(queryParameters)}&title=${title ? title : ""}`,
+            ApiClientUtils.ApplyQueryParametersAndFilters(queryParameters, filters),
             null,
-            QueryResult,
+            TvShowQueryResult,
             false,
-        ) as QueryResult<TvShow>;
+        ) as TvShowQueryResult;
     }
 }

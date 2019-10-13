@@ -1,5 +1,5 @@
 import { Endpoints } from "../..";
-import { Movie, QueryParameters, QueryResult } from "../../../../Models";
+import { Filters, MovieQueryResult, MovieSearch, QueryParameters } from "../../../../Models";
 import { ApiClientUtils } from "../../../ApiClientUtils";
 import { ApiVersions } from "../../../Versions/Concrete/Versions";
 
@@ -8,14 +8,25 @@ export class MovieEndpoints extends Endpoints {
         super(version, "movies");
     }
 
-    public async getMovies(queryParameters: QueryParameters, title?: string): Promise<QueryResult<Movie>> {
+    public async getMovies(queryParameters: QueryParameters, filters?: Filters): Promise<MovieQueryResult> {
         return await this.call(
             "GET",
             true,
-            `${ApiClientUtils.QueryParamsToPath(queryParameters)}&title=${title ? title : ""}`,
+            ApiClientUtils.ApplyQueryParametersAndFilters(queryParameters, filters),
             null,
-            QueryResult,
+            MovieQueryResult,
             false,
-        ) as QueryResult<Movie>;
+        ) as MovieQueryResult;
+    }
+
+    public async searchMovieByQuery(query: string): Promise<MovieSearch[]> {
+        return await this.call(
+            "GET",
+            true,
+            `search?query=${query}`,
+            null,
+            MovieSearch,
+            true,
+        ) as MovieSearch[];
     }
 }

@@ -8,12 +8,23 @@ interface IProps {
 export const ComponentSpinner = (props: IProps): JSX.Element => {
     return (
         props.loading && (
-            <Spinner
-                animation="border"
-                size="sm"
-                role="status"
-                aria-hidden="true"
-            />
+            <React.Fragment>
+                <Spinner
+                    animation="border"
+                    role="status"
+                    aria-hidden="true"
+                    className="component-spinner"
+                />
+                <style jsx>
+                    {`
+                        :global(.component-spinner) {
+                            display: flex;
+                            margin: auto auto;
+                            color: #ff8d1c;
+                        }
+                    `}
+                </style>
+            </React.Fragment>
         )
     );
 };

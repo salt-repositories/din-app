@@ -1,11 +1,18 @@
 import { QueryParameters } from "../Models/Querying";
+import { Filters } from "../Models/Querying/Filters";
 
 export class ApiClientUtils {
-    public static QueryParamsToPath(queryParameters: QueryParameters): string {
+    public static ApplyQueryParametersAndFilters(queryParameters: QueryParameters, filters?: Filters): string {
         if (!queryParameters) {
             queryParameters = new QueryParameters();
         }
 
-        return `?skip=${queryParameters.skip}&take=${queryParameters.take}&sortby=${queryParameters.sortBy}&sortdirection=${queryParameters.sortDirection}`;
+        const path = `?skip=${queryParameters.skip}&take=${queryParameters.take}&sortby=${queryParameters.sortBy}&sortdirection=${queryParameters.sortDirection}`;
+
+        if (!filters) {
+            return path;
+        }
+
+        return path + `&title=${filters.title}&status=${filters.status}&downloaded=${filters.downloaded}&year=${filters.year}`;
     }
 }

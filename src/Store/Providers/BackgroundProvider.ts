@@ -14,8 +14,6 @@ export const BackgroundProvider = async (context: AppContext) => {
     if (!backgroundImages) {
         backgroundImages = await apiClient.v1.media.getBackgrounds();
         context.store.dispatch(MainActions.setBackgroundImages({backgroundImages}));
-
-        return backgroundImages;
     }
 
     return backgroundImages;

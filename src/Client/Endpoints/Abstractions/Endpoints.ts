@@ -2,9 +2,9 @@ import { plainToClass } from "class-transformer";
 import { ClassType } from "class-transformer/ClassTransformer";
 import fetch from "isomorphic-unfetch";
 import { getToken } from "../../../Authentication/Authentication";
+import { logException } from "../../../Utils/Analytics";
 import { ApiException } from "../../Exceptions/ApiException";
 import { ApiVersions } from "../../Versions/Concrete/Versions";
-import { logException } from "../../../Utils/Analytics";
 
 type Method = "GET" | "POST" | "PATCH" | "PUT" | "DELETE";
 
