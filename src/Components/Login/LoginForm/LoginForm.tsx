@@ -14,7 +14,6 @@ import { logEvent } from "../../../Utils/Analytics";
 import { ButtonSpinner } from "../../Shared/ButtonSpinner";
 import ToggleSwitch from "../../Shared/ToggleSwitch";
 import { ILoginSchema, loginSchema } from "./Schema";
-import { AppContext } from "../../../Context/AppContext";
 
 library.add(faUser, faKey, faEnvelope, faFingerprint);
 
@@ -194,7 +193,7 @@ export const LoginForm = (props: IProps) => {
                         box-shadow: none !important;
                     }
 
-                    :global(.input-wrapper input:focus + .icon) {
+                    :global(.input-wrapper input:focus ~ .icon) {
                         color: #ff8d1c;
                     }
 

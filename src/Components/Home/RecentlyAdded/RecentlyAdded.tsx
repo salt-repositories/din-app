@@ -93,7 +93,7 @@ class RecentlyAddedMovies extends React.Component<Props, IState> {
                             width: 80vw;
                             height: 400px;
                             background: #2b2b2ba8;
-                            margin: 0 auto;
+                            margin: 45vh auto;
                         }
                         
                         :global(.recently-added > .card-body > .card-title) {

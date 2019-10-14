@@ -14,7 +14,6 @@ export const YoutubeModal = (props: IProps): JSX.Element => {
     const dispatch = useDispatch();
     const show = useSelector(showYoutubeModalSelector);
 
-    console.log(show);
     return (
         <React.Fragment>
             <Modal
