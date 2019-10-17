@@ -7,7 +7,7 @@ import { destroyCookie } from "nookies";
 import React, { useState } from "react";
 import { withAuthentication } from "../../src/Authentication";
 import { ApiClientProvider } from "../../src/Client";
-import RecentlyAddedMovies from "../../src/Components/Home/RecentlyAdded/RecentlyAdded";
+import { RecentlyAddedMovies } from "../../src/Components/Home";
 import FullScreenCarousel from "../../src/Components/Shared/FullScreenCarousel";
 import { Menu } from "../../src/Components/Shared/Menu";
 import { AppContext } from "../../src/Context/AppContext";

@@ -29,7 +29,7 @@ export default class Layout extends React.Component {
                  {this.props.children}
                  <style jsx global>
                      {`
-                        :global(body) {
+                        body {
                             overflow: hidden;
                             position: relative;
                             font-family: 'Roboto', sans-serif;

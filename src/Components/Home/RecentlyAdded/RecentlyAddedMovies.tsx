@@ -54,9 +54,9 @@ class RecentlyAddedMovies extends React.Component<Props, IState> {
             <Card
                 className="recently-added"
             >
+                <YoutubeModal show={this.props.showYoutubeModal} trailerId={this.state.trailerId} />
                 <Card.Body>
                     <Card.Title>Recently Added Movies</Card.Title>
-                    <YoutubeModal show={this.props.showYoutubeModal} trailerId={this.state.trailerId} />
                     <div className="horizontal-container">
                         <Row>
                             {this.props.recentlyAddedMovies ? (
@@ -90,15 +90,16 @@ class RecentlyAddedMovies extends React.Component<Props, IState> {
                     {`
                         :global(.recently-added) {
                             border-radius: 5px;
-                            width: 80vw;
+                            width: 90vw;
                             height: 400px;
                             background: #2b2b2ba8;
-                            margin: 45vh auto;
+                            margin: 45vh auto auto 8vw;
                         }
                         
                         :global(.recently-added > .card-body > .card-title) {
                             font-size: 25px;
                             color: #ff8d1c;
+                            text-shadow: 1px 1px 1px #000;
                             width: 95%;
                             margin: 0 auto;
                         }

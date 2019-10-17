@@ -35,6 +35,8 @@ const FullScreenCarousel = (props: IProps): JSX.Element => {
             <style jsx>
                 {`
                     .full-screen-carousel-container {
+                        width: 100vw;
+                        height: 100vh;
                         position: fixed;
                         top: 0;
                         overflow: hidden;
