@@ -23,7 +23,7 @@ const FullScreenCarousel = (props: IProps): JSX.Element => {
                 keyboard={false}
                 pauseOnHover={false}
                 interval={10000}
-                onSelect={(newIndex: number) => dispatch(MainActions.setCarouselIndex({index: newIndex}))}
+                onSelect={(newIndex: number) => dispatch(MainActions.setCarouselIndex(newIndex))}
             >
                 {props.backgrounds.map((image: any, index: number) => (
                     <Carousel.Item key={index}>

@@ -1,6 +1,7 @@
 import produce from "immer";
 import { reducerWithInitialState } from "typescript-fsa-reducers";
-import { ISetBackgroundsPayload, ISetCarouselIndexPayload, MainActions } from "./actions";
+import { BackgroundImage } from "../../Models/Media";
+import { MainActions } from "./actions";
 import { IMainState, MainInitialState } from "./states";
 
 export default reducerWithInitialState(MainInitialState)
@@ -8,11 +9,10 @@ export default reducerWithInitialState(MainInitialState)
         MainActions.setBackgroundImages,
         (
             state: Readonly<IMainState>,
-            payload: ISetBackgroundsPayload,
+            payload: BackgroundImage[],
         ): IMainState => {
-            const { backgroundImages } = payload;
             return produce(state, (draft: IMainState) => {
-                draft.backgroundImages = backgroundImages;
+                draft.backgroundImages = payload;
             });
         },
     )
@@ -20,11 +20,10 @@ export default reducerWithInitialState(MainInitialState)
         MainActions.setCarouselIndex,
         (
             state: Readonly<IMainState>,
-            payload: ISetCarouselIndexPayload,
+            payload: number,
         ): IMainState => {
-            const { index } = payload;
             return produce(state, (draft: IMainState) => {
-                draft.carouselIndex = index;
+                draft.carouselIndex = payload;
             });
         },
     )

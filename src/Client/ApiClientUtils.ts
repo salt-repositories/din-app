@@ -1,5 +1,4 @@
-import { QueryParameters } from "../Models/Querying";
-import { Filters } from "../Models/Querying/Filters";
+import { Filters, QueryParameters } from "../Models/Querying";
 
 export class ApiClientUtils {
     public static ApplyQueryParametersAndFilters(queryParameters: QueryParameters, filters?: Filters): string {
