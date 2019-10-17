@@ -13,6 +13,6 @@ COPY --from=build /opt/yarn.lock .
 COPY --from=build /opt/.next ./.next
 COPY --from=build /opt/src ./src
 COPY --from=build /opt/pages ./pages
-COPY --from=build /opt/static ./static
+COPY --from=build /opt/public ./public
 RUN yarn
 ENTRYPOINT ["yarn", "start"]

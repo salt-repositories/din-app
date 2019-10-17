@@ -1,3 +1,5 @@
+import "reflect-metadata";
+
 import { NextPage } from "next";
 import Head from "next/dist/next-server/lib/head";
 import Router from "next/router";
