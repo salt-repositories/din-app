@@ -3,7 +3,7 @@ import Head from "next/dist/next-server/lib/head";
 import Router from "next/router";
 import { destroyCookie } from "nookies";
 import React, { useState } from "react";
-import { HandleAuthentication } from "../../src/Authentication/Authentication";
+import { withAuthentication } from "../../src/Authentication";
 import { ApiClientProvider } from "../../src/Client";
 import RecentlyAddedMovies from "../../src/Components/Home/RecentlyAdded/RecentlyAdded";
 import FullScreenCarousel from "../../src/Components/Shared/FullScreenCarousel";
@@ -50,7 +50,6 @@ const HomePage: NextPage = (props: IProps) => {
 };
 
 HomePage.getInitialProps = async (context: AppContext) => {
-    await HandleAuthentication(context);
     context.store.dispatch(MainActions.setActiveMenuItem(context.pathname));
 
     const backgroundImages = await BackgroundProvider(context);
@@ -59,4 +58,4 @@ HomePage.getInitialProps = async (context: AppContext) => {
 
 };
 
-export default HomePage;
+export default withAuthentication(HomePage);

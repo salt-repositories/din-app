@@ -2,7 +2,7 @@ import { NextPage } from "next";
 import Head from "next/head";
 import { parseCookies } from "nookies";
 import React, { useState } from "react";
-import { HandleAuthentication } from "../../src/Authentication/Authentication";
+import { withAuthentication } from "../../src/Authentication";
 import ForgotPasswordModal from "../../src/Components/Login/ForgotPasswordModal/ForgotPasswordModal";
 import LoginForm from "../../src/Components/Login/LoginForm/LoginForm";
 import FullScreenCarousel from "../../src/Components/Shared/FullScreenCarousel";
@@ -19,7 +19,6 @@ interface IProps {
 
 const LoginPage: NextPage = (props: IProps): JSX.Element => {
     const [showPasswordModal, setShowPasswordModal] = useState<boolean>(false);
-
     return (
         <Layout>
             <Head>
@@ -40,13 +39,11 @@ const LoginPage: NextPage = (props: IProps): JSX.Element => {
 
 
 LoginPage.getInitialProps = async (context: AppContext): Promise<IProps> => {
-    await HandleAuthentication(context);
-
     const { rememberUsername, username } = parseCookies(context);
     const backgrounds = await BackgroundProvider(context);
 
     return { username, rememberUsername, backgrounds };
 };
 
-export default LoginPage;
+export default withAuthentication(LoginPage);
 

@@ -7,6 +7,8 @@ const apiClient = ApiClientProvider.getClient();
 export const RecentlyAddedMoviesProvider =
     async (stateValues: Array<[Movie, MovieSearch]>, setRecentlyAdded): Promise<Array<[Movie, MovieSearch]>> => {
         if (!stateValues) {
+            stateValues = [];
+
             const queryParameters = new QueryParameters(
                 0,
                 20,

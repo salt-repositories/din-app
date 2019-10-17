@@ -6,7 +6,7 @@ import Router from "next/router";
 import { destroyCookie, setCookie } from "nookies";
 import React, { useState } from "react";
 import { Badge, Button, Col, Container, Form, Row } from "react-bootstrap";
-import { setTokenCookie } from "../../../Authentication/Authentication";
+import { setTokenCookie } from "../../../Authentication/HandleAuthentication";
 import { ApiClientProvider } from "../../../Client";
 import { ApiException } from "../../../Client/Exceptions/ApiException";
 import { Token } from "../../../Models";

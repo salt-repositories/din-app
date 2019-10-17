@@ -1,29 +1,13 @@
-import { deserialize, plainToClass, serialize, Transform, Type } from "class-transformer";
-import moment, { Moment } from "moment";
+import { deserialize, plainToClass, serialize } from "class-transformer";
+import moment from "moment";
 import Router from "next/router";
 import { destroyCookie, parseCookies, setCookie } from "nookies";
 import { ApiClientProvider } from "../Client";
 import { AppContext } from "../Context/AppContext";
 import { Token } from "../Models";
 import { logException } from "../Utils/Analytics";
+import { TokenCookie } from "./TokenCookie";
 
-const apiClient = ApiClientProvider.getClient();
-
-/**
- * Wrapper class for token cookie object
- */
-export class TokenCookie {
-    @Type(() => Token)
-    public token: Token;
-    @Type(() => Date)
-    @Transform((value) => moment(value), { toClassOnly: true })
-    public expires: Moment;
-
-    constructor(token: Token, requested: Moment) {
-        this.token = token;
-        this.expires = requested;
-    }
-}
 
 /**
  * Check validity of current token cookie and reauthenticate if needed
@@ -119,9 +103,11 @@ export const getToken = async (context?: AppContext): Promise<Token> => {
  * @return {Promise<Token>} token
  */
 const authenticateWithRefreshToken = async (refreshToken: string, context?: AppContext): Promise<Token> => {
+    const apiClient = ApiClientProvider.getClient();
+
     try {
         console.log("refresh");
-        const response = await apiClient.v1.authentication.getTokenByRefreshToken(refreshToken);
+        const response = await this.apiClient.v1.authentication.getTokenByRefreshToken(refreshToken);
 
         context
             ? setTokenCookie(response, context)

@@ -35,7 +35,7 @@ export const ForgotPasswordModal = (props: IProps) => {
             <Modal.Header closeButton>
                 <Modal.Title>Forgot password</Modal.Title>
             </Modal.Header>
-            <Tabs id="tabs" activeKey={tabState} onSelect={(state: TabStates) => setTabState(state)} hidden="true">
+            <Tabs id="tabs" activeKey={tabState} onSelect={(state: TabStates) => setTabState(state)} hidden={true}>
                 <Tab eventKey="email" title="Email">
                     <EmailTab
                         setEmail={setEmail}

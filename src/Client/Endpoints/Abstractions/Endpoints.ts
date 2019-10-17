@@ -1,7 +1,7 @@
 import { plainToClass } from "class-transformer";
 import { ClassType } from "class-transformer/ClassTransformer";
 import fetch from "isomorphic-unfetch";
-import { getToken } from "../../../Authentication/Authentication";
+import { getToken } from "../../../Authentication/HandleAuthentication";
 import { logException } from "../../../Utils/Analytics";
 import { ApiException } from "../../Exceptions/ApiException";
 import { ApiVersions } from "../../Versions/Concrete/Versions";

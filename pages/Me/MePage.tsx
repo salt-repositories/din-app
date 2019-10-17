@@ -1,11 +1,11 @@
 import { NextPage } from "next";
 import Head from "next/head";
 import React from "react";
+import { withAuthentication } from "../../src/Authentication";
 import { Menu } from "../../src/Components/Shared/Menu";
 import Layout from "../../src/Layouts/Layout";
 
 const MePage: NextPage = (props) => {
-    
     return (
         <Layout>
             <Head>
@@ -16,4 +16,4 @@ const MePage: NextPage = (props) => {
     );
 };
 
-export default MePage;
+export default withAuthentication(MePage);
