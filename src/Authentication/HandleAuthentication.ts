@@ -107,7 +107,7 @@ const authenticateWithRefreshToken = async (refreshToken: string, context?: AppC
 
     try {
         console.log("refresh");
-        const response = await this.apiClient.v1.authentication.getTokenByRefreshToken(refreshToken);
+        const response = await apiClient.v1.authentication.getTokenByRefreshToken(refreshToken);
 
         context
             ? setTokenCookie(response, context)

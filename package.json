@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/salt-repositories/din-app#readme",
   "dependencies": {
+    "@aspnet/signalr": "^1.1.4",
     "@fortawesome/fontawesome-svg-core": "^1.2.19",
     "@fortawesome/free-brands-svg-icons": "^5.11.2",
     "@fortawesome/free-regular-svg-icons": "^5.9.0",

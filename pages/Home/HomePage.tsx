@@ -8,6 +8,7 @@ import React, { useState } from "react";
 import { withAuthentication } from "../../src/Authentication";
 import { ApiClientProvider } from "../../src/Client";
 import { RecentlyAddedMovies } from "../../src/Components/Home";
+import { CurrentQueue } from "../../src/Components/Home/CurrentQueue/CurrentQueue";
 import FullScreenCarousel from "../../src/Components/Shared/FullScreenCarousel";
 import { Menu } from "../../src/Components/Shared/Menu";
 import { AppContext } from "../../src/Context/AppContext";
@@ -21,8 +22,6 @@ interface IProps {
     backgroundImages: BackgroundImage[];
     context: AppContext;
 }
-
-const apiClient = ApiClientProvider.getClient();
 
 const HomePage: NextPage = (props: IProps) => {
     const [loading, setLoading] = useState<boolean>(false);
@@ -45,6 +44,7 @@ const HomePage: NextPage = (props: IProps) => {
                 LOGOUT
             </span>
             <div style={{overflow: "hidden"}}>
+                <CurrentQueue/>
                 <RecentlyAddedMovies />
             </div>
         </Layout>
