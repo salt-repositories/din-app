@@ -1,3 +1,3 @@
-export * from "./MovieHub";
+export * from "./ContentHub";
 export * from "./HubProvider";
 

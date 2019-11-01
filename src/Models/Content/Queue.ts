@@ -1,7 +1,8 @@
 import { Expose, Transform, Type } from "class-transformer";
 import moment, { Moment } from "moment";
+import { Content } from "../Abstractions/Content";
 
-export abstract class Queue {
+export class Queue {
     public id: number;
     public title: string;
     public size: number;
@@ -16,4 +17,6 @@ export abstract class Queue {
     @Expose({ name: "download_id" })
     public downloadId: string;
     public protocol: string;
+    @Type(() => Content)
+    public content: Content;
 }

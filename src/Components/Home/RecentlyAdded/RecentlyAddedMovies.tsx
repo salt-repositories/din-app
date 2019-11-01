@@ -70,9 +70,7 @@ class RecentlyAddedMovies extends React.Component<Props, IState> {
                                                 className="trailer-link"
                                                 onClick={() => this.openYoutubeModal(item[0].youtubeTrailerId)}
                                             >
-                                                <FontAwesomeIcon
-                                                    icon={["fab", "youtube"]}
-                                                    size="sm"
+                                                <Youtube
                                                     className="logo"
                                                 />
                                                 Trailer

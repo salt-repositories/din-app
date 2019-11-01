@@ -6,3 +6,4 @@ export * from "./Media";
 export * from "./Movies";
 export * from "./Querying";
 export * from "./Abstractions";
+export * from "./Content";

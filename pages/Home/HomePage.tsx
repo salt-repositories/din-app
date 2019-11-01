@@ -6,9 +6,7 @@ import Router from "next/router";
 import { destroyCookie } from "nookies";
 import React, { useState } from "react";
 import { withAuthentication } from "../../src/Authentication";
-import { ApiClientProvider } from "../../src/Client";
-import { RecentlyAddedMovies } from "../../src/Components/Home";
-import { CurrentQueue } from "../../src/Components/Home/CurrentQueue/CurrentQueue";
+import { CurrentQueue, RecentlyAddedMovies } from "../../src/Components/Home";
 import FullScreenCarousel from "../../src/Components/Shared/FullScreenCarousel";
 import { Menu } from "../../src/Components/Shared/Menu";
 import { AppContext } from "../../src/Context/AppContext";
@@ -24,8 +22,6 @@ interface IProps {
 }
 
 const HomePage: NextPage = (props: IProps) => {
-    const [loading, setLoading] = useState<boolean>(false);
-
     const onclick = () => {
         destroyCookie({}, "token");
         Router.push("/");
