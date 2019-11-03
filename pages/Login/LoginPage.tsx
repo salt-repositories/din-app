@@ -1,9 +1,8 @@
-import "reflect-metadata";
-
 import { NextPage } from "next";
 import Head from "next/head";
 import { parseCookies } from "nookies";
 import React, { useState } from "react";
+import "reflect-metadata";
 import { withAuthentication } from "../../src/Authentication";
 import ForgotPasswordModal from "../../src/Components/Login/ForgotPasswordModal/ForgotPasswordModal";
 import LoginForm from "../../src/Components/Login/LoginForm/LoginForm";
@@ -34,17 +33,17 @@ const LoginPage: NextPage = (props: IProps): JSX.Element => {
                 rememberUsername={props.rememberUsername === "true"}
                 modalHandler={setShowPasswordModal}
             />
-            <ForgotPasswordModal visible={showPasswordModal} modalHandler={setShowPasswordModal}/>
+            <ForgotPasswordModal/>
         </Layout>
     );
 };
 
 
 LoginPage.getInitialProps = async (context: AppContext): Promise<IProps> => {
-    const { rememberUsername, username } = parseCookies(context);
+    const {rememberUsername, username} = parseCookies(context);
     const backgrounds = await BackgroundProvider(context);
 
-    return { username, rememberUsername, backgrounds };
+    return {username, rememberUsername, backgrounds};
 };
 
 export default withAuthentication(LoginPage);

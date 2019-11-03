@@ -1,5 +1,5 @@
+import { Carousel } from "antd";
 import React from "react";
-import { Carousel } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { BackgroundImage } from "../../Models";
 import { MainActions } from "../../Store/Main/actions";
@@ -16,19 +16,14 @@ const FullScreenCarousel = (props: IProps): JSX.Element => {
     return (
         <div className="full-screen-carousel-container">
             <Carousel
-                activeIndex={carouselIndex}
+                slickGoTo={carouselIndex}
                 className="full-screen-carousel"
-                controls={false}
-                indicators={false}
-                keyboard={false}
-                pauseOnHover={false}
-                interval={10000}
-                onSelect={(newIndex: number) => dispatch(MainActions.setCarouselIndex(newIndex))}
+                afterChange={(newIndex: number) => dispatch(MainActions.setCarouselIndex(newIndex))}
             >
                 {props.backgrounds.map((image: any, index: number) => (
-                    <Carousel.Item key={index}>
+                    <div key={index}>
                         <img className="full-image" src={image.regular} key={index} alt="error"/>
-                    </Carousel.Item>
+                    </div>
                 ))}
             </Carousel>
             <div className="overlay"/>

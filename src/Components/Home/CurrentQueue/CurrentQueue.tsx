@@ -1,14 +1,7 @@
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { faPause, faPlay, faTachometerAlt } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { deserialize } from "class-transformer";
 import React, { useEffect, useState } from "react";
-import { Card, Col, ProgressBar, Row } from "react-bootstrap";
 import { Queue } from "../../../Models";
 import { ContentHub, HubProvider } from "../../../SignalR";
-import { Activity } from "react-feather";
-
-library.add(faPause, faPlay, faTachometerAlt);
 
 const contentHub: ContentHub = HubProvider(ContentHub);
 

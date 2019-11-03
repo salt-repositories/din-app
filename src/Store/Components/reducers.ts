@@ -11,7 +11,40 @@ export default reducerWithInitialState(ComponentsInitialState)
             payload: boolean,
         ): IComponentsState => {
             return produce(state, (draft: IComponentsState) => {
-                draft.showYoutubeModal = payload;
+                draft.recentlyAdded.showYoutubeModal = payload;
+            });
+        },
+    )
+    .case(
+        ComponentsActions.setShowForgotPasswordModal,
+        (
+            state: Readonly<IComponentsState>,
+            payload: boolean,
+        ): IComponentsState => {
+            return produce(state, (draft: IComponentsState) => {
+                draft.forgotPassword.visible = payload;
+            });
+        },
+    )
+    .case(
+        ComponentsActions.setForgotPasswordModalTabIndex,
+        (
+            state: Readonly<IComponentsState>,
+            payload: number,
+        ): IComponentsState => {
+            return produce(state, (draft: IComponentsState) => {
+                draft.forgotPassword.currentTab = payload;
+            });
+        },
+    )
+    .case(
+        ComponentsActions.ForgotPassword.setLoading,
+        (
+            state: Readonly<IComponentsState>,
+            payload: boolean,
+        ): IComponentsState => {
+            return produce(state, (draft: IComponentsState) => {
+                draft.forgotPassword.loading = payload;
             });
         },
     );

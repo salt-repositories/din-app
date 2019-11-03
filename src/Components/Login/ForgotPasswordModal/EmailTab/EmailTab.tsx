@@ -1,85 +1,93 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Formik, FormikActions } from "formik";
+import { Button, Form, Icon, Input } from "antd";
+import { connect as formikConnect } from "formik";
 import React from "react";
-import { Button, Form, Modal } from "react-bootstrap";
 import { ApiClientProvider } from "../../../../Client";
 import { ApiException } from "../../../../Client/Exceptions/ApiException";
-import { ButtonSpinner } from "../../../Shared/ButtonSpinner";
-import { TabStates } from "../ForgotPasswordModal";
-import { emailSchema, IEmailSchema } from "./Schema";
+import { IFormikProps } from "../Formik";
 
 interface IProps {
     loading: boolean;
-    setEmail(email: string): void;
     handleClose(): void;
     setLoading(value: boolean): void;
-    setTabState(value: TabStates): void;
+    setTabIndex(index: number): void;
 }
+
+type Props = IProps &
+    IFormikProps;
 
 const apiClient = ApiClientProvider.getClient();
 
-export const EmailTab = (props: IProps): JSX.Element => {
-    const sendForgotPasswordEmail = async (values: IEmailSchema, formikActions: FormikActions<any>) => {
-        try {
-            props.setLoading(true);
-            await apiClient.v1.authentication.getAuthorizationCode(values.email);
-            props.setEmail(values.email);
-        } catch (error) {
-            if (error instanceof ApiException) {
-                formikActions.setFieldError("email", error.errorObject.message);
-            }
+const EmailTab = (props: Props): JSX.Element => {
+    const sendForgotPasswordEmail = async () => {
+        // props.setLoading(true);
+        //
+        // try {
+        //     await apiClient.v1.authentication.getAuthorizationCode(props.formik.values.email);
+        // } catch (error) {
+        //     if (error instanceof ApiException) {
+        //         props.formik.setFieldError("email", error.errorObject.message);
+        //     }
+        //
+        //     return;
+        //     return;
+        // } finally {
+        //     props.setLoading(false);
+        // }
 
-            return;
-        } finally {
-            props.setLoading(false);
-        }
-
-        props.setTabState("password");
+        props.setTabIndex(1);
     };
+
     return (
-        <Formik
-            validationSchema={emailSchema}
-            onSubmit={sendForgotPasswordEmail}
-            initialValues={{
-                email: "",
-            }}
-        >
-            {({handleSubmit, handleChange, handleBlur, values, errors, touched}) => (
-                <Form noValidate onSubmit={handleSubmit}>
-                    <Modal.Body>
-                        <p>To request a new password, an authorization code will be
-                            sent to your account registered email.
-                        </p>
-                        <Form.Group className="input-wrapper">
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control
-                                name="email"
-                                type="email"
-                                placeholder="Type your email"
-                                value={values.email}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                isValid={!errors.email && !!touched.email}
-                                isInvalid={!!errors.email && !!touched.email}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                {errors.email}
-                            </Form.Control.Feedback>
-                            <FontAwesomeIcon icon={["fas", "envelope"]} className="icon"/>
-                        </Form.Group>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={props.handleClose}>Close</Button>
-                        <Button
-                            type="submit"
-                            className="sent-button"
-                        >
-                            <ButtonSpinner loading={props.loading}/>
-                            Send email
-                        </Button>
-                    </Modal.Footer>
-                </Form>
-            )}
-        </Formik>
+        <>
+            <h2>Verify your email</h2>
+            <p>To request a new password, an authorization code will be
+                sent to your account registered email.
+            </p>
+            <Form.Item
+                className="input-wrapper"
+                label="Email"
+                hasFeedback
+                validateStatus="success"
+                help={props.formik.errors.email}
+            >
+                <Input
+                    name="email"
+                    type="email"
+                    placeholder="Type your email"
+                    value={props.formik.values.email}
+                    onChange={props.formik.handleChange}
+                    onBlur={props.formik.handleBlur}
+                    prefix={<Icon type="mail" theme="twoTone" twoToneColor="#ff8d1c"/>}
+                />
+            </Form.Item>
+            <div className="button-group">
+                <Button key="back" onClick={props.handleClose}>
+                    Cancel
+                </Button>
+                <Button
+                    className="send-email"
+                    key="submit"
+                    type="primary"
+                    loading={props.loading}
+                    onClick={sendForgotPasswordEmail}
+                >
+                    Send Email
+                </Button>
+            </div>
+            <style jsx>
+                {`
+                    .button-group {
+                        text-align: right;
+                    }
+                    
+                    :global(.button-group > .send-email) {
+                       margin-left: 10px;
+                    }
+                `}
+            </style>
+        </>
     );
 };
+
+export default formikConnect<Props>(EmailTab) as React.FC<IProps>;
+

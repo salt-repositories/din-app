@@ -1,9 +1,7 @@
-import React, { useState } from "react";
-import { Modal } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
+import { useDispatch } from "react-redux";
 import YouTube from "react-youtube";
 import { ComponentsActions } from "../../Store/Components/actions";
-import { showYoutubeModalSelector } from "../../Store/Components/selectors";
 
 interface IProps {
     show: boolean;
@@ -12,7 +10,6 @@ interface IProps {
 
 export const YoutubeModal = (props: IProps): JSX.Element => {
     const dispatch = useDispatch();
-    const show = useSelector(showYoutubeModalSelector);
 
     return (
         <React.Fragment>

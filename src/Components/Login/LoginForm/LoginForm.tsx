@@ -1,21 +1,16 @@
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { faEnvelope, faFingerprint, faKey, faUser } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Badge, Button, Form, Icon, Input, Switch } from "antd";
 import { Formik, FormikActions } from "formik";
 import Router from "next/router";
 import { destroyCookie, setCookie } from "nookies";
 import React, { useState } from "react";
-import { Badge, Button, Col, Container, Form, Row } from "react-bootstrap";
-import { setTokenCookie } from "../../../Authentication/HandleAuthentication";
+import { setTokenCookie } from "../../../Authentication";
 import { ApiClientProvider } from "../../../Client";
 import { ApiException } from "../../../Client/Exceptions/ApiException";
 import { Token } from "../../../Models";
 import { logEvent } from "../../../Utils/Analytics";
-import { ButtonSpinner } from "../../Shared/ButtonSpinner";
-import ToggleSwitch from "../../Shared/ToggleSwitch";
 import { ILoginSchema, loginSchema } from "./Schema";
-
-library.add(faUser, faKey, faEnvelope, faFingerprint);
+import { useDispatch } from "react-redux";
+import { ComponentsActions } from "../../../Store/Components/actions";
 
 interface IProps {
     username: string;
@@ -27,13 +22,22 @@ const apiClient = ApiClientProvider.getClient();
 
 export const LoginForm = (props: IProps) => {
     const [loading, setLoading] = useState<boolean>(false);
+    const dispatch = useDispatch();
+
+    const handleStatus = (error, touched): any => {
+        if (!error && !!touched) {
+            return "success";
+        } else if (error && !!touched) {
+            return "error";
+        }
+    };
 
     const handleLogin = async (values: ILoginSchema, formikActions: FormikActions<any>) => {
+        setLoading(true);
+
         let response: Token = new Token();
 
         try {
-            setLoading(true);
-
             response = await apiClient.v1.authentication.getTokenByCredentials(values.username, values.password);
         } catch (error) {
             if (error instanceof ApiException) {
@@ -45,7 +49,7 @@ export const LoginForm = (props: IProps) => {
             setLoading(false);
         }
 
-        props.rememberUsername
+        values.rememberUsername
             ? setCookie({}, "username", values.username, {})
             : destroyCookie({}, "username");
 
@@ -53,92 +57,98 @@ export const LoginForm = (props: IProps) => {
         logEvent("Authentication", "login");
 
         await Router.push("/Home");
+
+        setLoading(false);
     };
 
     return (
-        <Container>
-            <Row className="spacer"/>
-            <Row>
-                <Col md={{span: 6, offset: 3}} className="login-col">
-                    <Formik
-                        validationSchema={loginSchema}
-                        onSubmit={handleLogin}
-                        initialValues={{
-                            username: props.rememberUsername ? props.username : "",
-                            password: "",
-                        }}
-                    >
-                        {({handleSubmit, handleChange, handleBlur, values, errors, touched}) => (
+        <>
+            <div className="login-col">
+                <Formik
+                    validationSchema={loginSchema}
+                    onSubmit={handleLogin}
+                    initialValues={{
+                        username: props.rememberUsername ? props.username : "",
+                        password: "",
+                        rememberUsername: props.rememberUsername,
+                    }}
+                >
+                    {({handleSubmit, handleChange, handleBlur, values, errors, touched}) => (
+                        <Form noValidate onSubmit={handleSubmit} className="login-form">
+                            <div className="title-wrapper">
+                                <Badge className="title">DIN</Badge>
+                            </div>
+                            <Form.Item
+                                className="input-wrapper"
+                                label="Username / Email"
+                                hasFeedback
+                                validateStatus={handleStatus(errors.username, touched.username)}
+                                help={errors.username}
+                            >
+                                <Input
+                                    name="username"
+                                    type="text"
+                                    placeholder="Type your username or email"
+                                    value={values.username}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    prefix={<Icon className="icon" type="user"/>}
+                                />
+                            </Form.Item>
+                            <Form.Item
+                                className="input-wrapper"
+                                label="Password"
+                                hasFeedback
+                                validateStatus={handleStatus(errors.password, touched.password)}
+                                help={errors.password}
+                            >
+                                <Input.Password
+                                    name="password"
+                                    placeholder="Type your password"
+                                    value={values.password}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    prefix={<Icon type="key"/>}
 
-                            <Form noValidate onSubmit={handleSubmit} className="login-form">
-                                <div className="title-wrapper">
-                                    <Badge variant="light" className="title">DIN</Badge>
-                                </div>
-                                <Form.Group className="input-wrapper">
-                                    <Form.Label>Username / Email</Form.Label>
-                                    <Form.Control
-                                        name="username"
-                                        type="text"
-                                        placeholder="Type your username or email"
-                                        value={values.username}
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                        isValid={!errors.username && !!touched.username}
-                                        isInvalid={!!errors.username && !!touched.username}
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        {errors.username}
-                                    </Form.Control.Feedback>
-                                    <FontAwesomeIcon icon={["fas", "user"]} size="lg" className="icon"/>
-                                </Form.Group>
-                                <Form.Group className="input-wrapper">
-                                    <Form.Label>Password</Form.Label>
-                                    <Form.Control
-                                        name="password"
-                                        type="password"
-                                        placeholder="Type your password"
-                                        value={values.password}
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                        isValid={!errors.password && !!touched.password}
-                                        isInvalid={!!errors.password && !!touched.password}
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        {errors.password}
-                                    </Form.Control.Feedback>
-                                    <FontAwesomeIcon icon={["fas", "key"]} className="icon"/>
-                                </Form.Group>
-                                <div className="text-right link-wrapper">
-                                    <span onClick={() => props.modalHandler(true)}>Forgot Password?</span>
-                                </div>
-                                <Form.Group className="box-wrapper">
-                                    <ToggleSwitch
-                                        text="Remember username / email"
-                                        value={props.rememberUsername}
-                                    />
-                                </Form.Group>
-                                <Form.Group className="button-wrapper">
-                                    <Button type="submit">
-                                        <ButtonSpinner loading={loading}/>
-                                        LOGIN
-                                    </Button>
-                                </Form.Group>
-                            </Form>
-                        )}
-                    </Formik>
-                </Col>
-            </Row>
+                                />
+                            </Form.Item>
+                            <div className="text-right link-wrapper">
+                                    <span onClick={() => dispatch(ComponentsActions.setShowForgotPasswordModal(true))}>
+                                        Forgot Password?
+                                    </span>
+                            </div>
+                            <Form.Item
+                                className="box-wrapper"
+                                label="Remember username / email"
+                            >
+                                <Switch
+                                    onChange={handleChange}
+                                    defaultChecked={values.rememberUsername}
+                                />
+                            </Form.Item>
+                            <Form.Item className="button-wrapper">
+                                <Button
+                                    htmlType="submit"
+                                    className="submit"
+                                    loading={loading}
+                                >
+                                    LOGIN
+                                </Button>
+                            </Form.Item>
+                        </Form>
+                    )}
+                </Formik>
+            </div>
             <style jsx>
                 {`
-                    :global(.spacer) {
-                        height: 10vh;
-                    }
-
                     :global(.login-col) {
                         border-radius: 10px;
                         padding: 50px 55px 50px;
                         background: white;
                         opacity: .9;
+                        margin: 10vh auto;
+                        display: block;
+                        width: 500px;
                     }
 
                     :global(.login-form) {
@@ -149,7 +159,7 @@ export const LoginForm = (props: IProps) => {
 
                     :global(.title-wrapper) {
                         text-align: center;
-                        margin-bottom: 10vh;
+                        margin-bottom: 5vh;
                     }
 
                     :global(.title) {
@@ -157,6 +167,8 @@ export const LoginForm = (props: IProps) => {
                         color: #ff8d1c;
                         border: 1px solid;
                         line-height: 1.2;
+                        padding: 10px;
+                        border-radius: 10px;
                     }
 
                     :global(.input-wrapper) {
@@ -188,12 +200,12 @@ export const LoginForm = (props: IProps) => {
                     }
 
                     :global(.input-wrapper input:focus) {
-                        outline:0px !important;
-                        -webkit-appearance:none;
+                        outline: 0px !important;
+                        -webkit-appearance: none;
                         box-shadow: none !important;
                     }
 
-                    :global(.input-wrapper input:focus ~ .icon) {
+                    :global(.ant-input-prefix > .icon:focus-withintf) {
                         color: #ff8d1c;
                     }
 
@@ -213,16 +225,20 @@ export const LoginForm = (props: IProps) => {
                     }
 
                     :global(.box-wrapper) {
-                        margin-top: 5vh;
+                        margin-top: 2vh;
                         margin-bottom: 0 !important;
+                    }
+                    
+                    :global(.box-wrapper .ant-switch-checked) {
+                        background-color: #ff8d1c;
                     }
 
                     :global(.button-wrapper) {
-                        margin-top: 5vh;
+                        margin-top: 2vh;
                         margin-bottom: 0 !important;
                     }
 
-                    :global(.login-form button) {
+                    :global(.login-form .submit) {
                         font-size: 16px;
                         color: #fff;
                         background: #ff8d1c;
@@ -242,25 +258,21 @@ export const LoginForm = (props: IProps) => {
                         border-radius: 25px;
                     }
 
-                    :global(.login-form button:hover) {
+                    :global(.login-form .submit:hover) {
                         background: #d2771b;
                         border-color: #ff8d1c;
                     }
 
-                    :global(.icon) {
-                        width: 15px;
-                        color: #d9d9d9;
-                        position: absolute;
-                        top: 60%;
-                        display: block;
+                    :global(.ant-input-prefix) {
+                        left: 5px !important;
                     }
-                    
+
                     :global(.form-control.is-invalid ~ .invalid-feedback) {
                         position: absolute;
                     }
                 `}
             </style>
-        </Container>
+        </>
     );
 };
 

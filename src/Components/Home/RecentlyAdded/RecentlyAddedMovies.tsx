@@ -70,9 +70,6 @@ class RecentlyAddedMovies extends React.Component<Props, IState> {
                                                 className="trailer-link"
                                                 onClick={() => this.openYoutubeModal(item[0].youtubeTrailerId)}
                                             >
-                                                <Youtube
-                                                    className="logo"
-                                                />
                                                 Trailer
                                             </span>
                                         </Card.Body>
