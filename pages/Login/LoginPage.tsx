@@ -1,11 +1,9 @@
 import { NextPage } from "next";
 import Head from "next/head";
 import { parseCookies } from "nookies";
-import React, { useState } from "react";
-import "reflect-metadata";
+import React from "react";
 import { withAuthentication } from "../../src/Authentication";
-import ForgotPasswordModal from "../../src/Components/Login/ForgotPasswordModal/ForgotPasswordModal";
-import LoginForm from "../../src/Components/Login/LoginForm/LoginForm";
+import { ForgotPasswordModal, LoginForm } from "../../src/Components/Login";
 import FullScreenCarousel from "../../src/Components/Shared/FullScreenCarousel";
 import { AppContext } from "../../src/Context/AppContext";
 import Layout from "../../src/Layouts/Layout";
@@ -19,7 +17,6 @@ interface IProps {
 }
 
 const LoginPage: NextPage = (props: IProps): JSX.Element => {
-    const [showPasswordModal, setShowPasswordModal] = useState<boolean>(false);
     return (
         <Layout>
             <Head>
@@ -31,13 +28,11 @@ const LoginPage: NextPage = (props: IProps): JSX.Element => {
             <LoginForm
                 username={props.username}
                 rememberUsername={props.rememberUsername === "true"}
-                modalHandler={setShowPasswordModal}
             />
             <ForgotPasswordModal/>
         </Layout>
     );
 };
-
 
 LoginPage.getInitialProps = async (context: AppContext): Promise<IProps> => {
     const {rememberUsername, username} = parseCookies(context);

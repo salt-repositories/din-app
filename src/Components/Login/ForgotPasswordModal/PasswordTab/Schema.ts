@@ -6,6 +6,12 @@ export interface IPasswordSchema {
     authorizationCode: string;
 }
 
+export const initialValues: IPasswordSchema = {
+    password: "",
+    repeatPassword: "",
+    authorizationCode: "",
+};
+
 export const passwordSchema = yup.object({
     password: yup.string()
         .required("Please enter a password")

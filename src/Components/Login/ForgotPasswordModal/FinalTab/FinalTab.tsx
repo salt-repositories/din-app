@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Form, Modal } from "react-bootstrap";
+import { Tab } from "../Tab";
 
 interface IProps {
     handleClose(): void;
@@ -7,20 +7,14 @@ interface IProps {
 
 export const FinalTab = (props: IProps): JSX.Element => {
     return (
-        <Form>
-            <Modal.Body>
-                <p>
-                    Your password has been changed successfully.
-                </p>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button
-                    className="sent-button"
-                    onClick={props.handleClose}
-                >
-                        Close
-                </Button>
-            </Modal.Footer>
-        </Form>
+        <Tab
+            final={true}
+            submitText={"Close"}
+            closeCallback={props.handleClose}
+        >
+            <p>
+                Your password has been changed successfully.
+            </p>
+        </Tab>
     );
 };

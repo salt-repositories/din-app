@@ -1,12 +1,11 @@
-import { Button, Modal, Tabs } from "antd";
-import { Formik } from "formik";
+import { Modal, Tabs } from "antd";
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { ComponentsActions } from "../../../Store/Components/actions";
 import { IInitialState } from "../../../Store/states";
-import EmailTab from "./EmailTab/EmailTab";
-import { forgotPasswordSchema, initialValues } from "./Formik";
-import PasswordTab from "./PasswordTab/PasswordTab";
+import { EmailTab } from "./EmailTab";
+import { FinalTab } from "./FinalTab";
+import { PasswordTab } from "./PasswordTab";
 
 const mapStateToProps = (state: IInitialState) => ({
     loading: state.components.forgotPassword.loading,
@@ -23,9 +22,9 @@ const mapDispatchToProps = ({
 type Props = ReturnType<typeof mapStateToProps> &
     typeof mapDispatchToProps;
 
-export type TabStates = "email" | "password" | "final";
-
 const ForgotPasswordModal = (props: Props) => {
+    const [email, setEmail] = useState<string>("");
+
     const handleClose = () => {
         props.setVisible(false);
         props.setTabIndex(0);
@@ -40,52 +39,37 @@ const ForgotPasswordModal = (props: Props) => {
             title="Forgot password"
             footer={null}
         >
-            <Formik
-                validationSchema={forgotPasswordSchema}
-                initialValues={initialValues}
-                onSubmit={undefined}
+            <Tabs
+                defaultActiveKey={props.currentTab.toString()}
+                activeKey={props.currentTab.toString()}
+                renderTabBar={() => <></>}
             >
-                {() => (
-                    <Tabs
-                        defaultActiveKey={props.currentTab.toString()}
-                        activeKey={props.currentTab.toString()}
-                        renderTabBar={() => <></>}
-                    >
-                        <Tabs.TabPane
-                            key="0"
-                        >
-                            <EmailTab
-                                loading={props.loading}
-                                handleClose={handleClose}
-                                setLoading={props.setLoading}
-                                setTabIndex={props.setTabIndex}
-                            />
-                        </Tabs.TabPane>
-                        <Tabs.TabPane
-                            key="1"
-                        >
-                            <PasswordTab
-                                loading={props.loading}
-                                handleClose={handleClose}
-                                setLoading={props.setLoading}
-                                setTabIndex={props.setTabIndex}
-                            />
-                        </Tabs.TabPane>
-                        {/*<Tab eventKey="password" title="Authorize">*/}
-                        {/*    <PasswordTab*/}
-                        {/*        email={email}*/}
-                        {/*        loading={loading}*/}
-                        {/*        handleClose={handleClose}*/}
-                        {/*        setLoading={setLoading}*/}
-                        {/*        setTabState={setTabState}*/}
-                        {/*    />*/}
-                        {/*</Tab>*/}
-                        {/*<Tab eventKey="final" title="Final">*/}
-                        {/*    <FinalTab handleClose={handleClose}/>*/}
-                        {/*</Tab>*/}
-                    </Tabs>
-                )}
-            </Formik>
+                <Tabs.TabPane
+                    key="0"
+                >
+                    <EmailTab
+                        loading={props.loading}
+                        handleClose={handleClose}
+                        setLoading={props.setLoading}
+                        setTabIndex={props.setTabIndex}
+                        setEmail={setEmail}
+                    />
+                </Tabs.TabPane>
+                <Tabs.TabPane
+                    key="1"
+                >
+                    <PasswordTab
+                        email={email}
+                        loading={props.loading}
+                        handleClose={handleClose}
+                        setLoading={props.setLoading}
+                        setTabIndex={props.setTabIndex}
+                    />
+                </Tabs.TabPane>
+                <Tabs.TabPane key="2">
+                    <FinalTab handleClose={handleClose}/>
+                </Tabs.TabPane>
+            </Tabs>
             <style jsx>
                 {`
                     :global(.password-modal .modal-content) {

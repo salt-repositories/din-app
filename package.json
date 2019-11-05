@@ -26,6 +26,7 @@
     "babel-plugin-import": "^1.12.2",
     "class-transformer": "^0.2.3",
     "formik": "^1.5.8",
+    "formik-antd": "^1.6.0",
     "immer": "^3.2.1",
     "isomorphic-unfetch": "^3.0.0",
     "less": "^3.10.3",

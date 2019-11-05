@@ -3,19 +3,18 @@ import { Formik, FormikActions } from "formik";
 import Router from "next/router";
 import { destroyCookie, setCookie } from "nookies";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { setTokenCookie } from "../../../Authentication";
 import { ApiClientProvider } from "../../../Client";
 import { ApiException } from "../../../Client/Exceptions/ApiException";
 import { Token } from "../../../Models";
+import { ComponentsActions } from "../../../Store/Components/actions";
 import { logEvent } from "../../../Utils/Analytics";
 import { ILoginSchema, loginSchema } from "./Schema";
-import { useDispatch } from "react-redux";
-import { ComponentsActions } from "../../../Store/Components/actions";
 
 interface IProps {
     username: string;
     rememberUsername: boolean;
-    modalHandler(visible: true): void;
 }
 
 const apiClient = ApiClientProvider.getClient();
@@ -208,6 +207,10 @@ export const LoginForm = (props: IProps) => {
                     :global(.ant-input-prefix > .icon:focus-withintf) {
                         color: #ff8d1c;
                     }
+                    
+                    :global(.link-wrapper) {
+                        text-align: right;
+                    }
 
                     :global(.link-wrapper span) {
                         font-size: 14px;
@@ -275,5 +278,3 @@ export const LoginForm = (props: IProps) => {
         </>
     );
 };
-
-export default LoginForm;
