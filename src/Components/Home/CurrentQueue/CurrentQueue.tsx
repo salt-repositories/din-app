@@ -1,90 +1,78 @@
-import { deserialize } from "class-transformer";
-import React, { useEffect, useState } from "react";
-import { Queue } from "../../../Models";
-import { ContentHub, HubProvider } from "../../../SignalR";
-
-const contentHub: ContentHub = HubProvider(ContentHub);
+import { Card, Col, Icon, Progress, Row } from "antd";
+import { Actions } from "easy-peasy";
+import React, { useEffect } from "react";
+import { Queue } from "../../../Domain/Models";
+import { IRootState, useStoreActions, useStoreState } from "../../../Store";
 
 interface IQueueRowProps {
     item: Queue;
     percentage: number;
 }
 
+const GIGABYTE: number = 1073741824;
+
 const QueueRow = (props: IQueueRowProps): JSX.Element => {
+    const getSizeInGb = (item: Queue): string => {
+        return `${Math.round(item.size / GIGABYTE).toFixed(1)} GB`;
+    };
+
     return (
         <Row
             className="queue-item"
         >
-            <Col xs={5}>{props.item.content.title}</Col>
-            <Col xs={1}>{
-                props.item.status === "Paused"
-                    ? <FontAwesomeIcon
-                        icon={["fas", "pause"]}
-                        size="sm"
-                        className="logo"
-                    />
-                    : <FontAwesomeIcon
-                        icon={["fas", "play"]}
-                        size="sm"
-                        className="logo"
-                    />
-            }</Col>
-            <Col xs={6}>
-                <ProgressBar
-                    animated={props.item.status !== "Paused"}
-                    now={props.percentage}
-                    label={`${props.percentage}%
-                    eta (${props.item.eta.format("ddd DD-MM-YYYY HH:mm:ss")})`}/>
+            <Col xs={7} offset={1}>{props.item.content.title}</Col>
+            <Col xs={1} offset={1}>
+                {
+                    props.item.status === "Paused"
+                        ? <Icon type="pause-circle"/>
+                        : <Icon type="play-circle"/>
+                }
+            </Col>
+            <Col xs={2}>{getSizeInGb(props.item)}</Col>
+            <Col xs={10} offset={1}>
+                <Progress
+                    className="progress"
+                    status={props.item.status !== "Paused" && props.percentage < 100 ? "active" : undefined}
+                    percent={props.percentage}
+                />
             </Col>
         </Row>
     );
 };
 
 export const CurrentQueue = (): JSX.Element => {
-    const stopAutoClean = true;
-    const [queue, setQueue] = useState<Queue[]>([]);
+    const queue = useStoreState((state: IRootState) => state.queue.currentQueue);
+    const getCurrentQueue = useStoreActions((actions: Actions<IRootState>) => actions.queue.getCurrentQueue);
 
     const getPercentage = (item: Queue): number => {
         return Number((100 - (item.sizeLeft / item.size) * 100).toFixed(2));
     };
 
     useEffect(() => {
-        async function connect() {
-            await contentHub.getCurrentQueue((response: string) => {
-                setQueue(deserialize(Queue, response) as unknown as Queue[]);
-            }).catch();
-        }
-
-        connect();
-
-        return async function cleanup() {
-            await contentHub.disconnect();
-        };
-    }, [stopAutoClean]);
+        getCurrentQueue();
+    }, []);
 
     return (
         <Card
             className="current-queue"
         >
-            <Card.Body>
-                <Card.Title>Current Queue</Card.Title>
-                <Col className="vertical-container">
-                    {queue.length !== 0 ? (
-                        queue.map((item: Queue) => {
-                            const percentage = getPercentage(item);
+            <h1>Current Queue</h1>
+            <Col span={24} className="vertical-container">
+                {queue.length !== 0 ? (
+                    queue.map((item: Queue) => {
+                        const percentage = getPercentage(item);
 
-                            return (
-                                <QueueRow key={item.id} item={item} percentage={percentage}/>
-                            );
-                        })
-                    ) : (
-                        <div className="empty">
-                            <Activity color="white" size={40}/>
-                            <p>Nothing in queue</p>
-                        </div>
-                    )}
-                </Col>
-            </Card.Body>
+                        return (
+                            <QueueRow key={item.id} item={item} percentage={percentage}/>
+                        );
+                    })
+                ) : (
+                    <div className="empty">
+                        <Icon type="exclamation-circle" />
+                        <p>Nothing in queue</p>
+                    </div>
+                )}
+            </Col>
             <style jsx>
                 {`
                     :global(.current-queue) {
@@ -93,17 +81,17 @@ export const CurrentQueue = (): JSX.Element => {
                         height: 400px;
                         background: #2b2b2ba8;
                         margin: 5vh auto auto 63vw;
+                        border: none;
                     }
                     
-                    :global(.current-queue > .card-body) {
-                        height: 100%;
+                    :global(.current-queue > .ant-card-body) {
+                        height: 85%;
                     }
                     
-                    :global(.current-queue > .card-body > .card-title) {
+                    :global(.current-queue h1) {
                         font-size: 25px;
                         color: #ff8d1c;
                         text-shadow: 1px 1px 1px #000;
-                        width: 95%;
                         margin: 0 auto;
                     }
                     
@@ -113,7 +101,6 @@ export const CurrentQueue = (): JSX.Element => {
                         scrollbar-width: none;
                         white-space: nowrap;
                         overflow-y: auto;
-                        max-width: 95%;
                         max-height: 95%;
                     }
                     
@@ -132,13 +119,8 @@ export const CurrentQueue = (): JSX.Element => {
                         width: 12px;
                     }
                     
-                    :global(.queue-item .progress) {
-                        margin-top: 17px;
-                        background-color: #626262;
-                    }
-
-                    :global(.queue-item .progress .progress-bar) {
-                        background-color: #ff8d1c;
+                    :global(.queue-item .progress span) {
+                        color: #fff;
                     }
                     
                     :global(.vertical-container .empty) {

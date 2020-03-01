@@ -1,28 +1,29 @@
 import { Carousel } from "antd";
+import { Actions } from "easy-peasy";
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { BackgroundImage } from "../../Models";
-import { MainActions } from "../../Store/Main/actions";
-import { carouselIndexSelector } from "../../Store/Main/selectors";
+import { BackgroundImage } from "../../Domain/Models";
+import { IRootState, useStoreActions, useStoreState } from "../../Store";
 
 interface IProps {
     backgrounds: BackgroundImage[];
 }
 
 const FullScreenCarousel = (props: IProps): JSX.Element => {
-    const dispatch = useDispatch();
-    const carouselIndex = useSelector(carouselIndexSelector);
+    const carouselIndex = useStoreState((state: IRootState) => state.main.carousel.carouselIndex);
+    const setCarouselIndex = useStoreActions((actions: Actions<IRootState>) => actions.main.carousel.setCarouselIndex);
 
     return (
         <div className="full-screen-carousel-container">
             <Carousel
+                autoplay={true}
+                autoplaySpeed={10000}
                 slickGoTo={carouselIndex}
                 className="full-screen-carousel"
-                afterChange={(newIndex: number) => dispatch(MainActions.setCarouselIndex(newIndex))}
+                afterChange={(newIndex: number) => setCarouselIndex(newIndex)}
             >
-                {props.backgrounds.map((image: any, index: number) => (
+                {props.backgrounds.map((image: BackgroundImage, index: number) => (
                     <div key={index}>
-                        <img className="full-image" src={image.regular} key={index} alt="error"/>
+                        <img className="full-image" src={image.full} key={index} alt="error"/>
                     </div>
                 ))}
             </Carousel>
@@ -57,7 +58,6 @@ const FullScreenCarousel = (props: IProps): JSX.Element => {
                         top: 0;
                         width: 100%;
                         height: 100%;
-                        background: orange;
                         opacity: .15;
                     }
                 `}

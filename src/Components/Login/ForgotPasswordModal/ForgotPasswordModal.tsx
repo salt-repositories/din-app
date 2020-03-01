@@ -1,38 +1,29 @@
 import { Modal, Tabs } from "antd";
 import React, { useState } from "react";
-import { connect } from "react-redux";
-import { ComponentsActions } from "../../../Store/Components/actions";
-import { IInitialState } from "../../../Store/states";
+import { IRootState, useStoreActions, useStoreState } from "../../../Store";
 import { EmailTab } from "./EmailTab";
 import { FinalTab } from "./FinalTab";
 import { PasswordTab } from "./PasswordTab";
 
-const mapStateToProps = (state: IInitialState) => ({
-    loading: state.components.forgotPassword.loading,
-    visible: state.components.forgotPassword.visible,
-    currentTab: state.components.forgotPassword.currentTab,
-});
-
-const mapDispatchToProps = ({
-    setLoading: ComponentsActions.ForgotPassword.setLoading,
-    setVisible: ComponentsActions.setShowForgotPasswordModal,
-    setTabIndex: ComponentsActions.setForgotPasswordModalTabIndex,
-});
-
-type Props = ReturnType<typeof mapStateToProps> &
-    typeof mapDispatchToProps;
-
-const ForgotPasswordModal = (props: Props) => {
+export const ForgotPasswordModal = () => {
     const [email, setEmail] = useState<string>("");
 
+    const visible = useStoreState((state: IRootState) => state.components.forgotPassword.visible);
+    const currentTab = useStoreState((state: IRootState) => state.components.forgotPassword.currentTab);
+    const loading = useStoreState((state: IRootState) => state.components.forgotPassword.loading);
+
+    const setVisible = useStoreActions((actions) => actions.components.forgotPassword.setVisible);
+    const setCurrentTab = useStoreActions((actions) => actions.components.forgotPassword.setCurrentTab);
+    const setLoading = useStoreActions((actions) => actions.components.forgotPassword.setLoading);
+
     const handleClose = () => {
-        props.setVisible(false);
-        props.setTabIndex(0);
+        setVisible(false);
+        setCurrentTab(0);
     };
 
     return (
         <Modal
-            visible={props.visible}
+            visible={visible}
             onCancel={handleClose}
             centered
             className="password-modal"
@@ -40,18 +31,18 @@ const ForgotPasswordModal = (props: Props) => {
             footer={null}
         >
             <Tabs
-                defaultActiveKey={props.currentTab.toString()}
-                activeKey={props.currentTab.toString()}
+                defaultActiveKey={currentTab.toString()}
+                activeKey={currentTab.toString()}
                 renderTabBar={() => <></>}
             >
                 <Tabs.TabPane
                     key="0"
                 >
                     <EmailTab
-                        loading={props.loading}
+                        loading={loading}
                         handleClose={handleClose}
-                        setLoading={props.setLoading}
-                        setTabIndex={props.setTabIndex}
+                        setLoading={setLoading}
+                        setTabIndex={setCurrentTab}
                         setEmail={setEmail}
                     />
                 </Tabs.TabPane>
@@ -60,10 +51,10 @@ const ForgotPasswordModal = (props: Props) => {
                 >
                     <PasswordTab
                         email={email}
-                        loading={props.loading}
+                        loading={loading}
                         handleClose={handleClose}
-                        setLoading={props.setLoading}
-                        setTabIndex={props.setTabIndex}
+                        setLoading={setLoading}
+                        setTabIndex={setCurrentTab}
                     />
                 </Tabs.TabPane>
                 <Tabs.TabPane key="2">
@@ -104,8 +95,3 @@ const ForgotPasswordModal = (props: Props) => {
         </Modal>
     );
 };
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(ForgotPasswordModal) as React.FC;

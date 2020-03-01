@@ -1,9 +1,9 @@
 import { Icon } from "antd";
-import { Formik, FormikActions } from "formik";
+import { Formik, FormikHelpers } from "formik";
 import { Form, Input } from "formik-antd";
 import React from "react";
-import { ApiClientProvider } from "../../../../Client";
-import { ApiException } from "../../../../Client/Exceptions/ApiException";
+import { ApiClientProvider } from "../../../../Domain/Client";
+import { ApiException } from "../../../../Domain/Client/Exceptions/ApiException";
 import { Tab } from "../Tab";
 import { emailSchema, IEmailSchema, initialValues } from "./Schema";
 
@@ -18,7 +18,7 @@ interface IProps {
 const apiClient = ApiClientProvider.getClient();
 
 export const EmailTab = (props: IProps): JSX.Element => {
-    const sendForgotPasswordEmail = async (values: IEmailSchema, actions: FormikActions<IEmailSchema>) => {
+    const sendForgotPasswordEmail = async (values: IEmailSchema, actions: FormikHelpers<IEmailSchema>) => {
         props.setLoading(true);
 
         try {

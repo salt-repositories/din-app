@@ -1,1 +1,1 @@
-export { default as ForgotPasswordModal } from "./ForgotPasswordModal";
+export * from "./ForgotPasswordModal";

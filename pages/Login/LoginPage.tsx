@@ -2,13 +2,13 @@ import { NextPage } from "next";
 import Head from "next/head";
 import { parseCookies } from "nookies";
 import React from "react";
-import { withAuthentication } from "../../src/Authentication";
 import { ForgotPasswordModal, LoginForm } from "../../src/Components/Login";
 import FullScreenCarousel from "../../src/Components/Shared/FullScreenCarousel";
-import { AppContext } from "../../src/Context/AppContext";
+import { withAuthentication } from "../../src/Domain/Authentication";
+import { BackgroundImage } from "../../src/Domain/Models/Media";
 import Layout from "../../src/Layouts/Layout";
-import { BackgroundImage } from "../../src/Models";
-import { BackgroundProvider } from "../../src/Store/Providers";
+import { AppContext } from "../../src/Store/AppContext";
+import { getBackgrounds } from "../../src/Store/Modules/Main";
 
 interface IProps {
     username: string;
@@ -16,7 +16,7 @@ interface IProps {
     backgrounds: BackgroundImage[];
 }
 
-const LoginPage: NextPage = (props: IProps): JSX.Element => {
+const LoginPage: NextPage<IProps> = (props: IProps): JSX.Element => {
     return (
         <Layout>
             <Head>
@@ -36,7 +36,7 @@ const LoginPage: NextPage = (props: IProps): JSX.Element => {
 
 LoginPage.getInitialProps = async (context: AppContext): Promise<IProps> => {
     const {rememberUsername, username} = parseCookies(context);
-    const backgrounds = await BackgroundProvider(context);
+    const backgrounds = await getBackgrounds(context);
 
     return {username, rememberUsername, backgrounds};
 };

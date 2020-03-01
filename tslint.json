@@ -1,5 +1,5 @@
 {
-    "extends": "tslint:recommended",
+    "extends": ["tslint:recommended", "tslint-react"],
     "rules": {
         "max-line-length": {
             "options": [120]
@@ -10,6 +10,11 @@
         "new-parens": true,
         "curly": true,
         "no-arg": true,
+        "jsx-wrap-multiline": false,
+        "no-empty-interface": false,
+        "jsx-no-multiline-js": false,
+        "jsx-no-lambda": false,
+        "jsx-boolean-value": false,
         "no-bitwise": true,
         "no-conditional-assignment": true,
         "no-consecutive-blank-lines": false,

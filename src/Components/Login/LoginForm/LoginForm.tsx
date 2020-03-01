@@ -1,15 +1,14 @@
 import { Badge, Button, Form, Icon, Input, Switch } from "antd";
-import { Formik, FormikActions } from "formik";
+import { Formik, FormikHelpers } from "formik";
 import Router from "next/router";
 import { destroyCookie, setCookie } from "nookies";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { setTokenCookie } from "../../../Authentication";
-import { ApiClientProvider } from "../../../Client";
-import { ApiException } from "../../../Client/Exceptions/ApiException";
-import { Token } from "../../../Models";
-import { ComponentsActions } from "../../../Store/Components/actions";
-import { logEvent } from "../../../Utils/Analytics";
+import { setTokenCookie } from "../../../Domain/Authentication";
+import { ApiClientProvider } from "../../../Domain/Client";
+import { ApiException } from "../../../Domain/Client/Exceptions/ApiException";
+import { Token } from "../../../Domain/Models";
+import { logEvent } from "../../../Domain/Utils";
+import { useStoreActions } from "../../../Store";
 import { ILoginSchema, loginSchema } from "./Schema";
 
 interface IProps {
@@ -21,7 +20,7 @@ const apiClient = ApiClientProvider.getClient();
 
 export const LoginForm = (props: IProps) => {
     const [loading, setLoading] = useState<boolean>(false);
-    const dispatch = useDispatch();
+    const showForgotPasswordModal = useStoreActions((action) => action.components.forgotPassword.setVisible);
 
     const handleStatus = (error, touched): any => {
         if (!error && !!touched) {
@@ -31,7 +30,7 @@ export const LoginForm = (props: IProps) => {
         }
     };
 
-    const handleLogin = async (values: ILoginSchema, formikActions: FormikActions<any>) => {
+    const handleLogin = async (values: ILoginSchema, formikActions: FormikHelpers<any>) => {
         setLoading(true);
 
         let response: Token = new Token();
@@ -112,7 +111,7 @@ export const LoginForm = (props: IProps) => {
                                 />
                             </Form.Item>
                             <div className="text-right link-wrapper">
-                                    <span onClick={() => dispatch(ComponentsActions.setShowForgotPasswordModal(true))}>
+                                    <span onClick={() => showForgotPasswordModal(true)}>
                                         Forgot Password?
                                     </span>
                             </div>

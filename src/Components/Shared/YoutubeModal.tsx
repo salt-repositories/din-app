@@ -1,23 +1,28 @@
+import { Modal } from "antd";
+import { Actions } from "easy-peasy";
 import React from "react";
-import { useDispatch } from "react-redux";
 import YouTube from "react-youtube";
-import { ComponentsActions } from "../../Store/Components/actions";
+import { IRootState, useStoreActions } from "../../Store";
 
 interface IProps {
-    show: boolean;
+    visible: boolean;
     trailerId: string;
 }
 
 export const YoutubeModal = (props: IProps): JSX.Element => {
-    const dispatch = useDispatch();
+    const showYoutubeModal = useStoreActions((actions: Actions<IRootState>) =>
+        actions.components.recentlyAdded.setShowYoutubeModal);
 
     return (
         <React.Fragment>
             <Modal
-                show={props.show}
-                onHide={() => dispatch(ComponentsActions.setShowYoutubeModal(false))}
-                centered
+                visible={props.visible}
+                onCancel={() => showYoutubeModal(false)}
                 className="youtube-modal"
+                footer={<></>}
+                centered
+                width={null}
+                destroyOnClose={true}
             >
                 <YouTube
                     videoId={props.trailerId}
@@ -32,12 +37,13 @@ export const YoutubeModal = (props: IProps): JSX.Element => {
             </Modal>
             <style jsx>
                 {`
-                    :global(.youtube-modal .modal-dialog) {
-                        max-width: 1280px;
+                    :global(.youtube-modal .ant-modal-content) {
+                        background: none;
+                        border: none;
+                        box-shadow: none;
                     }
                     
-                    :global(.youtube-modal .modal-content) {
-                        background: none;
+                    :global(.youtube-modal .ant-modal-footer) {
                         border: none;
                     }
                 `}

@@ -3,17 +3,17 @@ import "reflect-metadata";
 import { NextPage } from "next";
 import Head from "next/head";
 import React from "react";
-import { withAuthentication } from "../../src/Authentication";
-import { Menu } from "../../src/Components/Shared/Menu";
+import { SideMenu } from "../../src/Components/Shared/SideMenu";
+import { withAuthentication } from "../../src/Domain/Authentication";
 import Layout from "../../src/Layouts/Layout";
 
-const MePage: NextPage = (props) => {
+const MePage: NextPage = () => {
     return (
         <Layout>
             <Head>
-                <title>me</title>
+                <title>Me</title>
             </Head>
-            <Menu/>
+            <SideMenu/>
         </Layout>
     );
 };

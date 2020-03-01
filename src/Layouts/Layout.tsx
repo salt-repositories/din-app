@@ -1,6 +1,6 @@
 import Head from "next/head";
 import React from "react";
-import { initGA, logPageView } from "../Utils/Analytics";
+import { initGA, logPageView } from "../Domain/Utils/Analytics";
 
 
 type CustomWindow = Window & typeof globalThis & {

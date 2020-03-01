@@ -4,29 +4,21 @@ import { NextPage } from "next";
 import Head from "next/dist/next-server/lib/head";
 import Router from "next/router";
 import { destroyCookie } from "nookies";
-import React, { useState } from "react";
-import { withAuthentication } from "../../src/Authentication";
+import React from "react";
 import { CurrentQueue, RecentlyAddedMovies } from "../../src/Components/Home";
 import FullScreenCarousel from "../../src/Components/Shared/FullScreenCarousel";
-import { Menu } from "../../src/Components/Shared/Menu";
-import { AppContext } from "../../src/Context/AppContext";
+import { SideMenu } from "../../src/Components/Shared/SideMenu";
+import { withAuthentication } from "../../src/Domain/Authentication";
+import { BackgroundImage } from "../../src/Domain/Models/Media";
 import Layout from "../../src/Layouts/Layout";
-import { BackgroundImage } from "../../src/Models";
-import { MainActions } from "../../src/Store/Main/actions";
-import { BackgroundProvider } from "../../src/Store/Providers";
-
+import { AppContext } from "../../src/Store/AppContext";
+import { getBackgrounds } from "../../src/Store/Modules/Main";
 
 interface IProps {
     backgroundImages: BackgroundImage[];
-    context: AppContext;
 }
 
-const HomePage: NextPage = (props: IProps) => {
-    const onclick = () => {
-        destroyCookie({}, "token");
-        Router.push("/");
-    };
-
+const HomePage: NextPage<IProps> = (props: IProps) => {
     return (
         <Layout>
             <Head>
@@ -35,24 +27,23 @@ const HomePage: NextPage = (props: IProps) => {
             <FullScreenCarousel
                 backgrounds={props.backgroundImages}
             />
-            <Menu/>
-            <span onClick={() => onclick()} style={{position: "absolute", right: "0"}}>
-                LOGOUT
-            </span>
+            <SideMenu/>
             <div style={{overflow: "hidden"}}>
                 <CurrentQueue/>
-                <RecentlyAddedMovies />
+                <RecentlyAddedMovies/>
             </div>
         </Layout>
     );
 };
 
 HomePage.getInitialProps = async (context: AppContext) => {
-    context.store.dispatch(MainActions.setActiveMenuItem(context.pathname));
+    const backgroundImages = await getBackgrounds(context);
 
-    const backgroundImages = await BackgroundProvider(context);
+    // if (context.store.getState().movie.recentlyAddedMovies.length <= 0) {
+    //     await context.store.dispatch.movie.getRecentlyAddedMovies();
+    // }
 
-    return { backgroundImages };
+    return {backgroundImages};
 
 };
 

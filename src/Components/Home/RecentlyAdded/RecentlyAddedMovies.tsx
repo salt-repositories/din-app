@@ -1,97 +1,117 @@
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { fab } from "@fortawesome/free-brands-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Card, Icon, Row, Tooltip } from "antd";
+import { Actions } from "easy-peasy";
+import { useEffect, useState } from "react";
 import * as React from "react";
-import { Card, Row } from "react-bootstrap";
-import { connect } from "react-redux";
-import { ComponentsActions } from "../../../Store/Components/actions";
-import { MovieActions } from "../../../Store/Movie/actions";
-import { RecentlyAddedMoviesProvider } from "../../../Store/Providers/RecentlyAddedMoviesProvider";
-import { IInitialState } from "../../../Store/states";
-import { ComponentSpinner } from "../../Shared/ComponentSpinner";
+import { IRootState, useStoreActions, useStoreState } from "../../../Store";
+import { Spinner } from "../../Shared/Spinner";
 import { YoutubeModal } from "../../Shared/YoutubeModal";
+import { ImdbIcon, PlexIcon } from "./Icons";
 
-library.add(fab);
+export const RecentlyAddedMovies = (): JSX.Element => {
+    const recentlyAddedMovies = useStoreState((state: IRootState) => state.movie.recentlyAddedMovies);
+    const showYoutubeModal = useStoreState((state: IRootState) => state.components.recentlyAdded.showYoutubeModal);
 
-interface IState {
-    loading: boolean;
-    showYoutube: boolean;
-    trailerId: string;
-}
+    const getRecentlyAddedMovies = useStoreActions((actions: Actions<IRootState>) =>
+        actions.movie.getRecentlyAddedMovies);
+    const setShowYoutubeModal = useStoreActions((actions: Actions<IRootState>) =>
+        actions.components.recentlyAdded.setShowYoutubeModal);
 
-const mapDispatchToProps = ({
-    setRecentlyAddedMovies: MovieActions.setRecentlyAddedMovies,
-    setShowYoutubeModal: ComponentsActions.setShowYoutubeModal,
-});
+    const [trailerId, setTrailerId] = useState<string>();
 
-const mapStateToProps = (state: IInitialState) => ({
-    recentlyAddedMovies: state.movie.recentlyAddedMovies,
-    showYoutubeModal: state.components.showYoutubeModal,
-});
+    useEffect(() => {
+        if (recentlyAddedMovies.length <= 0) {
+            getRecentlyAddedMovies();
+        }
+    });
 
-type Props = ReturnType<typeof mapStateToProps> &
-    typeof mapDispatchToProps;
+    const openYoutubeModal = (id: string): void => {
+        setTrailerId(id);
+        setShowYoutubeModal(true);
+    };
 
-class RecentlyAddedMovies extends React.Component<Props, IState> {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            loading: false,
-            showYoutube: false,
-            trailerId: null,
-        };
-    }
-
-    public async componentDidMount(): Promise<void> {
-        this.setState({loading: true});
-        await RecentlyAddedMoviesProvider(this.props.recentlyAddedMovies, this.props.setRecentlyAddedMovies);
-        this.setState({loading: false});
-    }
-
-    public render() {
-        return (
-            <Card
-                className="recently-added"
-            >
-                <YoutubeModal show={this.props.showYoutubeModal} trailerId={this.state.trailerId} />
-                <Card.Body>
-                    <Card.Title>Recently Added Movies</Card.Title>
-                    <div className="horizontal-container">
-                        <Row>
-                            {this.props.recentlyAddedMovies ? (
-                                this.props.recentlyAddedMovies.map((item) => (
-                                    <Card key={item[0].id} className="container-item">
-                                        <Card.Img src={`https://image.tmdb.org/t/p/w500/${item[1].posterPath}`}/>
-                                        <Card.Body>
-                                            <Card.Title>{item[0].title}</Card.Title>
-                                            <Card.Text>{item[0].year}</Card.Text>
-                                            <span
-                                                className="trailer-link"
-                                                onClick={() => this.openYoutubeModal(item[0].youtubeTrailerId)}
-                                            >
-                                                Trailer
-                                            </span>
-                                        </Card.Body>
-                                    </Card>
-                                ))
-                            ) : (
-                                <ComponentSpinner loading={this.state.loading}/>
-                            )}
-                        </Row>
-                    </div>
-                </Card.Body>
-                <style jsx>
-                    {`
+    return (
+        <Card
+            className="recently-added"
+        >
+            <YoutubeModal visible={showYoutubeModal} trailerId={trailerId}/>
+            <h1 className="card-title">Recently Added Movies</h1>
+            <div className="horizontal-container">
+                <Row className="row">
+                    {recentlyAddedMovies.length > 0 ? (
+                        recentlyAddedMovies.map((item) => (
+                            <Card
+                                key={item[0].id}
+                                className="container-item"
+                                cover={
+                                    item[0].plexUrl ? (
+                                        <Tooltip title="Open on Plex">
+                                            <img
+                                                className="card-img plex"
+                                                alt=""
+                                                src={`https://image.tmdb.org/t/p/w500/${item[1].posterPath}`}
+                                                onClick={() => window.open(item[0].plexUrl)}
+                                            />
+                                        </Tooltip>
+                                    ) : (
+                                        <Tooltip title="This movie has not been downloaded">
+                                            <img
+                                                className="card-img"
+                                                alt=""
+                                                src={`https://image.tmdb.org/t/p/w500/${item[1].posterPath}`}
+                                            />
+                                        </Tooltip>
+                                    )
+                                }
+                            >
+                                <Card.Meta
+                                    title={item[0].title}
+                                    description={item[0].year}
+                                />
+                                <span
+                                    className="trailer-link"
+                                    onClick={() => openYoutubeModal(item[0].youtubeTrailerId)}
+                                >
+                                        <Icon type="youtube" className="logo"/>
+                                        Trailer
+                                </span>
+                                {item[0].plexUrl ? (
+                                    <span
+                                        className="plex-link"
+                                        onClick={() => window.open(item[0].plexUrl)}
+                                    >
+                                        <PlexIcon className="logo"/>
+                                        Plex
+                                    </span>
+                                ) : (
+                                    <span
+                                        className="imdb-link"
+                                        onClick={() => window.open(`https://imdb.com/title/${item[0].imdbId}`)}
+                                    >
+                                        <ImdbIcon className="logo"/>
+                                        IMDb
+                                    </span>
+                                )}
+                            </Card>
+                        ))
+                    ) : (
+                        <Spinner/>
+                    )}
+                </Row>
+            </div>
+            <style jsx>
+                {`
                         :global(.recently-added) {
                             border-radius: 5px;
+                            border: none;
                             width: 90vw;
                             height: 400px;
                             background: #2b2b2ba8;
-                            margin: 5vh auto auto 8vw;
+                            margin: auto auto auto 8vw;
+                            position: fixed;
+                            bottom: 2em;
                         }
                         
-                        :global(.recently-added > .card-body > .card-title) {
+                        :global(.recently-added .card-title) {
                             font-size: 25px;
                             color: #ff8d1c;
                             text-shadow: 1px 1px 1px #000;
@@ -103,17 +123,17 @@ class RecentlyAddedMovies extends React.Component<Props, IState> {
                             margin: 0 auto;
                             width: 95%;
                             height: 100%;
+                            overflow-x: scroll;
+                            overflow-y: hidden;
+                            white-space: nowrap;
+                            scrollbar-width: none;z
                         }
                         
                         :global(.horizontal-container > .row) {
                             flex-wrap: nowrap;
                             height: 100%;
-                            overflow-x: auto;
-                            scrollbar-width: none;
-                            white-space: nowrap;
                             margin-left: 0;
                             margin-right: 0;
-                            white-space: unset;
                         }
                         
                         .horizontal-container::-webkit-scrollbar {
@@ -128,26 +148,36 @@ class RecentlyAddedMovies extends React.Component<Props, IState> {
                             overflow: hidden;
                         }
                         
-                        :global(.container-item > .card-img) {
+                        :global(.container-item) {
+                            width: 130px;
+                            display: inline-block;
+                        }
+                        
+                        :global(.container-item .card-img) {
                             height: 185px;
                         }
                         
-                        :global(.container-item > .card-body) {
-                            padding: 10px 0 0 0;
+                        :global(.container-item .plex:hover) {
+                            cursor: pointer
                         }
                         
-                        :global(.container-item > .card-body > .card-title) {
+                        :global(.container-item > .ant-card-body) {
+                            padding: 24px 0 24px 0;
+                        }
+                        
+                        :global(.container-item > .ant-card-body .ant-card-meta-title) {
                             height: 28px;
                             color: #fff;
                             overflow-wrap: break-word;
                             word-wrap: break-word;
                             hyphens: auto;
-                            font-size: 15px;
+                            font-size: 12px;
+                            margin-bottom: 0;
                         }
                         
-                        :global(.container-item > .card-body > .card-text) {
+                        :global(.container-item > .ant-card-body .ant-card-meta-description) {
                             color: #9d7751;
-                            margin-bottom: 0;
+                            margin-bottom: 7px;
                         }
                         
                         :global(.container-item .trailer-link) {
@@ -164,22 +194,42 @@ class RecentlyAddedMovies extends React.Component<Props, IState> {
                             color: #df1818;
                             margin-right: 5px;
                         }
+                        
+                        :global(.container-item .plex-link) {
+                            color: #dbd6ce;
+                            font-size: 12px;
+                            margin-left: 10px;
+                        }
+                        
+                        :global(.container-item .plex-link:hover) {
+                            cursor: pointer
+                        }
+                        
+                        :global(.container-item .plex-link .logo) {
+                            width: 13px;
+                            height: 13px;
+                            color: #df1818;
+                            margin-right: 5px;
+                        }
+                        
+                        :global(.container-item .imdb-link) {
+                            color: #dbd6ce;
+                            font-size: 12px;
+                            margin-left: 10px;
+                        }
+                        
+                        :global(.container-item .imdb-link:hover) {
+                            cursor: pointer
+                        }
+                        
+                        :global(.container-item .imdb-link .logo) {
+                            width: 20px;
+                            height: 12px;
+                            color: #df1818;
+                            margin-right: 5px;
+                        }
                     `}
-                </style>
-            </Card>
-        );
-    }
-
-    private openYoutubeModal(trailerId: string) {
-        this.setState({
-            trailerId,
-        });
-
-        this.props.setShowYoutubeModal(true);
-    }
-}
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(RecentlyAddedMovies);
+            </style>
+        </Card>
+    );
+};

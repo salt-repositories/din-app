@@ -1,2 +1,1 @@
-import RecentlyAddedMovies from "./RecentlyAddedMovies";
-export { RecentlyAddedMovies };
+export * from "./RecentlyAddedMovies";
