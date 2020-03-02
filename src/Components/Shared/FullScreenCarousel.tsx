@@ -23,7 +23,7 @@ const FullScreenCarousel = (props: IProps): JSX.Element => {
             >
                 {props.backgrounds.map((image: BackgroundImage, index: number) => (
                     <div key={index}>
-                        <img className="full-image" src={image.full} key={index} alt="error"/>
+                        <img className="full-image" src={image.regular} key={index} alt="error"/>
                     </div>
                 ))}
             </Carousel>
