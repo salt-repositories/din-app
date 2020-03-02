@@ -2,8 +2,6 @@ import "reflect-metadata";
 
 import { NextPage } from "next";
 import Head from "next/dist/next-server/lib/head";
-import Router from "next/router";
-import { destroyCookie } from "nookies";
 import React from "react";
 import { CurrentQueue, RecentlyAddedMovies } from "../../src/Components/Home";
 import FullScreenCarousel from "../../src/Components/Shared/FullScreenCarousel";

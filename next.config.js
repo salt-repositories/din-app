@@ -42,7 +42,7 @@ module.exports = withLess({
             new Dotenv({
                 path: path.join(__dirname, ".env"),
                 systemvars: true
-            })
+            }),
         ];
 
         return config;
