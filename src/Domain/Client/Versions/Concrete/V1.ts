@@ -1,4 +1,3 @@
-import { IApiVersion } from "../index";
 import {
     AccountEndpoints,
     AuthenticationEndpoints,
@@ -6,6 +5,7 @@ import {
     MovieEndpoints,
     TvShowEndpoints,
 } from "../../Endpoints";
+import { IApiVersion } from "../index";
 import { ApiVersions } from "./Versions";
 
 export class V1 implements IApiVersion {

@@ -4,7 +4,7 @@ import { Movie, MovieSearch } from "../../../Domain/Models/Movies";
 import { Filters, QueryParameters } from "../../../Domain/Models/Querying";
 
 export interface IMovieState {
-    recentlyAddedMovies: Array<[Movie, MovieSearch]>;
+    recentlyAddedMovies: [Movie, MovieSearch][];
     getRecentlyAddedMovies: Thunk<IMovieState>;
     addRecentlyAddedMovies: Action<IMovieState, [Movie, MovieSearch]>;
     filters: Filters;

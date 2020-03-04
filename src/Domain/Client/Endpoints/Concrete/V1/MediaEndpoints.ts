@@ -1,6 +1,6 @@
-import { Endpoints } from "../../index";
 import { BackgroundImage, Gif } from "../../../../Models";
 import { ApiVersions } from "../../../Versions/Concrete/Versions";
+import { Endpoints } from "../../index";
 
 export class MediaEndpoints extends Endpoints {
 

@@ -1,5 +1,5 @@
-import { Icon, Menu } from "antd";
-import { SelectParam } from "antd/lib/menu";
+import { Icon, Menu  } from "antd";
+import { SelectParam } from "antd/es/menu";
 import { Actions } from "easy-peasy";
 import Router from "next/router";
 import { destroyCookie } from "nookies";

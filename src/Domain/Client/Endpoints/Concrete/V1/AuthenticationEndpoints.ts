@@ -1,6 +1,6 @@
-import { Endpoints } from "../../index";
 import { Token } from "../../../../Models";
 import { ApiVersions } from "../../../Versions/Concrete/Versions";
+import { Endpoints } from "../../index";
 
 export class AuthenticationEndpoints extends Endpoints {
     constructor(version: ApiVersions) {

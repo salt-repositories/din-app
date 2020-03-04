@@ -1,7 +1,7 @@
-import { Endpoints } from "../../index";
 import { Filters, MovieQueryResult, MovieSearch, QueryParameters } from "../../../../Models";
 import { ApiClientUtils } from "../../../ApiClientUtils";
 import { ApiVersions } from "../../../Versions/Concrete/Versions";
+import { Endpoints } from "../../index";
 
 export class MovieEndpoints extends Endpoints {
     constructor(version: ApiVersions) {
