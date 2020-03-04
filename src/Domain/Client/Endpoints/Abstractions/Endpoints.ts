@@ -1,15 +1,14 @@
 import { plainToClass } from "class-transformer";
 import { ClassType } from "class-transformer/ClassTransformer";
 import fetch from "isomorphic-unfetch";
-import { getToken } from "../../../Authentication/HandleAuthentication";
-import { logException } from "../../../Utils/Analytics";
+import { getToken } from "../../../Authentication";
+import { logException } from "../../../Utils";
 import { ApiException } from "../../Exceptions/ApiException";
 import { ApiVersions } from "../../Versions/Concrete/Versions";
 
 type Method = "GET" | "POST" | "PATCH" | "PUT" | "DELETE";
 
 export abstract class Endpoints {
-    public static token: string;
     private readonly baseUrl: string;
     private readonly version: ApiVersions;
     private readonly endpoint: string;

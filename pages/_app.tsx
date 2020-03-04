@@ -3,12 +3,22 @@ import "reflect-metadata";
 import { Store, StoreProvider } from "easy-peasy";
 import withRedux from "next-redux-wrapper";
 import App from "next/app";
+import { default as nextRouter } from 'next/router'
 import React from "react";
-import { initializeStore } from "../src/Store";
+import { initializeStore, IRootState } from "../src/Store";
+
+export const redirect = (ctx, path) => {
+    if (process.browser) {
+        nextRouter.push(path)
+    } else {
+        ctx.res.writeHead(301, { Location: path });
+        ctx.res.end()
+    }
+};
 
 interface IProps {
     Component: React.Component;
-    store: Store;
+    store: Store<IRootState>;
 }
 
 class MyApp extends App<IProps> {
@@ -19,11 +29,8 @@ class MyApp extends App<IProps> {
         return {pageProps};
     }
 
-    public store: Store;
-
     constructor(props) {
         super(props);
-        this.store = props.store;
     }
 
     public render(): JSX.Element {

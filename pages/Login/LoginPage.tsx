@@ -14,7 +14,6 @@ import { getBackgrounds } from "../../src/Store/Modules/Main";
 
 interface IProps {
     username: string;
-    rememberUsername: string;
     backgrounds: BackgroundImage[];
 }
 
@@ -29,7 +28,6 @@ const LoginPage: NextPage<IProps> = (props: IProps): JSX.Element => {
             />
             <LoginForm
                 username={props.username}
-                rememberUsername={props.rememberUsername === "true"}
             />
             <ForgotPasswordModal/>
         </Layout>
@@ -37,10 +35,12 @@ const LoginPage: NextPage<IProps> = (props: IProps): JSX.Element => {
 };
 
 LoginPage.getInitialProps = async (context: AppContext): Promise<IProps> => {
-    const {rememberUsername, username} = parseCookies(context);
-    const backgrounds = await getBackgrounds(context);
+    const promise = getBackgrounds(context);
+    const {username} = parseCookies(context);
 
-    return {username, rememberUsername, backgrounds};
+    const backgrounds = await promise;
+
+    return {username, backgrounds};
 };
 
 export default withAuthentication(LoginPage);

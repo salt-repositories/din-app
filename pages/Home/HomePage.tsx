@@ -13,7 +13,7 @@ import { AppContext } from "../../src/Store/AppContext";
 import { getBackgrounds } from "../../src/Store/Modules/Main";
 
 interface IProps {
-    backgroundImages: BackgroundImage[];
+    backgrounds: BackgroundImage[];
 }
 
 const HomePage: NextPage<IProps> = (props: IProps) => {
@@ -23,7 +23,7 @@ const HomePage: NextPage<IProps> = (props: IProps) => {
                 <title>Home</title>
             </Head>
             <FullScreenCarousel
-                backgrounds={props.backgroundImages}
+                backgrounds={props.backgrounds}
             />
             <SideMenu/>
             <div style={{overflow: "hidden"}}>
@@ -34,15 +34,10 @@ const HomePage: NextPage<IProps> = (props: IProps) => {
     );
 };
 
-HomePage.getInitialProps = async (context: AppContext) => {
-    const backgroundImages = await getBackgrounds(context);
+HomePage.getInitialProps = async (context: AppContext): Promise<IProps> => {
+    const backgrounds = await getBackgrounds(context);
 
-    // if (context.store.getState().movie.recentlyAddedMovies.length <= 0) {
-    //     await context.store.dispatch.movie.getRecentlyAddedMovies();
-    // }
-
-    return {backgroundImages};
-
+    return {backgrounds};
 };
 
 export default withAuthentication(HomePage);

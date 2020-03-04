@@ -8,7 +8,7 @@ export const withAuthentication = (Page) => {
             await HandleAuthentication(context);
 
             if (Page.getInitialProps) {
-                return await Page.getInitialProps(context);
+                return Page.getInitialProps(context);
             }
 
             return {};

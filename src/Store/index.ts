@@ -11,7 +11,7 @@ export interface IRootState {
     queue: Readonly<IQueueState>;
 }
 
-export const store: IRootState = {
+export const storeStructure: IRootState = {
     main: mainState,
     movie: movieState,
     components: componentsState,
@@ -19,7 +19,7 @@ export const store: IRootState = {
 };
 
 export const initializeStore = (initialState) => {
-    return createStore(store, initialState);
+    return createStore(storeStructure, initialState);
 };
 
 const typedHooks = createTypedHooks<IRootState>();

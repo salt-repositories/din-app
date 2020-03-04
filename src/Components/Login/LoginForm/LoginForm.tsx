@@ -1,5 +1,6 @@
-import { Badge, Button, Form, Icon, Input, Switch } from "antd";
-import { Formik, FormikHelpers } from "formik";
+import { Badge, Button, Icon, Switch } from "antd";
+import { Formik , FormikHelpers } from "formik";
+import { Form, Input } from "formik-antd";
 import Router from "next/router";
 import { destroyCookie, setCookie } from "nookies";
 import React, { useState } from "react";
@@ -13,7 +14,6 @@ import { ILoginSchema, loginSchema } from "./Schema";
 
 interface IProps {
     username: string;
-    rememberUsername: boolean;
 }
 
 const apiClient = ApiClientProvider.getClient();
@@ -21,14 +21,6 @@ const apiClient = ApiClientProvider.getClient();
 export const LoginForm = (props: IProps) => {
     const [loading, setLoading] = useState<boolean>(false);
     const showForgotPasswordModal = useStoreActions((action) => action.components.forgotPassword.setVisible);
-
-    const handleStatus = (error, touched): any => {
-        if (!error && !!touched) {
-            return "success";
-        } else if (error && !!touched) {
-            return "error";
-        }
-    };
 
     const handleLogin = async (values: ILoginSchema, formikActions: FormikHelpers<any>) => {
         setLoading(true);
@@ -66,46 +58,36 @@ export const LoginForm = (props: IProps) => {
                     validationSchema={loginSchema}
                     onSubmit={handleLogin}
                     initialValues={{
-                        username: props.rememberUsername ? props.username : "",
+                        username: props.username ? props.username : "",
                         password: "",
-                        rememberUsername: props.rememberUsername,
+                        rememberUsername: !!props.username,
                     }}
                 >
-                    {({handleSubmit, handleChange, handleBlur, values, errors, touched}) => (
+                    {({ handleSubmit, handleChange, values, setFieldValue }) => (
                         <Form noValidate onSubmit={handleSubmit} className="login-form">
                             <div className="title-wrapper">
                                 <Badge className="title">DIN</Badge>
                             </div>
                             <Form.Item
+                                name="username"
                                 className="input-wrapper"
                                 label="Username / Email"
-                                hasFeedback
-                                validateStatus={handleStatus(errors.username, touched.username)}
-                                help={errors.username}
                             >
                                 <Input
                                     name="username"
                                     type="text"
                                     placeholder="Type your username or email"
-                                    value={values.username}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
                                     prefix={<Icon className="icon" type="user"/>}
                                 />
                             </Form.Item>
                             <Form.Item
+                                name="password"
                                 className="input-wrapper"
                                 label="Password"
-                                hasFeedback
-                                validateStatus={handleStatus(errors.password, touched.password)}
-                                help={errors.password}
                             >
                                 <Input.Password
                                     name="password"
                                     placeholder="Type your password"
-                                    value={values.password}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
                                     prefix={<Icon type="key"/>}
 
                                 />
@@ -115,16 +97,17 @@ export const LoginForm = (props: IProps) => {
                                         Forgot Password?
                                     </span>
                             </div>
-                            <Form.Item
+                            <div
                                 className="box-wrapper"
-                                label="Remember username / email"
                             >
+                                <span>Remember username / email</span>
+                                <br/>
                                 <Switch
-                                    onChange={handleChange}
+                                    onChange={(value) => setFieldValue("rememberUsername", value)}
                                     defaultChecked={values.rememberUsername}
                                 />
-                            </Form.Item>
-                            <Form.Item className="button-wrapper">
+                            </div>
+                            <Form.Item className="button-wrapper" name="submit">
                                 <Button
                                     htmlType="submit"
                                     className="submit"
@@ -144,7 +127,7 @@ export const LoginForm = (props: IProps) => {
                         padding: 50px 55px 50px;
                         background: white;
                         opacity: .9;
-                        margin: 10vh auto;
+                        margin: 14em auto;
                         display: block;
                         width: 500px;
                     }
@@ -236,8 +219,7 @@ export const LoginForm = (props: IProps) => {
                     }
 
                     :global(.button-wrapper) {
-                        margin-top: 2vh;
-                        margin-bottom: 0 !important;
+                        margin: 2em 0 2em 0;
                     }
 
                     :global(.login-form .submit) {
@@ -266,11 +248,19 @@ export const LoginForm = (props: IProps) => {
                     }
 
                     :global(.ant-input-prefix) {
-                        left: 5px !important;
-                    }
-
-                    :global(.form-control.is-invalid ~ .invalid-feedback) {
                         position: absolute;
+                        top: 1.5em;
+                    }
+                    
+                    :global(.ant-input-suffix) {
+                        position: absolute;
+                        top: 1.5em;
+                        left: 21em;
+                    }
+                    
+                    :global(.ant-form-explain) {
+                        color: #c62b2b;
+                        list-style-type: none;
                     }
                 `}
             </style>

@@ -53,9 +53,7 @@ export const CurrentQueue = (): JSX.Element => {
     }, []);
 
     return (
-        <Card
-            className="current-queue"
-        >
+        <Card className="current-queue">
             <h1>Current Queue</h1>
             <Col span={24} className="vertical-container">
                 {queue.length !== 0 ? (
@@ -76,11 +74,14 @@ export const CurrentQueue = (): JSX.Element => {
             <style jsx>
                 {`
                     :global(.current-queue) {
+                        position: fixed;
+                        top: 2em;
+                        right: 2em;
                         border-radius: 5px;
                         width: 35vw;
                         height: 400px;
                         background: #2b2b2ba8;
-                        margin: 5vh auto auto 63vw;
+                        margin: auto;
                         border: none;
                     }
                     
