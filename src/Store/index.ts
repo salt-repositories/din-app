@@ -3,10 +3,12 @@ import { componentsState, IComponentsState } from "./Modules/Components";
 import { IMainState, mainState } from "./Modules/Main";
 import { IMovieState, movieState } from "./Modules/Movie";
 import { IQueueState, queueState } from "./Modules/Queue";
+import { ITvShowState, tvShowState } from "./Modules/TvShow";
 
 export interface IRootState {
     main: Readonly<IMainState>;
     movie: Readonly<IMovieState>;
+    tvShow: Readonly<ITvShowState>;
     components: Readonly<IComponentsState>;
     queue: Readonly<IQueueState>;
 }
@@ -14,6 +16,7 @@ export interface IRootState {
 export const storeStructure: IRootState = {
     main: mainState,
     movie: movieState,
+    tvShow: tvShowState,
     components: componentsState,
     queue: queueState,
 };

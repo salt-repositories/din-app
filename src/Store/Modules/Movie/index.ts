@@ -25,7 +25,7 @@ export const movieState: IMovieState = {
 
         const movies = await apiClient.v1.movies.getMovies(params, filters);
         const searchMovies = await Promise.all(
-            movies.items.map(async (movie) => apiClient.v1.movies.searchMovieByQuery(movie.title)).flat(1),
+            movies.items.map(async (movie) => apiClient.v1.movies.searchMovieByQuery(movie.title)),
         );
 
         searchMovies.map((result, index) => {

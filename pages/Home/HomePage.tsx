@@ -3,7 +3,7 @@ import "reflect-metadata";
 import { NextPage } from "next";
 import Head from "next/dist/next-server/lib/head";
 import React from "react";
-import { CurrentQueue, RecentlyAddedMovies } from "../../src/Components/Home";
+import { CurrentQueue, RecentlyAdded } from "../../src/Components/Home";
 import FullScreenCarousel from "../../src/Components/Shared/FullScreenCarousel";
 import { SideMenu } from "../../src/Components/Shared/SideMenu";
 import { withAuthentication } from "../../src/Domain/Authentication";
@@ -28,7 +28,7 @@ const HomePage: NextPage<IProps> = (props: IProps) => {
             <SideMenu/>
             <div style={{overflow: "hidden"}}>
                 <CurrentQueue/>
-                <RecentlyAddedMovies/>
+                <RecentlyAdded/>
             </div>
         </Layout>
     );

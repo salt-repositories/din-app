@@ -1,1 +1,1 @@
-export * from "./RecentlyAddedMovies";
+export * from "./RecentlyAdded";

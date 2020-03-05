@@ -1,8 +1,8 @@
+import { Endpoints } from "../..";
 import { Filters, QueryParameters } from "../../../../Models/Querying";
-import { TvShowQueryResult } from "../../../../Models/TvShow";
+import { TvShowQueryResult, TvShowSearch } from "../../../../Models/TvShow";
 import { ApiClientUtils } from "../../../ApiClientUtils";
 import { ApiVersions } from "../../../Versions/Concrete/Versions";
-import { Endpoints } from "../../index";
 
 export class TvShowEndpoints extends Endpoints {
     constructor(version: ApiVersions) {
@@ -18,5 +18,16 @@ export class TvShowEndpoints extends Endpoints {
             TvShowQueryResult,
             false,
         ) as TvShowQueryResult;
+    }
+    
+    public async searchTvShowByQuery(query: string): Promise<TvShowSearch[]> {
+        return await this.call(
+            "GET",
+            true,
+            `search?query=${query}`,
+            null,
+            TvShowSearch,
+            true,
+        ) as TvShowSearch[];
     }
 }

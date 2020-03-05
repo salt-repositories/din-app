@@ -1,100 +1,32 @@
-import { Card, Icon, Row, Tooltip } from "antd";
-import { Actions } from "easy-peasy";
-import { useEffect, useState } from "react";
+import { Card, Row, Select } from "antd";
+import { useState } from "react";
 import * as React from "react";
-import { IRootState, useStoreActions, useStoreState } from "../../../Store";
-import { Spinner } from "../../Shared/Spinner";
-import { YoutubeModal } from "../../Shared/YoutubeModal";
-import { ImdbIcon, PlexIcon } from "./Icons";
+import { MoviesContainer } from "./MoviesContainer";
+import { TvShowsContainer } from "./TvShowsContainer";
 
-export const RecentlyAddedMovies = (): JSX.Element => {
-    const recentlyAddedMovies = useStoreState((state: IRootState) => state.movie.recentlyAddedMovies);
-    const showYoutubeModal = useStoreState((state: IRootState) => state.components.recentlyAdded.showYoutubeModal);
-
-    const getRecentlyAddedMovies = useStoreActions((actions: Actions<IRootState>) =>
-        actions.movie.getRecentlyAddedMovies);
-    const setShowYoutubeModal = useStoreActions((actions: Actions<IRootState>) =>
-        actions.components.recentlyAdded.setShowYoutubeModal);
-
-    const [trailerId, setTrailerId] = useState<string>();
-
-    useEffect(() => {
-        if (recentlyAddedMovies.length <= 0) {
-            getRecentlyAddedMovies();
-        }
-    });
-
-    const openYoutubeModal = (id: string): void => {
-        setTrailerId(id);
-        setShowYoutubeModal(true);
-    };
+export const RecentlyAdded = (): JSX.Element => {
+    const [select, setSelect] = useState<string>("movies");
 
     return (
         <Card
             className="recently-added"
         >
-            <YoutubeModal visible={showYoutubeModal} trailerId={trailerId}/>
-            <h1 className="card-title">Recently Added Movies</h1>
+
+            <h1 className="card-title">Recently Added</h1>
+            <Select
+                defaultValue={select}
+                className="select"
+                onChange={setSelect}
+            >
+                <Select.Option value="movies">Movies</Select.Option>
+                <Select.Option value="tvshows">Tv Shows</Select.Option>
+            </Select>
             <div className="horizontal-container">
                 <Row className="row">
-                    {recentlyAddedMovies.length > 0 ? (
-                        recentlyAddedMovies.map((item) => (
-                            <Card
-                                key={item[0].id}
-                                className="container-item"
-                                cover={
-                                    item[0].plexUrl ? (
-                                        <Tooltip title="Open on Plex">
-                                            <img
-                                                className="card-img plex"
-                                                alt=""
-                                                src={`https://image.tmdb.org/t/p/w500/${item[1].posterPath}`}
-                                                onClick={() => window.open(item[0].plexUrl)}
-                                            />
-                                        </Tooltip>
-                                    ) : (
-                                        <Tooltip title="This movie has not been downloaded">
-                                            <img
-                                                className="card-img"
-                                                alt=""
-                                                src={`https://image.tmdb.org/t/p/w500/${item[1].posterPath}`}
-                                            />
-                                        </Tooltip>
-                                    )
-                                }
-                            >
-                                <Card.Meta
-                                    title={item[0].title}
-                                    description={item[0].year}
-                                />
-                                <span
-                                    className="trailer-link"
-                                    onClick={() => openYoutubeModal(item[0].youtubeTrailerId)}
-                                >
-                                        <Icon type="youtube" className="logo"/>
-                                        Trailer
-                                </span>
-                                {item[0].plexUrl ? (
-                                    <span
-                                        className="plex-link"
-                                        onClick={() => window.open(item[0].plexUrl)}
-                                    >
-                                        <PlexIcon className="logo"/>
-                                        Plex
-                                    </span>
-                                ) : (
-                                    <span
-                                        className="imdb-link"
-                                        onClick={() => window.open(`https://imdb.com/title/${item[0].imdbId}`)}
-                                    >
-                                        <ImdbIcon className="logo"/>
-                                        IMDb
-                                    </span>
-                                )}
-                            </Card>
-                        ))
+                    {select === "movies" ? (
+                        <MoviesContainer/>
                     ) : (
-                        <Spinner/>
+                        <TvShowsContainer/>
                     )}
                 </Row>
             </div>
@@ -111,13 +43,35 @@ export const RecentlyAddedMovies = (): JSX.Element => {
                         background: #2b2b2ba8;
                         margin: auto auto auto 8vw;
                     }
-                    
+                  
                     :global(.recently-added .card-title) {
+                        margin-left: 2.2em;
+                        float: left;
                         font-size: 25px;
                         color: #ff8d1c;
                         text-shadow: 1px 1px 1px #000;
-                        width: 95%;
-                        margin: 0 auto;
+                    }
+                    
+                    :global(.recently-added .select) {
+                        float: left;
+                        margin-top: 0.15em;
+                        font-size: 25px;
+                        color: #ff8d1c;
+                        text-shadow: 1px 1px 1px #000;
+                    }
+                    
+                    :global(.recently-added .select .ant-select-selection:focus, .ant-select-selection:active) {
+                        box-shadow: none;
+                    }
+                    
+                    :global(.recently-added .select .ant-select-selection) {
+                        background: transparent;
+                        border: transparent;
+                    }
+                     
+                    :global(.recently-added .select .ant-select-arrow) {
+                       color: #ff8d1c;
+                       right: 5px;
                     }
                     
                     :global(.horizontal-container) {
@@ -184,6 +138,7 @@ export const RecentlyAddedMovies = (): JSX.Element => {
                     :global(.container-item .trailer-link) {
                         color: #dbd6ce;
                         font-size: 12px;
+                        margin-right: 10px;
                     }
                     
                     :global(.container-item .trailer-link:hover) {
@@ -199,7 +154,6 @@ export const RecentlyAddedMovies = (): JSX.Element => {
                     :global(.container-item .plex-link) {
                         color: #dbd6ce;
                         font-size: 12px;
-                        margin-left: 10px;
                     }
                     
                     :global(.container-item .plex-link:hover) {
@@ -216,7 +170,6 @@ export const RecentlyAddedMovies = (): JSX.Element => {
                     :global(.container-item .imdb-link) {
                         color: #dbd6ce;
                         font-size: 12px;
-                        margin-left: 10px;
                     }
                     
                     :global(.container-item .imdb-link:hover) {
