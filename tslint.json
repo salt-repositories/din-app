@@ -1,9 +1,6 @@
 {
-    "extends": ["tslint:recommended"],
+    "extends": ["tslint:recommended", "tslint-etc"],
     "rules": {
-        "max-line-length": {
-            "options": [120]
-        },
         "object-literal-sort-keys": false,
         "ordered-imports": true,
         "whitespace": [true, "check-module"],
@@ -19,6 +16,15 @@
         "no-bitwise": true,
         "no-conditional-assignment": true,
         "no-consecutive-blank-lines": false,
+        "no-unused-declaration": {
+            "options": [
+                {
+                    "declarations": true,
+                    "imports": true
+                }
+            ],
+            "severity": "error"
+        },
         "no-trailing-whitespace": [true, "ignore-comments", "ignore-jsdoc", "ignore-blank-lines"],
         "no-console": {
             "severity": "warning",

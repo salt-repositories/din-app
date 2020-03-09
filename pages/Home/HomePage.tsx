@@ -1,43 +1,42 @@
 import "reflect-metadata";
 
+import { Col, Icon, Row } from "antd";
 import { NextPage } from "next";
 import Head from "next/dist/next-server/lib/head";
 import React from "react";
-import { CurrentQueue, RecentlyAdded } from "../../src/Components/Home";
-import FullScreenCarousel from "../../src/Components/Shared/FullScreenCarousel";
-import { SideMenu } from "../../src/Components/Shared/SideMenu";
+import { CurrentQueue, DownloadCalendar, RecentlyAdded } from "../../src/Components/Home";
 import { withAuthentication } from "../../src/Domain/Authentication";
-import { BackgroundImage } from "../../src/Domain/Models/Media";
+import { WithMenu } from "../../src/Layouts";
 import Layout from "../../src/Layouts/Layout";
 import { AppContext } from "../../src/Store/AppContext";
-import { getBackgrounds } from "../../src/Store/Modules/Main";
 
-interface IProps {
-    backgrounds: BackgroundImage[];
-}
-
-const HomePage: NextPage<IProps> = (props: IProps) => {
+const HomePage: NextPage = () => {
     return (
         <Layout>
             <Head>
                 <title>Home</title>
             </Head>
-            <FullScreenCarousel
-                backgrounds={props.backgrounds}
-            />
-            <SideMenu/>
-            <div style={{overflow: "hidden"}}>
-                <CurrentQueue/>
+            <WithMenu crumbs={[{name: "Home", icon: <Icon type="home"/>}]}>
+                <Col span={24}>
+                    <Row>
+                        <Col span={15}>
+                            <DownloadCalendar/>
+                        </Col>
+                        <Col span={8} offset={1}>
+                            <CurrentQueue/>
+                        </Col>
+                    </Row>
+                </Col>
                 <RecentlyAdded/>
-            </div>
+            </WithMenu>
         </Layout>
     );
 };
 
-HomePage.getInitialProps = async (context: AppContext): Promise<IProps> => {
-    const backgrounds = await getBackgrounds(context);
-
-    return {backgrounds};
+HomePage.getInitialProps = async (context: AppContext): Promise<void> => {
+    context.store.dispatch.movie.recentlyAddedMovies.setSsr(true);
+    context.store.dispatch.movie.recentlyAddedMovies.getRecentlyAdded();
+    context.store.dispatch.tvShow.recentlyAddedTvShows.getRecentlyAdded();
 };
 
 export default withAuthentication(HomePage);

@@ -32,6 +32,7 @@ export default class Layout extends React.Component {
                             overflow: hidden;
                             position: relative;
                             font-family: 'Roboto', sans-serif;
+                            background-color: #000000a8;
                         }
                     `}
                  </style>

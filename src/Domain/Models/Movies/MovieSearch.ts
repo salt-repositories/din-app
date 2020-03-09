@@ -1,23 +1,9 @@
 import { Expose, Transform } from "class-transformer";
 import moment, { Moment } from "moment";
+import { Search } from "../Abstractions/Search";
 
-export class MovieSearch {
-    public title: string;
-    @Expose({ name: "original_title" })
-    public originalTitle: string;
+export class MovieSearch extends Search {
     @Expose({ name: "release_date" })
     @Transform((value) => moment(value))
     public releaseDate: Moment;
-    @Expose({ name: "tmdb_id" })
-    public tmdbId: number;
-    public overview: string;
-    @Expose({ name: "poster_path" })
-    public posterPath: string;
-    public genres: string[];
-    @Expose({ name: "original_language" })
-    public originalLanguage: string;
-    @Expose({ name: "vote_average" })
-    public voteAverage: number;
-    @Expose({ name: "vote_count" })
-    public voteCount: number;
 }

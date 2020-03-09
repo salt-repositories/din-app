@@ -67,6 +67,7 @@ export const SideMenu = (): JSX.Element => {
                 {`
                     :global(.side-menu) {
                         position: fixed;
+                        top: 0;
                         height: 100vh;
                         width: 100px;
                         background: #2b2b2ba8;

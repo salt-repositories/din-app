@@ -1,5 +1,5 @@
 import { Endpoints } from "../..";
-import { Filters, MovieQueryResult, MovieSearch, QueryParameters } from "../../../../Models";
+import { Filters, Movie, MovieQueryResult, MovieSearch, QueryParameters } from "../../../../Models";
 import { ApiClientUtils } from "../../../ApiClientUtils";
 import { ApiVersions } from "../../../Versions/Concrete/Versions";
 
@@ -28,5 +28,16 @@ export class MovieEndpoints extends Endpoints {
             MovieSearch,
             true,
         ) as MovieSearch[];
+    }
+
+    public async getCalendar(from: string, till: string): Promise<Movie[]> {
+        return await this.call(
+            "GET",
+            true,
+            `calendar?from=${from}&till=${till}`,
+            null,
+            Movie,
+            true,
+        ) as Movie[];
     }
 }

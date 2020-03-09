@@ -6,6 +6,7 @@ import App from "next/app";
 import { default as nextRouter } from 'next/router'
 import React from "react";
 import { initializeStore, IRootState } from "../src/Store";
+import { AppContext } from "../src/Store/AppContext";
 
 export const redirect = (ctx, path) => {
     if (process.browser) {
@@ -16,6 +17,8 @@ export const redirect = (ctx, path) => {
     }
 };
 
+export let globalContext: AppContext;
+
 interface IProps {
     Component: React.Component;
     store: Store<IRootState>;
@@ -23,6 +26,7 @@ interface IProps {
 
 class MyApp extends App<IProps> {
     public static async getInitialProps({Component, ctx}) {
+        globalContext = ctx;
         const pageProps = Component.getInitialProps
             ? await Component.getInitialProps(ctx)
             : {};

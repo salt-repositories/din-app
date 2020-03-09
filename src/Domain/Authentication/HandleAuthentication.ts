@@ -3,6 +3,7 @@ import jwtDecode from "jwt-decode";
 import moment from "moment";
 import Router from "next/router";
 import { destroyCookie, parseCookies, setCookie } from "nookies";
+import { globalContext } from "../../../pages/_app";
 import { AppContext } from "../../Store/AppContext";
 import { ApiClientProvider } from "../Client";
 import { Token } from "../Models";
@@ -42,6 +43,13 @@ export const HandleAuthentication = async (context: AppContext) => {
          * Try to get a new token with the current refresh token
          */
         await authenticateWithRefreshToken(token.refreshToken, context);
+
+        if (context.pathname === "/") {
+            context.res.writeHead(302, {Location: "/Home"});
+            context.res.end();
+        }
+
+        return;
     } catch (error) {
         logException(error.message, false);
         await redirectToLogin(context);
@@ -61,15 +69,14 @@ export const setTokenCookie = (token: Token, context?: AppContext) => {
 
 /**
  * Get the token cookie
- * @param context
  * @return {Promise<Token>} token
  */
-export const getToken = async (context?: AppContext): Promise<Token> => {
+export const getToken = async (): Promise<Token> => {
     const now = moment();
 
-    const token = context
-        ? plainToClass(Token, parseCookies(context).token)
-        : plainToClass(Token, JSON.parse(parseCookies().token));
+    const token = globalContext?.isServer
+        ? deserialize(Token, parseCookies(globalContext).token)
+        : deserialize(Token, parseCookies().token);
 
     const {exp} = jwtDecode(token.accessToken);
 

@@ -1,6 +1,6 @@
 import { Endpoints } from "../..";
 import { Filters, QueryParameters } from "../../../../Models/Querying";
-import { TvShowQueryResult, TvShowSearch } from "../../../../Models/TvShow";
+import { TvShowCalendar, TvShowQueryResult, TvShowSearch } from "../../../../Models/TvShow";
 import { ApiClientUtils } from "../../../ApiClientUtils";
 import { ApiVersions } from "../../../Versions/Concrete/Versions";
 
@@ -29,5 +29,16 @@ export class TvShowEndpoints extends Endpoints {
             TvShowSearch,
             true,
         ) as TvShowSearch[];
+    }
+
+    public async getCalendar(from: string, till: string): Promise<TvShowCalendar[]> {
+        return await this.call(
+            "GET",
+            true,
+            `calendar?from=${from}&till=${till}`,
+            null,
+            TvShowCalendar,
+            true,
+        ) as TvShowCalendar[];
     }
 }

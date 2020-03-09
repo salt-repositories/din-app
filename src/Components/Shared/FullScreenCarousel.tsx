@@ -1,6 +1,6 @@
 import { Carousel } from "antd";
 import { Actions } from "easy-peasy";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { BackgroundImage } from "../../Domain/Models";
 import { IRootState, useStoreActions, useStoreState } from "../../Store";
 

@@ -10,10 +10,13 @@ interface IQueueRowProps {
 }
 
 const GIGABYTE: number = 1073741824;
+const MEGABYTE: number = 1048576;
 
 const QueueRow = (props: IQueueRowProps): JSX.Element => {
-    const getSizeInGb = (item: Queue): string => {
-        return `${Math.round(item.size / GIGABYTE).toFixed(1)} GB`;
+    const getSize = (item: Queue): string => {
+        return item.size > GIGABYTE
+            ? `${(item.size / GIGABYTE).toFixed(1)} GB`
+            : `${(item.size / MEGABYTE).toFixed(0)} MB`;
     };
 
     return (
@@ -28,10 +31,11 @@ const QueueRow = (props: IQueueRowProps): JSX.Element => {
                         : <Icon type="play-circle"/>
                 }
             </Col>
-            <Col xs={2}>{getSizeInGb(props.item)}</Col>
+            <Col xs={2}>{getSize(props.item)}</Col>
             <Col xs={10} offset={1}>
                 <Progress
                     className="progress"
+                    strokeColor="#ff8d1c"
                     status={props.item.status !== "Paused" && props.percentage < 100 ? "active" : undefined}
                     percent={props.percentage}
                 />
@@ -53,47 +57,26 @@ export const CurrentQueue = (): JSX.Element => {
     }, []);
 
     return (
-        <Card className="current-queue">
+        <div className="current-queue-container">
             <h1>Current Queue</h1>
             <Col span={24} className="vertical-container">
-                {queue.length !== 0 ? (
-                    queue.map((item: Queue) => {
-                        const percentage = getPercentage(item);
-
-                        return (
-                            <QueueRow key={item.id} item={item} percentage={percentage}/>
-                        );
-                    })
-                ) : (
-                    <div className="empty">
-                        <Icon type="exclamation-circle" />
-                        <p>Nothing in queue</p>
-                    </div>
+                {queue.length !== 0 && (
+                    queue.map((item: Queue) => (
+                        <QueueRow key={item.id} item={item} percentage={getPercentage(item)}/>
+                    ))
                 )}
             </Col>
             <style jsx>
                 {`
-                    :global(.current-queue) {
-                        position: fixed;
-                        top: 2em;
-                        right: 2em;
-                        border-radius: 5px;
-                        width: 35vw;
-                        height: 400px;
-                        background: #2b2b2ba8;
-                        margin: auto;
-                        border: none;
+                    .current-queue-container {
+                        visibility: ${queue.length === 0 && "hidden;"}
+                        height: 350px;
                     }
-                    
-                    :global(.current-queue > .ant-card-body) {
-                        height: 85%;
-                    }
-                    
-                    :global(.current-queue h1) {
+                                      
+                    .current-queue-container h1 {
                         font-size: 25px;
                         color: #ff8d1c;
                         text-shadow: 1px 1px 1px #000;
-                        margin: 0 auto;
                     }
                     
                     :global(.vertical-container) {
@@ -133,6 +116,6 @@ export const CurrentQueue = (): JSX.Element => {
                     }
                 `}
             </style>
-        </Card>
+        </div>
     );
 };

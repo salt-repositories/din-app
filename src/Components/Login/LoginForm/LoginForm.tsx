@@ -248,8 +248,7 @@ export const LoginForm = (props: IProps) => {
                     }
 
                     :global(.ant-input-prefix) {
-                        position: absolute;
-                        top: 1.5em;
+                        left: 0px !important;
                     }
                     
                     :global(.ant-input-suffix) {

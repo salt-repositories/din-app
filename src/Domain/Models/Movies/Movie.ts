@@ -1,4 +1,5 @@
-import { Expose } from "class-transformer";
+import { Expose, Transform } from "class-transformer";
+import moment, { Moment } from "moment";
 import { Content } from "../Abstractions";
 
 export class Movie extends Content {
@@ -8,7 +9,9 @@ export class Movie extends Content {
     public youtubeTrailerId: string;
     public studio: string;
     @Expose({ name: "in_cinemas" })
-    public inCinemas: Date;
+    @Transform((value) => moment(value))
+    public inCinemas: Moment;
     @Expose({ name: "physical_release" })
-    public physicalRelease: Date;
+    @Transform((value) => moment(value))
+    public physicalRelease: Moment;
 }

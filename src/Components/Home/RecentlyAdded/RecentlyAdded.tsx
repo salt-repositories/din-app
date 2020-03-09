@@ -1,4 +1,4 @@
-import { Card, Row, Select } from "antd";
+import { Row, Select } from "antd";
 import { useState } from "react";
 import * as React from "react";
 import { MoviesContainer } from "./MoviesContainer";
@@ -8,19 +8,20 @@ export const RecentlyAdded = (): JSX.Element => {
     const [select, setSelect] = useState<string>("movies");
 
     return (
-        <Card
+        <div
             className="recently-added"
         >
-
-            <h1 className="card-title">Recently Added</h1>
-            <Select
-                defaultValue={select}
-                className="select"
-                onChange={setSelect}
-            >
-                <Select.Option value="movies">Movies</Select.Option>
-                <Select.Option value="tvshows">Tv Shows</Select.Option>
-            </Select>
+            <Row>
+                <h1 className="card-title">Recently Added</h1>
+                <Select
+                    defaultValue={select}
+                    className="select"
+                    onChange={setSelect}
+                >
+                    <Select.Option value="movies">Movies</Select.Option>
+                    <Select.Option value="tvshows">Tv Shows</Select.Option>
+                </Select>
+            </Row>
             <div className="horizontal-container">
                 <Row className="row">
                     {select === "movies" ? (
@@ -34,18 +35,14 @@ export const RecentlyAdded = (): JSX.Element => {
                 {`
                     :global(.recently-added) {
                         position: fixed;
-                        bottom: 2em;
+                        bottom: 1em;
                         right: 2em;
-                        border-radius: 5px;
-                        border: none;
-                        width: 90vw;
-                        height: 400px;
-                        background: #2b2b2ba8;
-                        margin: auto auto auto 8vw;
+                        width: 92vw;
+                        height: 350px;
                     }
                   
                     :global(.recently-added .card-title) {
-                        margin-left: 2.2em;
+                        margin-left: 10px;
                         float: left;
                         font-size: 25px;
                         color: #ff8d1c;
@@ -76,7 +73,7 @@ export const RecentlyAdded = (): JSX.Element => {
                     
                     :global(.horizontal-container) {
                         margin: 0 auto;
-                        width: 95%;
+                        width: 100%;
                         height: 100%;
                         overflow-x: scroll;
                         overflow-y: hidden;
@@ -131,7 +128,7 @@ export const RecentlyAdded = (): JSX.Element => {
                     }
                     
                     :global(.container-item > .ant-card-body .ant-card-meta-description) {
-                        color: #9d7751;
+                        color: #ff8d1c99;
                         margin-bottom: 7px;
                     }
                     
@@ -184,6 +181,6 @@ export const RecentlyAdded = (): JSX.Element => {
                     }
                 `}
             </style>
-        </Card>
+        </div>
     );
 };
