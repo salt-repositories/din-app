@@ -1,5 +1,5 @@
 import { ApiClientProvider } from "../../../Domain/Client";
-import { Movie} from "../../../Domain/Models/Movies";
+import { Movie } from "../../../Domain/Models/Movies";
 import { Filters, QueryParameters } from "../../../Domain/Models/Querying";
 import { calendar, ICalendar, IRecentlyAdded, recentlyAdded } from "../Shared";
 

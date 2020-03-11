@@ -1,4 +1,4 @@
-import { deserialize, plainToClass, serialize } from "class-transformer";
+import { deserialize, serialize } from "class-transformer";
 import jwtDecode from "jwt-decode";
 import moment from "moment";
 import Router from "next/router";

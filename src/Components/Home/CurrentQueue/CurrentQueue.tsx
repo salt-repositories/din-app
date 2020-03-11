@@ -1,4 +1,4 @@
-import { Card, Col, Icon, Progress, Row } from "antd";
+import { Col, Icon, Progress, Row } from "antd";
 import { Actions } from "easy-peasy";
 import React, { useEffect } from "react";
 import { Queue } from "../../../Domain/Models";

@@ -1,5 +1,5 @@
 import { action, Action, Actions, thunk, Thunk } from "easy-peasy";
-import { Content} from "../../../Domain/Models/Abstractions";
+import { Content } from "../../../Domain/Models/Abstractions";
 import { Filters, QueryParameters, QueryResult } from "../../../Domain/Models/Querying";
 
 export interface IRecentlyAdded<TModel extends Content> {
