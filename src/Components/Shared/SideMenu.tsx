@@ -85,6 +85,7 @@ export const SideMenu = (): JSX.Element => {
                     
                     :global(.side-menu .ant-menu-item) {
                         color: #f1f2f3;
+                        padding-left: 10px !important;
                     }
                     
                     :global(.side-menu .ant-menu-item-selected) {
@@ -107,40 +108,3 @@ export const SideMenu = (): JSX.Element => {
         </>
     );
 };
-
-// <div className="side-menu">
-//     <div className="logo-section">
-//         <span>DIN</span>
-//     </div>
-//     <div className="navigation-section">
-//         <Nav
-//             activeKey={selectedMenuItem}
-//             onSelect={handleChange}
-//         >
-//             <Nav.Item className="nav-item">
-//                 <Nav.Link href="/Home" className="link">
-//                     <FontAwesomeIcon icon={["fas", "home"]} size="sm" className="logo"/>
-//                     Home
-//                 </Nav.Link>
-//             </Nav.Item>
-//             <Nav.Item className="nav-item">
-//                 <Nav.Link href="/Me" className="link">
-//                     <FontAwesomeIcon icon={["fas", "user-circle"]} size="sm" className="logo"/>
-//                     Me
-//                 </Nav.Link>
-//             </Nav.Item>
-//             <Nav.Item className="nav-item">
-//                 <Nav.Link href="/Movies" className="link">
-//                     <FontAwesomeIcon icon={["fas", "film"]} size="sm" className="logo"/>
-//                     Movies
-//                 </Nav.Link>
-//             </Nav.Item>
-//             <Nav.Item className="nav-item">
-//                 <Nav.Link href="/Tvshows" className="link">
-//                     <FontAwesomeIcon icon={["fas", "tv"]} size="sm" className="logo"/>
-//                     Tv Shows
-//                 </Nav.Link>
-//             </Nav.Item>
-//         </Nav>
-//     </div>
-// </div>

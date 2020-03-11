@@ -17,4 +17,6 @@ export abstract class Content {
     public added: Moment;
     @Expose({ name: "plex_url" })
     public plexUrl: string;
+    @Expose({ name: "poster_path" })
+    public posterPath: string;
 }

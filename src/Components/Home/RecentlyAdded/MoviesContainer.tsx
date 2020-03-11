@@ -1,11 +1,13 @@
-import { Card, Icon, Tooltip } from "antd";
+import { Card, Icon } from "antd";
 import { Actions } from "easy-peasy";
 import { default as React, useEffect, useState } from "react";
 import { Waypoint } from "react-waypoint";
+import { Movie } from "../../../Domain/Models/Movies";
 import { IRootState, useStoreActions, useStoreState } from "../../../Store";
 import { Spinner } from "../../Shared/Spinner";
 import { YoutubeModal } from "../../Shared/YoutubeModal";
 import { ImdbIcon, PlexIcon } from "./Icons";
+import { Poster } from "./Poster";
 
 export const MoviesContainer: React.FC = (): JSX.Element => {
     const recentlyAddedMovies = useStoreState((state: IRootState) => state.movie.recentlyAddedMovies.items);
@@ -38,46 +40,27 @@ export const MoviesContainer: React.FC = (): JSX.Element => {
             <YoutubeModal visible={showYoutubeModal} trailerId={trailerId}/>
             {recentlyAddedMovies.length > 0 ? (
                 <>
-                    {recentlyAddedMovies.map((item) => (
+                    {recentlyAddedMovies.map((item: Movie) => (
                         <Card
-                            key={item[0].id}
+                            key={item.id}
                             className="container-item"
-                            cover={
-                                item[0].plexUrl ? (
-                                    <Tooltip title="Open on Plex">
-                                        <img
-                                            className="card-img plex"
-                                            alt=""
-                                            src={`https://image.tmdb.org/t/p/w500/${item[1].posterPath}`}
-                                            onClick={() => window.open(item[0].plexUrl)}
-                                        />
-                                    </Tooltip>
-                                ) : (
-                                    <Tooltip title="This movie has not been downloaded">
-                                        <img
-                                            className="card-img"
-                                            alt=""
-                                            src={`https://image.tmdb.org/t/p/w500/${item[1].posterPath}`}
-                                        />
-                                    </Tooltip>
-                                )
-                            }
+                            cover={<Poster item={item} noPlexMatchMessage="This movies has not been downloaded"/>}
                         >
                             <Card.Meta
-                                title={item[0].title}
-                                description={item[0].year}
+                                title={item.title}
+                                description={item.year}
                             />
                             <span
                                 className="trailer-link"
-                                onClick={() => openYoutubeModal(item[0].youtubeTrailerId)}
+                                onClick={() => openYoutubeModal(item.youtubeTrailerId)}
                             >
                                 <Icon type="youtube" className="logo"/>
                                 Trailer
                             </span>
-                            {item[0].plexUrl ? (
+                            {item.plexUrl ? (
                                 <span
                                     className="plex-link"
-                                    onClick={() => window.open(item[0].plexUrl)}
+                                    onClick={() => window.open(item.plexUrl)}
                                 >
                                     <PlexIcon className="logo"/>
                                     Plex
@@ -85,7 +68,7 @@ export const MoviesContainer: React.FC = (): JSX.Element => {
                             ) : (
                                 <span
                                     className="imdb-link"
-                                    onClick={() => window.open(`https://imdb.com/title/${item[0].imdbId}`)}
+                                    onClick={() => window.open(`https://imdb.com/title/${item.imdbId}`)}
                                 >
                                     <ImdbIcon className="logo"/>
                                     IMDb

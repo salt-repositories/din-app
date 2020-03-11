@@ -26,8 +26,10 @@ const HomePage: NextPage = () => {
                             <CurrentQueue/>
                         </Col>
                     </Row>
+                    <Row>
+                        <RecentlyAdded/>
+                    </Row>
                 </Col>
-                <RecentlyAdded/>
             </WithMenu>
         </Layout>
     );

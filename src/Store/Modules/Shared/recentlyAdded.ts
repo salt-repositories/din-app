@@ -1,57 +1,52 @@
 import { action, Action, Actions, thunk, Thunk } from "easy-peasy";
-import { Content, Search } from "../../../Domain/Models/Abstractions";
-import { Filters, QueryParameters } from "../../../Domain/Models/Querying";
+import { Content} from "../../../Domain/Models/Abstractions";
+import { Filters, QueryParameters, QueryResult } from "../../../Domain/Models/Querying";
 
-export interface IRecentlyAdded<TModel extends Content, TSearchModel extends Search> {
-    items: [TModel, TSearchModel][];
+export interface IRecentlyAdded<TModel extends Content> {
+    items: TModel[];
     loading: boolean;
     ssr: boolean;
     filters: Filters;
     queryParams: QueryParameters;
 
-    setLoading: Action<IRecentlyAdded<TModel, TSearchModel>, boolean>;
-    setSsr: Action<IRecentlyAdded<TModel, TSearchModel>, boolean>;
-    addRecentlyAdded: Action<IRecentlyAdded<TModel, TSearchModel>, [TModel, TSearchModel]>;
-    getRecentlyAdded: Thunk<IRecentlyAdded<TModel, TSearchModel>>;
-    next: Thunk<IRecentlyAdded<TModel, TSearchModel>>;
+    setLoading: Action<IRecentlyAdded<TModel>, boolean>;
+    setSsr: Action<IRecentlyAdded<TModel>, boolean>;
+    addRecentlyAdded: Action<IRecentlyAdded<TModel>, TModel>;
+    getRecentlyAdded: Thunk<IRecentlyAdded<TModel>>;
+    next: Thunk<IRecentlyAdded<TModel>>;
 }
 
-export const recentlyAdded = <TModel extends Content, TSearchModel extends Search>(
-    getModelMethod,
-    getSearchModelMethod,
-): IRecentlyAdded<TModel, TSearchModel> => {
+export const recentlyAdded = <TModel extends Content>(
+    getModelMethod: (params, filters) => Promise<QueryResult<TModel>>,
+): IRecentlyAdded<TModel> => {
     return {
         items: [],
         loading: false,
         ssr: false,
-        filters: new Filters(null, null, null, null, true),
+        filters: new Filters(null, null, null, null, true, true),
         queryParams: new QueryParameters(0, 20, "Added", "Desc"),
-        setLoading: action((state: IRecentlyAdded<TModel, TSearchModel>, payload: boolean) => {
+        setLoading: action((state: IRecentlyAdded<TModel>, payload: boolean) => {
             state.loading = payload;
         }),
-        setSsr: action((state: IRecentlyAdded<TModel, TSearchModel>, payload: boolean) => {
+        setSsr: action((state: IRecentlyAdded<TModel>, payload: boolean) => {
             state.ssr = payload;
         }),
-        addRecentlyAdded: action((state: IRecentlyAdded<TModel, TSearchModel>, payload: [TModel, TSearchModel]) => {
+        addRecentlyAdded: action((state: IRecentlyAdded<TModel>, payload: TModel) => {
             state.items.push(payload);
         }),
-        getRecentlyAdded: thunk(async (actions: Actions<IRecentlyAdded<TModel, TSearchModel>>, _, helpers) => {
+        getRecentlyAdded: thunk(async (actions: Actions<IRecentlyAdded<TModel>>, _, helpers) => {
             actions.setLoading(true);
 
             const state = helpers.getState();
+            const result = await getModelMethod(state.queryParams, state.filters);
 
-            const modelResult = await getModelMethod(state.queryParams, state.filters);
-            const searchMovies = await Promise.all(
-                modelResult.items.map(async (item) => await getSearchModelMethod(item.title))
-            );
-
-            searchMovies.map((result, index) => {
-                actions.addRecentlyAdded([modelResult.items[index], result[0]]);
+            result.items.map((item: TModel) => {
+                actions.addRecentlyAdded(item);
             });
 
             actions.setLoading(false);
         }),
-        next: thunk((actions: Actions<IRecentlyAdded<TModel, TSearchModel>>, _, helpers) => {
+        next: thunk((actions: Actions<IRecentlyAdded<TModel>>, _, helpers) => {
             const state = helpers.getState();
 
             const params = state.queryParams;

@@ -7,6 +7,9 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import { Movie } from "../../../Domain/Models/Movies";
 import { TvShowCalendar } from "../../../Domain/Models/TvShow";
 import { IRootState, useStoreActions, useStoreState } from "../../../Store";
+import { CalendarItemModal } from "./CalendarItemModal";
+
+const rowIndexes = [7, 15, 23];
 
 export const DownloadCalendar: React.FC = (): JSX.Element => {
     const movieCalendarItems = useStoreState((state: IRootState) => state.movie.calendar.items);
@@ -17,8 +20,10 @@ export const DownloadCalendar: React.FC = (): JSX.Element => {
 
     const [dateRange, setDateRange] = useState<{ from: Moment, till: Moment }>({
         from: moment(),
-        till: moment().add(1, "week"),
+        till: moment().add(36, "days"),
     });
+    const [modalVisible, setModalVisible] = useState<boolean>(false);
+    const [selectedItem, setSelectedItem] = useState<Movie | TvShowCalendar>();
 
     useEffect(() => {
         getMovieCalendarItems(dateRange);
@@ -30,7 +35,7 @@ export const DownloadCalendar: React.FC = (): JSX.Element => {
 
         let currentDate = dateRange.from;
 
-        while (currentDate <= dateRange.till && data.length <= 7) {
+        while (currentDate <= dateRange.till && data.length <= 23) {
             data.push([
                 currentDate.clone(),
                 [
@@ -44,12 +49,43 @@ export const DownloadCalendar: React.FC = (): JSX.Element => {
         return data;
     };
 
-    const datePickerOnChange = (dates: RangePickerValue) => {
+    const datePickerOnChange = (dates: RangePickerValue): void => {
         setDateRange({from: dates[0], till: dates[1]});
+    };
+
+    const previous = (): void => {
+        setDateRange({
+            from: dateRange.from.subtract(36, "days"),
+            till: dateRange.till.subtract(36, "days"),
+        })
+    };
+
+    const next = (): void => {
+        setDateRange({
+            from: dateRange.from.add(36, "days"),
+            till: dateRange.till.add(36, "days"),
+        })
+    };
+
+    const today = (): void => {
+        setDateRange({
+            from: moment(),
+            till: moment().add(36, "days"),
+        });
+    };
+
+    const openItemModal = (item: Movie | TvShowCalendar): void => {
+        setSelectedItem(item);
+        setModalVisible(true);
     };
 
     return (
         <>
+            <CalendarItemModal
+                visible={modalVisible}
+                setVisible={setModalVisible}
+                item={selectedItem}
+            />
             <div className="content-calendar-container">
                 <Row>
                     <h1>Download Calendar</h1>
@@ -67,34 +103,19 @@ export const DownloadCalendar: React.FC = (): JSX.Element => {
                         <Col span={2} offset={1}>
                             <Button.Group>
                                 <Tooltip title="previous week">
-                                    <Button onClick={() => {
-                                        setDateRange({
-                                            from: dateRange.from.subtract(1, "week"),
-                                            till: dateRange.till.subtract(1, "week"),
-                                        });
-                                    }}>
+                                    <Button onClick={previous}>
                                         <Icon type="left"/>
                                     </Button>
                                 </Tooltip>
                                 <Tooltip title="next week">
-                                    <Button onClick={() => {
-                                        setDateRange({
-                                            from: dateRange.from.add(1, "week"),
-                                            till: dateRange.till.add(1, "week"),
-                                        });
-                                    }}>
+                                    <Button onClick={next}>
                                         <Icon type="right"/>
                                     </Button>
                                 </Tooltip>
                             </Button.Group>
                         </Col>
                         <Col span={1} offset={1}>
-                            <Button onClick={() => {
-                                setDateRange({
-                                    from: moment(),
-                                    till: moment().add(1, "week"),
-                                });
-                            }}>
+                            <Button onClick={today}>
                                 Today
                             </Button>
                         </Col>
@@ -105,41 +126,44 @@ export const DownloadCalendar: React.FC = (): JSX.Element => {
                     <Divider className="divider"/>
                     <Row>
                         <Col span={24}>
-                            {getData().map((item: [Moment, (Movie | TvShowCalendar)[]]) => (
-                                <Col span={3} className="date-card" key={item[0].unix()}>
+                            {getData().map((item: [Moment, (Movie | TvShowCalendar)[]], index: number) => (
+                                <div className={rowIndexes.includes(index) && "ant-row date-card-row"} key={item[0].unix()}>
+                                    <Col span={3} className="date-card">
                                     <span
                                         className={
                                             item[0].format("DD-MM-YYYY") === moment().format("DD-MM-YYYY") && "today"}
                                     >
                                         {item[0].date()}
                                     </span>
-                                    <Divider className="divider"/>
-                                    <Scrollbars
-                                        universal={true}
-                                        horizontal={true}
-                                        className="content"
-                                        style={{
-                                            height: `${item[1].length * 2.2}em`
-                                        }}
-                                    >
-                                        {item[1].map((content) => (
-                                            <Row key={content.id}>
-                                                <Tag
-                                                    color={
-                                                        content instanceof Movie
-                                                            ? content.downloaded ? "green" : "red"
-                                                            : content.hasFile ? "green" : "red"
-                                                    }
-                                                >
-                                                    {content instanceof Movie
-                                                        ? `${content.title} - (${content.year})`
-                                                        : `${content.tvShow.title} - (S${content.seasonNumber}E${content.episodeNumber}) - ${content.title}`
-                                                    }
-                                                </Tag>
-                                            </Row>
-                                        ))}
-                                    </Scrollbars>
-                                </Col>
+                                        <Divider className="divider"/>
+                                        <Scrollbars
+                                            universal={true}
+                                            autoHeight={true}
+                                            className="content"
+                                        >
+                                            <div className="item-container">
+                                                {item[1].map((content) => (
+                                                    <Row key={content.id}>
+                                                        <Tag
+                                                            className="item"
+                                                            color={
+                                                                content instanceof Movie
+                                                                    ? content.downloaded ? "green" : "red"
+                                                                    : content.hasFile ? "green" : "red"
+                                                            }
+                                                            onClick={() => openItemModal(content)}
+                                                        >
+                                                            {content instanceof Movie
+                                                                ? `${content.title} - (${content.year})`
+                                                                : `${content.tvShow.title} - (S${content.seasonNumber}E${content.episodeNumber}) - ${content.title}`
+                                                            }
+                                                        </Tag>
+                                                    </Row>
+                                                ))}
+                                            </div>
+                                        </Scrollbars>
+                                    </Col>
+                                </div>
                             ))}
                         </Col>
                     </Row>
@@ -184,8 +208,8 @@ export const DownloadCalendar: React.FC = (): JSX.Element => {
                         background: #ff8d1c;
                     }
                     
-                     :global(.content-calendar-container .date-card) {
-                        
+                    :global(.content-calendar-container .date-card-row) {
+                        position: unset;
                     }
                     
                     :global(.content-calendar-container .date-card > span) {
@@ -193,15 +217,18 @@ export const DownloadCalendar: React.FC = (): JSX.Element => {
                         padding: 5px;
                     }
                     
-                    
                     :global(.content-calendar-container .date-card > .divider) {
                         min-width: 90%;
                         width: 90%;
                         margin-top: 10px;
                     }
                     
-                    :global(.content-calendar-container .date-card > .content > .item) {
-                        height: 2em;
+                    :global(.content-calendar-container .date-card .item-container) {
+                        max-height: 5em;
+                    }
+                    
+                    :global(.content-calendar-container .date-card .item-container .item:hover) {
+                        cursor: pointer;
                     }
 
                     :global(.content-calendar-container .date-card .today) {

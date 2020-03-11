@@ -2,9 +2,11 @@ import { Card } from "antd";
 import { Actions } from "easy-peasy";
 import { default as React, useEffect } from "react";
 import { Waypoint } from "react-waypoint";
+import { TvShow } from "../../../Domain/Models/TvShow";
 import { IRootState, useStoreActions, useStoreState } from "../../../Store";
 import { Spinner } from "../../Shared/Spinner";
 import { ImdbIcon, PlexIcon } from "./Icons";
+import { Poster } from "./Poster";
 
 export const TvShowsContainer: React.FC = (): JSX.Element => {
     const recentlyAddedTvShows = useStoreState((state: IRootState) => state.tvShow.recentlyAddedTvShows.items);
@@ -24,27 +26,20 @@ export const TvShowsContainer: React.FC = (): JSX.Element => {
         <>
             {recentlyAddedTvShows.length > 0 ? (
                 <>
-                    {recentlyAddedTvShows.map((item) => (
+                    {recentlyAddedTvShows.map((item: TvShow) => (
                         <Card
-                            key={item[0].id}
+                            key={item.id}
                             className="container-item"
-                            cover={
-                                <img
-                                    className="card-img plex"
-                                    alt=""
-                                    src={item[1] ? `https://image.tmdb.org/t/p/w500/${item[1].posterPath}` : "https://i.imgur.com/kofVyyQ.png?1"}
-                                    onClick={() => window.open(item[0].plexUrl)}
-                                />
-                            }
+                            cover={<Poster item={item} noPlexMatchMessage="This tv show has not been downloaded or was not matched"/>}
                         >
                             <Card.Meta
-                                title={item[0].title}
-                                description={item[0].year}
+                                title={item.title}
+                                description={item.year}
                             />
-                            {item[0].plexUrl ? (
+                            {item.plexUrl ? (
                                 <span
                                     className="plex-link"
-                                    onClick={() => window.open(item[0].plexUrl)}
+                                    onClick={() => window.open(item.plexUrl)}
                                 >
                                     <PlexIcon className="logo"/>
                                     Plex
@@ -52,7 +47,7 @@ export const TvShowsContainer: React.FC = (): JSX.Element => {
                             ) : (
                                 <span
                                     className="imdb-link"
-                                    onClick={() => window.open(`https://imdb.com/title/${item[0].imdbId}`)}
+                                    onClick={() => window.open(`https://imdb.com/title/${item.imdbId}`)}
                                 >
                                     <ImdbIcon className="logo"/>
                                     IMDb

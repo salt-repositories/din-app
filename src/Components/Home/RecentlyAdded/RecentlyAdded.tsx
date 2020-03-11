@@ -34,11 +34,8 @@ export const RecentlyAdded = (): JSX.Element => {
             <style jsx>
                 {`
                     :global(.recently-added) {
-                        position: fixed;
-                        bottom: 1em;
-                        right: 2em;
-                        width: 92vw;
-                        height: 350px;
+                        margin-top: 4em;
+                        height: 100%;
                     }
                   
                     :global(.recently-added .card-title) {
