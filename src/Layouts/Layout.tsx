@@ -29,7 +29,6 @@ export default class Layout extends React.Component {
                  <style jsx global>
                      {`
                         body {
-                            overflow: hidden;
                             position: relative;
                             font-family: 'Roboto', sans-serif;
                             background-color: #000000a8;

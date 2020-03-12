@@ -88,6 +88,10 @@ export const SideMenu = (): JSX.Element => {
                         padding-left: 10px !important;
                     }
                     
+                    :global(.side-menu .ant-menu-item:hover) {
+                        color: #ee9e4f;
+                    }
+                    
                     :global(.side-menu .ant-menu-item-selected) {
                         color: #ff8d1c;
                     }
@@ -96,6 +100,10 @@ export const SideMenu = (): JSX.Element => {
                         color: #c62b2b;
                         position: absolute;
                         bottom: 0;
+                    }
+                    
+                    :global(.side-menu .logout:hover) {
+                        color: #d75050;
                     }
                     
                     :global(.side-menu .menu-item .icon) {
