@@ -53,7 +53,8 @@ export const LoginForm = (props: IProps) => {
 
     return (
         <>
-            <div className="login-col">
+            <div className="login-wrapper">
+                <div className="login-col">
                 <Formik
                     validationSchema={loginSchema}
                     onSubmit={handleLogin}
@@ -120,15 +121,22 @@ export const LoginForm = (props: IProps) => {
                     )}
                 </Formik>
             </div>
+            </div>
             <style jsx>
                 {`
+                    .login-wrapper {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 100%;
+                        height: 100vh;
+                    }
+                    
                     :global(.login-col) {
                         border-radius: 10px;
                         padding: 50px 55px 50px;
                         background: white;
                         opacity: .9;
-                        margin: 14em auto;
-                        display: block;
                         width: 500px;
                     }
 

@@ -20,7 +20,7 @@ export const DownloadCalendar: React.FC = (): JSX.Element => {
 
     const [dateRange, setDateRange] = useState<{ from: Moment, till: Moment }>({
         from: moment(),
-        till: moment().add(36, "days"),
+        till: moment().add(23, "days"),
     });
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [selectedItem, setSelectedItem] = useState<Movie | TvShowCalendar>();
@@ -40,7 +40,7 @@ export const DownloadCalendar: React.FC = (): JSX.Element => {
                 currentDate.clone(),
                 [
                     ...movieCalendarItems.filter((movie) => movie.physicalRelease.format("DD-MM-YYYY") === currentDate.format("DD-MM-YYYY")),
-                    ...tvShowCalendarItems.filter((tvShow) => tvShow.airDate.format("DD-MM-YYYY") === currentDate.format("DD-MM-YYYY"))
+                    ...tvShowCalendarItems.filter((tvShow) => tvShow.airDateUtc.format("DD-MM-YYYY") === currentDate.format("DD-MM-YYYY"))
                 ]
             ]);
             currentDate = moment(currentDate).add(1, "day");
@@ -55,22 +55,22 @@ export const DownloadCalendar: React.FC = (): JSX.Element => {
 
     const previous = (): void => {
         setDateRange({
-            from: dateRange.from.subtract(36, "days"),
-            till: dateRange.till.subtract(36, "days"),
+            from: dateRange.from.subtract(23, "days"),
+            till: dateRange.till.subtract(23, "days"),
         })
     };
 
     const next = (): void => {
         setDateRange({
-            from: dateRange.from.add(36, "days"),
-            till: dateRange.till.add(36, "days"),
+            from: dateRange.from.add(23, "days"),
+            till: dateRange.till.add(23, "days"),
         })
     };
 
     const today = (): void => {
         setDateRange({
             from: moment(),
-            till: moment().add(36, "days"),
+            till: moment().add(23, "days"),
         });
     };
 
@@ -102,12 +102,12 @@ export const DownloadCalendar: React.FC = (): JSX.Element => {
                         </Col>
                         <Col span={2} offset={1}>
                             <Button.Group>
-                                <Tooltip title="previous week">
+                                <Tooltip title="previous">
                                     <Button onClick={previous}>
                                         <Icon type="left"/>
                                     </Button>
                                 </Tooltip>
-                                <Tooltip title="next week">
+                                <Tooltip title="next">
                                     <Button onClick={next}>
                                         <Icon type="right"/>
                                     </Button>
@@ -174,7 +174,7 @@ export const DownloadCalendar: React.FC = (): JSX.Element => {
                 {`
                     .content-calendar-container {
                         height: 350px;
-                        min-width: 70em;
+                        min-width: 65em;
                     }
                     
                     .content-calendar-container h1 {
@@ -210,6 +210,10 @@ export const DownloadCalendar: React.FC = (): JSX.Element => {
                     
                     :global(.content-calendar-container .date-card-row) {
                         position: unset;
+                    }
+                    
+                    :global(.content-calendar-container .date-card .content) {
+                        max-width: 90%;
                     }
                     
                     :global(.content-calendar-container .date-card > span) {
