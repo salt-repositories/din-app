@@ -1,5 +1,5 @@
 import "reflect-metadata";
 
-import LoginPage from "./Login/LoginPage";
+import LoginPage from "./Login";
 
 export default LoginPage;

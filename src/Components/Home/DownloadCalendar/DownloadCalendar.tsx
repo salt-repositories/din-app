@@ -3,7 +3,7 @@ import { RangePickerValue } from "antd/lib/date-picker/interface";
 import { Actions } from "easy-peasy";
 import moment, { Moment } from "moment";
 import { default as React, useEffect, useState } from "react";
-import { Scrollbars } from 'react-custom-scrollbars';
+import { Scrollbars } from "react-custom-scrollbars";
 import { Movie } from "../../../Domain/Models/Movies";
 import { TvShowCalendar } from "../../../Domain/Models/TvShow";
 import { IRootState, useStoreActions, useStoreState } from "../../../Store";
@@ -229,6 +229,10 @@ export const DownloadCalendar: React.FC = (): JSX.Element => {
                     
                     :global(.content-calendar-container .date-card .item-container) {
                         max-height: 5em;
+                    }
+                    
+                    :global(.content-calendar-container .date-card .item) {
+                        margin: 2px;
                     }
                     
                     :global(.content-calendar-container .date-card .item-container .item:hover) {

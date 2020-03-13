@@ -17,22 +17,20 @@ interface IProps {
     backgrounds: BackgroundImage[];
 }
 
-const LoginPage: NextPage<IProps> = (props: IProps): JSX.Element => {
-    return (
-        <Layout>
-            <Head>
-                <title>Login</title>
-            </Head>
-            <FullScreenCarousel
-                backgrounds={props.backgrounds}
-            />
-            <LoginForm
-                username={props.username}
-            />
-            <ForgotPasswordModal/>
-        </Layout>
-    );
-};
+const LoginPage: NextPage<IProps> = (props: IProps): JSX.Element => (
+    <Layout>
+        <Head>
+            <title>Login</title>
+        </Head>
+        <FullScreenCarousel
+            backgrounds={props.backgrounds}
+        />
+        <LoginForm
+            username={props.username}
+        />
+        <ForgotPasswordModal/>
+    </Layout>
+);
 
 LoginPage.getInitialProps = async (context: AppContext): Promise<IProps> => {
     const promise = getBackgrounds(context);
