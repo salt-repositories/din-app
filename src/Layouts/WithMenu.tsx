@@ -20,7 +20,7 @@ export const WithMenu: React.FC<IProps> = (props: IProps) => (
         <SideMenu/>
         <Breadcrumb className="breadcrumb">
             {props.crumbs.map((crumb: ICrumb) => (
-                <Breadcrumb.Item key={crumb.name}>
+                <Breadcrumb.Item key={crumb.path}>
                         <span
                             onClick={() => Router.push(crumb.path)}
                             style={{cursor: "pointer"}}

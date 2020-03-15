@@ -2,6 +2,7 @@ import { Col, Icon, Row } from "antd";
 import { NextPage } from "next";
 import Head from "next/head";
 import React from "react";
+import { HeaderFilters } from "../../src/Components/Movies/HeaderFilters";
 import { withAuthentication } from "../../src/Domain/Authentication";
 import { WithMenu } from "../../src/Layouts";
 import Layout from "../../src/Layouts/Layout";
@@ -19,7 +20,7 @@ const MoviesPage: NextPage = () => (
         <WithMenu crumbs={[{path: "/Movies", icon: <Icon type="video-camera"/>}]}>
             <Col span={24}>
                 <Row>
-
+                    <HeaderFilters/>
                 </Row>
             </Col>
         </WithMenu>
