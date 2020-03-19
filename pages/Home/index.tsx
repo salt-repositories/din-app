@@ -10,30 +10,28 @@ import { WithMenu } from "../../src/Layouts";
 import Layout from "../../src/Layouts/Layout";
 import { AppContext } from "../../src/Store/AppContext";
 
-const HomePage: NextPage = () => {
-    return (
-        <Layout>
-            <Head>
-                <title>Home</title>
-            </Head>
-            <WithMenu crumbs={[{name: "Home", icon: <Icon type="home"/>}]}>
-                <Col span={24}>
-                    <Row>
-                        <Col span={15}>
-                            <DownloadCalendar/>
-                        </Col>
-                        <Col span={8} offset={1}>
-                            <CurrentQueue/>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <RecentlyAdded/>
-                    </Row>
-                </Col>
-            </WithMenu>
-        </Layout>
-    );
-};
+const HomePage: NextPage = () => (
+    <Layout>
+        <Head>
+            <title>Home</title>
+        </Head>
+        <WithMenu crumbs={[{path: "/Home", icon: <Icon type="home"/>}]}>
+            <Col span={24}>
+                <Row>
+                    <Col span={15}>
+                        <DownloadCalendar/>
+                    </Col>
+                    <Col span={8} offset={1}>
+                        <CurrentQueue/>
+                    </Col>
+                </Row>
+                <Row>
+                    <RecentlyAdded/>
+                </Row>
+            </Col>
+        </WithMenu>
+    </Layout>
+);
 
 HomePage.getInitialProps = async (context: AppContext): Promise<void> => {
     context.store.dispatch.movie.recentlyAddedMovies.setSsr(true);

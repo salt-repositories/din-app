@@ -1,4 +1,4 @@
-type SortDirection = "Asc" | "Desc";
+export type SortDirection = "Asc" | "Desc";
 
 export class QueryParameters {
     public skip: number;

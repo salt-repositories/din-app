@@ -13,16 +13,12 @@ export const MoviesContainer: React.FC = (): JSX.Element => {
     const recentlyAddedMovies = useStoreState((state: IRootState) => state.movie.recentlyAddedMovies.items);
     const loading = useStoreState((state: IRootState) => state.movie.recentlyAddedMovies.loading);
     const ssr = useStoreState((state: IRootState) => state.movie.recentlyAddedMovies.ssr);
-    const showYoutubeModal = useStoreState((state: IRootState) => state.components.recentlyAdded.showYoutubeModal);
-
 
     const getRecentlyAddedMovies = useStoreActions((actions: Actions<IRootState>) =>
         actions.movie.recentlyAddedMovies.getRecentlyAdded);
-    const setShowYoutubeModal = useStoreActions((actions: Actions<IRootState>) =>
-        actions.components.recentlyAdded.setShowYoutubeModal);
     const next = useStoreActions((actions: Actions<IRootState>) => actions.movie.recentlyAddedMovies.next);
 
-    const [trailerId, setTrailerId] = useState<string>();
+    const [showYoutubeModal, setShowYoutubeModal] = useState<[boolean, string]>([false, undefined]);
 
     useEffect(() => {
         if (recentlyAddedMovies.length <= 0 && !loading && !ssr) {
@@ -31,13 +27,12 @@ export const MoviesContainer: React.FC = (): JSX.Element => {
     }, []);
 
     const openYoutubeModal = (id: string): void => {
-        setTrailerId(id);
-        setShowYoutubeModal(true);
+        setShowYoutubeModal([true, id]);
     };
 
     return (
         <>
-            <YoutubeModal visible={showYoutubeModal} trailerId={trailerId}/>
+            <YoutubeModal data={showYoutubeModal} setData={setShowYoutubeModal}/>
             {recentlyAddedMovies.length > 0 ? (
                 <>
                     {recentlyAddedMovies.map((item: Movie) => (

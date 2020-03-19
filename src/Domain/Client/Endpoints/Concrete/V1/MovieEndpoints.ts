@@ -19,6 +19,17 @@ export class MovieEndpoints extends Endpoints {
         ) as MovieQueryResult;
     }
 
+    public async getMovieById(id: number, plex: boolean, poster: boolean): Promise<Movie> {
+        return await this.call(
+            "GET",
+            true,
+            `${id}?plex=${plex}&poster=${poster}`,
+            null,
+            Movie,
+            false,
+        ) as Movie;
+    }
+
     public async searchMovieByQuery(query: string): Promise<MovieSearch[]> {
         return await this.call(
             "GET",

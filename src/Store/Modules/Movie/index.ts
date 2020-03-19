@@ -1,13 +1,12 @@
 import { ApiClientProvider } from "../../../Domain/Client";
 import { Movie } from "../../../Domain/Models/Movies";
-import { Filters, QueryParameters } from "../../../Domain/Models/Querying";
 import { calendar, ICalendar, IRecentlyAdded, recentlyAdded } from "../Shared";
+import { contentState, IContent } from "../Shared/content";
 
 export interface IMovieState {
     recentlyAddedMovies: IRecentlyAdded<Movie>,
     calendar: ICalendar<Movie>;
-    filters: Filters;
-    queryParams: QueryParameters;
+    movies: IContent<Movie>;
 }
 
 export const movieState: IMovieState = {
@@ -23,6 +22,14 @@ export const movieState: IMovieState = {
             return apiClient.v1.movies.getCalendar(from, till);
         }
     ),
-    filters: new Filters(),
-    queryParams: new QueryParameters(),
+    movies: contentState(
+        (params, filters) => {
+            const apiClient = ApiClientProvider.getClient();
+            return apiClient.v1.movies.getMovies(params, filters);
+        },
+        (id) => {
+            const apiClient = ApiClientProvider.getClient();
+            return apiClient.v1.movies.getMovieById(id, true, true);
+        }
+    )
 };

@@ -1,5 +1,6 @@
-import { Expose, Transform } from "class-transformer";
+import { Expose, Transform, Type } from "class-transformer";
 import moment, { Moment } from "moment";
+import { Rating } from "../Content/Rating";
 
 export abstract class Content {
     public id: number;
@@ -19,4 +20,6 @@ export abstract class Content {
     public plexUrl: string;
     @Expose({ name: "poster_path" })
     public posterPath: string;
+    @Type(() => Rating)
+    public ratings: Rating;
 }

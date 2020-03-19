@@ -13,18 +13,16 @@ import { getBackgrounds } from "../../src/Store/Modules/Main";
 interface IProps {
 }
 
-const MePage: NextPage<IProps> = (props: IProps) => {
-    return (
-        <Layout>
-            <Head>
-                <title>Me</title>
-            </Head>
-            <WithMenu crumbs={[{name: "Me", icon: <Icon type="user"/>}]}>
+const MePage: NextPage<IProps> = (props: IProps) => (
+    <Layout>
+        <Head>
+            <title>Me</title>
+        </Head>
+        <WithMenu crumbs={[{path: "/Me", icon: <Icon type="user"/>}]}>
 
-            </WithMenu>
-        </Layout>
-    );
-};
+        </WithMenu>
+    </Layout>
+);
 
 MePage.getInitialProps = async (context: AppContext): Promise<IProps> => {
     const backgrounds = await getBackgrounds(context);

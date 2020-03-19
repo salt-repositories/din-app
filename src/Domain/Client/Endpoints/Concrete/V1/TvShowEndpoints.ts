@@ -1,6 +1,6 @@
 import { Endpoints } from "../..";
 import { Filters, QueryParameters } from "../../../../Models/Querying";
-import { TvShowCalendar, TvShowQueryResult, TvShowSearch } from "../../../../Models/TvShow";
+import { TvShow, TvShowCalendar, TvShowQueryResult, TvShowSearch } from "../../../../Models/TvShow";
 import { ApiClientUtils } from "../../../ApiClientUtils";
 import { ApiVersions } from "../../../Versions/Concrete/Versions";
 
@@ -18,6 +18,17 @@ export class TvShowEndpoints extends Endpoints {
             TvShowQueryResult,
             false,
         ) as TvShowQueryResult;
+    }
+
+    public async getTvShowById(id: number, plex: boolean, poster: boolean): Promise<TvShow> {
+        return await this.call(
+            "GET",
+            true,
+            `${id}?plex=${plex}&poster=${poster}`,
+            null,
+            TvShow,
+            false,
+        ) as TvShow;
     }
     
     public async searchTvShowByQuery(query: string): Promise<TvShowSearch[]> {

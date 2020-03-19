@@ -3,6 +3,8 @@ import { Content } from "../Abstractions";
 import { Season } from "./Season";
 
 export class TvShow extends Content {
+    @Expose({name: "tv_show_id" })
+    public tvShowId: number;
     @Expose({ name : "tvdb_id" })
     public tvdbId: number;
     @Expose({ name: "season_count" })
