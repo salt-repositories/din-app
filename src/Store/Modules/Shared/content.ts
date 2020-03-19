@@ -3,6 +3,7 @@ import { Content } from "../../../Domain/Models/Abstractions";
 import { Filters, QueryParameters, QueryResult } from "../../../Domain/Models/Querying";
 
 export interface IContent<T extends Content> {
+    item;
     items: T[];
 
     loading: boolean;
@@ -14,15 +15,18 @@ export interface IContent<T extends Content> {
     setFilterProp: Action<IContent<T>, [string, string]>;
 
     get: Thunk<IContent<T>>;
+    getById: Thunk<IContent<T>, number>;
     add: Action<IContent<T>, T>;
     set: Action<IContent<T>, T[]>;
     next: Thunk<IContent<T>>;
 }
 
 export const contentState = <T extends Content>(
-    getMethod: (params, filters) => Promise<QueryResult<T>>
+    getAllMethod: (params, filters) => Promise<QueryResult<T>>,
+    getByIdMethod: (id) => Promise<T>
 ): IContent<T> => {
     return {
+        item: undefined,
         items: [],
 
         loading: false,
@@ -43,8 +47,16 @@ export const contentState = <T extends Content>(
             actions.setLoading(true);
 
             const state = helpers.getState();
-            const result = await getMethod(state.params, state.filters);
+            const result = await getAllMethod(state.params, state.filters);
             actions.set(result.items);
+            actions.setLoading(false);
+        }),
+        getById: thunk(async (actions: Actions<IContent<T>>, payload: number, helpers) => {
+            actions.setLoading(true);
+
+            const state = helpers.getState();
+            state.item = await getByIdMethod(payload);
+
             actions.setLoading(false);
         }),
         add: action((state: IContent<T>, payload: T) => {
@@ -59,7 +71,7 @@ export const contentState = <T extends Content>(
             const state = helpers.getState();
             state.params.skip += 20;
 
-            const results = await getMethod(state.params, state.filters);
+            const results = await getAllMethod(state.params, state.filters);
             results.items.map((item) => actions.add(item));
 
             actions.setLoading(false);

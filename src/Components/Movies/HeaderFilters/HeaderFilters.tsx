@@ -1,12 +1,12 @@
-import { Col, Select } from "antd";
-import { Button, Form, Row } from "antd";
+import { Select } from "antd";
+import { Form } from "antd";
 import { Actions } from "easy-peasy";
 import React, { useEffect } from "react";
 import { IRootState, useStoreActions, useStoreState } from "../../../Store";
-import { Poster } from "../../Home/RecentlyAdded/Poster";
 
 export const HeaderFilters = () => {
-    const movies = useStoreState((state: IRootState) => state.movie.movies.items);
+    // TODO
+    // const movies = useStoreState((state: IRootState) => state.movie.movies.items);
 
     const {
         sortBy,
@@ -17,10 +17,10 @@ export const HeaderFilters = () => {
     }));
 
     const setParamProp = useStoreActions((actions: Actions<IRootState>) => actions.movie.movies.setParamProp);
-    const setFilterProp = useStoreActions((actions: Actions<IRootState>) => actions.movie.movies.setFilterProp);
+    // const setFilterProp = useStoreActions((actions: Actions<IRootState>) => actions.movie.movies.setFilterProp);
 
     const getMovies = useStoreActions((actions: Actions<IRootState>) => actions.movie.movies.get);
-    const next = useStoreActions((actions: Actions<IRootState>) => actions.movie.movies.next);
+    // const next = useStoreActions((actions: Actions<IRootState>) => actions.movie.movies.next);
 
     useEffect(() => {
         getMovies();

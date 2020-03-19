@@ -1,10 +1,5 @@
 import { action, Action } from "easy-peasy";
 
-interface IRecentlyAdded {
-    showYoutubeModal: boolean;
-    setShowYoutubeModal: Action<IRecentlyAdded, boolean>;
-}
-
 interface IForgotPassword {
     visible: boolean;
     setVisible: Action<IForgotPassword, boolean>;
@@ -16,7 +11,6 @@ interface IForgotPassword {
 
 export interface IComponentsState {
     forgotPassword: IForgotPassword;
-    recentlyAdded: IRecentlyAdded;
 }
 
 export const componentsState: IComponentsState = {
@@ -32,12 +26,6 @@ export const componentsState: IComponentsState = {
         currentTab: 0,
         setCurrentTab: action((state: IForgotPassword, payload: number) => {
             state.currentTab = payload;
-        }),
-    },
-    recentlyAdded: {
-        showYoutubeModal: false,
-        setShowYoutubeModal: action((state: IRecentlyAdded, payload: boolean) => {
-            state.showYoutubeModal = payload;
         }),
     },
 };

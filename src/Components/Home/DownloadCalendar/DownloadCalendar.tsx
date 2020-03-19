@@ -7,13 +7,17 @@ import { Scrollbars } from "react-custom-scrollbars";
 import { Movie } from "../../../Domain/Models/Movies";
 import { TvShowCalendar } from "../../../Domain/Models/TvShow";
 import { IRootState, useStoreActions, useStoreState } from "../../../Store";
-import { CalendarItemModal } from "./CalendarItemModal";
+import { MovieModal, TvShowModal } from "../../Shared/Modals";
+import { Spinner } from "../../Shared/Spinner";
 
 const rowIndexes = [7, 15, 23];
 
 export const DownloadCalendar: React.FC = (): JSX.Element => {
     const movieCalendarItems = useStoreState((state: IRootState) => state.movie.calendar.items);
     const tvShowCalendarItems = useStoreState((state: IRootState) => state.tvShow.calendar.items);
+
+    const movieCalendarLoading = useStoreState((state: IRootState) => state.movie.calendar.loading);
+    const tvShowCalendarLoading = useStoreState((state: IRootState) => state.tvShow.calendar.loading);
 
     const getMovieCalendarItems = useStoreActions((actions: Actions<IRootState>) => actions.movie.calendar.getItems);
     const getTvShowCalendarItems = useStoreActions((actions: Actions<IRootState>) => actions.tvShow.calendar.getItems);
@@ -22,8 +26,9 @@ export const DownloadCalendar: React.FC = (): JSX.Element => {
         from: moment(),
         till: moment().add(23, "days"),
     });
-    const [modalVisible, setModalVisible] = useState<boolean>(false);
-    const [selectedItem, setSelectedItem] = useState<Movie | TvShowCalendar>();
+
+    const [movieModalVisible, setMovieModalVisible] = useState<[boolean, Movie]>([false, undefined]);
+    const [tvShowModalVisible, setTvShowModalVisible] = useState<[boolean, TvShowCalendar]>([false, undefined]);
 
     useEffect(() => {
         getMovieCalendarItems(dateRange);
@@ -57,14 +62,14 @@ export const DownloadCalendar: React.FC = (): JSX.Element => {
         setDateRange({
             from: dateRange.from.subtract(23, "days"),
             till: dateRange.till.subtract(23, "days"),
-        })
+        });
     };
 
     const next = (): void => {
         setDateRange({
             from: dateRange.from.add(23, "days"),
             till: dateRange.till.add(23, "days"),
-        })
+        });
     };
 
     const today = (): void => {
@@ -75,16 +80,22 @@ export const DownloadCalendar: React.FC = (): JSX.Element => {
     };
 
     const openItemModal = (item: Movie | TvShowCalendar): void => {
-        setSelectedItem(item);
-        setModalVisible(true);
+        item instanceof Movie
+            ? setMovieModalVisible([true, item])
+            : setTvShowModalVisible([true, item]);
     };
 
     return (
         <>
-            <CalendarItemModal
-                visible={modalVisible}
-                setVisible={setModalVisible}
-                item={selectedItem}
+            <MovieModal
+                visible={movieModalVisible[0]}
+                setVisible={setMovieModalVisible}
+                movie={movieModalVisible[1]}
+            />
+            <TvShowModal
+                visible={tvShowModalVisible[0]}
+                setVisible={setTvShowModalVisible}
+                tvShowCalendar={tvShowModalVisible[1]}
             />
             <div className="content-calendar-container">
                 <Row>
@@ -126,45 +137,50 @@ export const DownloadCalendar: React.FC = (): JSX.Element => {
                     <Divider className="divider"/>
                     <Row>
                         <Col span={24}>
-                            {getData().map((item: [Moment, (Movie | TvShowCalendar)[]], index: number) => (
-                                <div className={rowIndexes.includes(index) && "ant-row date-card-row"} key={item[0].unix()}>
-                                    <Col span={3} className="date-card">
-                                    <span
-                                        className={
-                                            item[0].format("DD-MM-YYYY") === moment().format("DD-MM-YYYY") && "today"}
-                                    >
-                                        {item[0].date()}
-                                    </span>
-                                        <Divider className="divider"/>
-                                        <Scrollbars
-                                            universal={true}
-                                            autoHeight={true}
-                                            className="content"
-                                        >
-                                            <div className="item-container">
-                                                {item[1].map((content) => (
-                                                    <Row key={content.id}>
-                                                        <Tag
-                                                            className="item"
-                                                            color={
-                                                                content instanceof Movie
-                                                                    ? content.downloaded ? "green" : "red"
-                                                                    : content.hasFile ? "green" : "red"
-                                                            }
-                                                            onClick={() => openItemModal(content)}
-                                                        >
-                                                            {content instanceof Movie
-                                                                ? `${content.title} - (${content.year})`
-                                                                : `${content.tvShow.title} - (S${content.seasonNumber}E${content.episodeNumber}) - ${content.title}`
-                                                            }
-                                                        </Tag>
-                                                    </Row>
-                                                ))}
-                                            </div>
-                                        </Scrollbars>
-                                    </Col>
-                                </div>
-                            ))}
+                            {movieCalendarLoading || tvShowCalendarLoading ? (
+                                <Spinner/>
+                            ) : (
+                                getData().map((item: [Moment, (Movie | TvShowCalendar)[]], index: number) => (
+                                    <div className={rowIndexes.includes(index) && "ant-row date-card-row"}
+                                         key={item[0].unix()}>
+                                        <Col span={3} className="date-card">
+                                            <span
+                                                className={
+                                                    item[0].format("DD-MM-YYYY") === moment().format("DD-MM-YYYY") && "today"}
+                                            >
+                                                {item[0].date()}
+                                            </span>
+                                            <Divider className="divider"/>
+                                            <Scrollbars
+                                                universal={true}
+                                                autoHeight={true}
+                                                className="content"
+                                            >
+                                                <div className="item-container">
+                                                    {item[1].map((content) => (
+                                                        <Row key={content.id}>
+                                                            <Tag
+                                                                className="item"
+                                                                color={
+                                                                    content instanceof Movie
+                                                                        ? content.downloaded ? "green" : "red"
+                                                                        : content.hasFile ? "green" : "red"
+                                                                }
+                                                                onClick={() => openItemModal(content)}
+                                                            >
+                                                                {content instanceof Movie
+                                                                    ? `${content.title} - (${content.year})`
+                                                                    : `${content.tvShow.title} - (S${content.seasonNumber}E${content.episodeNumber}) - ${content.title}`
+                                                                }
+                                                            </Tag>
+                                                        </Row>
+                                                    ))}
+                                                </div>
+                                            </Scrollbars>
+                                        </Col>
+                                    </div>
+                                ))
+                            )}
                         </Col>
                     </Row>
                 </Col>
@@ -229,10 +245,6 @@ export const DownloadCalendar: React.FC = (): JSX.Element => {
                     
                     :global(.content-calendar-container .date-card .item-container) {
                         max-height: 5em;
-                    }
-                    
-                    :global(.content-calendar-container .date-card .item) {
-                        margin: 2px;
                     }
                     
                     :global(.content-calendar-container .date-card .item-container .item:hover) {

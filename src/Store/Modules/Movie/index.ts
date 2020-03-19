@@ -22,8 +22,14 @@ export const movieState: IMovieState = {
             return apiClient.v1.movies.getCalendar(from, till);
         }
     ),
-    movies: contentState((params, filters) => {
-        const apiClient = ApiClientProvider.getClient();
-        return apiClient.v1.movies.getMovies(params, filters);
-    })
+    movies: contentState(
+        (params, filters) => {
+            const apiClient = ApiClientProvider.getClient();
+            return apiClient.v1.movies.getMovies(params, filters);
+        },
+        (id) => {
+            const apiClient = ApiClientProvider.getClient();
+            return apiClient.v1.movies.getMovieById(id, true, true);
+        }
+    )
 };
