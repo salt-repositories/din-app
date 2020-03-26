@@ -63,8 +63,12 @@ export const HandleAuthentication = async (context: AppContext) => {
  */
 export const setTokenCookie = (token: Token, context?: AppContext) => {
     context
-        ? setCookie(context, "token", serialize(token), {})
-        : setCookie({}, "token", serialize(token), {});
+        ? setCookie(context, "token", serialize(token), {
+            maxAge: 3600 * 24 * 35,
+        })
+        : setCookie({}, "token", serialize(token), {
+            maxAge: 3600 * 24 * 35,
+        });
 };
 
 /**
