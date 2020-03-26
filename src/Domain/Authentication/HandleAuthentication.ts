@@ -1,4 +1,4 @@
-import { deserialize, serialize } from "class-transformer";
+import { deserialize, plainToClass, serialize } from "class-transformer";
 import jwtDecode from "jwt-decode";
 import moment from "moment";
 import Router from "next/router";
@@ -75,8 +75,8 @@ export const getToken = async (): Promise<Token> => {
     const now = moment();
 
     const token = globalContext?.isServer
-        ? deserialize(Token, parseCookies(globalContext).token)
-        : deserialize(Token, parseCookies().token);
+        ? plainToClass(Token, JSON.parse(parseCookies(globalContext).token))
+        : plainToClass(Token, JSON.parse(parseCookies().token));
 
     const {exp} = jwtDecode(token.accessToken);
 
