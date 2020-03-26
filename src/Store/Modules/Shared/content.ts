@@ -4,7 +4,7 @@ import { Filters, QueryParameters, QueryResult } from "../../../Domain/Models/Qu
 
 export interface IContent<T extends Content> {
     item;
-    items: T[];
+    collection: QueryResult<T>;
 
     loading: boolean;
     params: QueryParameters;
@@ -17,7 +17,7 @@ export interface IContent<T extends Content> {
     get: Thunk<IContent<T>>;
     getById: Thunk<IContent<T>, number>;
     add: Action<IContent<T>, T>;
-    set: Action<IContent<T>, T[]>;
+    set: Action<IContent<T>, QueryResult<T>>;
     next: Thunk<IContent<T>>;
 }
 
@@ -27,7 +27,7 @@ export const contentState = <T extends Content>(
 ): IContent<T> => {
     return {
         item: undefined,
-        items: [],
+        collection: undefined,
 
         loading: false,
         params: new QueryParameters(0, 20, "title", "Asc"),
@@ -47,8 +47,7 @@ export const contentState = <T extends Content>(
             actions.setLoading(true);
 
             const state = helpers.getState();
-            const result = await getAllMethod(state.params, state.filters);
-            actions.set(result.items);
+            actions.set(await getAllMethod(state.params, state.filters));
             actions.setLoading(false);
         }),
         getById: thunk(async (actions: Actions<IContent<T>>, payload: number, helpers) => {
@@ -60,10 +59,10 @@ export const contentState = <T extends Content>(
             actions.setLoading(false);
         }),
         add: action((state: IContent<T>, payload: T) => {
-            state.items.push(payload);
+            state.collection.items.push(payload);
         }),
-        set: action((state: IContent<T>, payload: T[]) => {
-            state.items = payload;
+        set: action((state: IContent<T>, payload: QueryResult<T>) => {
+            state.collection = payload;
         }),
         next: thunk(async (actions: Actions<IContent<T>>,_, helpers) => {
             actions.setLoading(true);
