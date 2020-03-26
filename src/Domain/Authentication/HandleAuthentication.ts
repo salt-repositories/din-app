@@ -78,9 +78,20 @@ export const setTokenCookie = (token: Token, context?: AppContext) => {
 export const getToken = async (): Promise<Token> => {
     const now = moment();
 
-    const token = globalContext?.isServer
-        ? plainToClass(Token, JSON.parse(parseCookies(globalContext).token))
-        : plainToClass(Token, JSON.parse(parseCookies().token));
+    let token: Token;
+
+    try {
+        token = globalContext?.isServer
+            ? plainToClass(Token, JSON.parse(parseCookies(globalContext).token))
+            : plainToClass(Token, JSON.parse(parseCookies().token));
+    } catch (error) {
+        console.log(error);
+        globalContext?.isServer
+            ? console.log(parseCookies(globalContext).token)
+            : console.log(parseCookies().token);
+
+        return;
+    }
 
     const {exp} = jwtDecode(token.accessToken);
 
