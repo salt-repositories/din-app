@@ -4,11 +4,7 @@ import { Filters, QueryParameters, QueryResult } from "../../../Domain/Models/Qu
 
 export interface IContent<T extends Content> {
     item;
-<<<<<<< HEAD
     collection: QueryResult<T>;
-=======
-    items: T[];
->>>>>>> develop
 
     loading: boolean;
     params: QueryParameters;
@@ -21,11 +17,7 @@ export interface IContent<T extends Content> {
     get: Thunk<IContent<T>>;
     getById: Thunk<IContent<T>, number>;
     add: Action<IContent<T>, T>;
-<<<<<<< HEAD
     set: Action<IContent<T>, QueryResult<T>>;
-=======
-    set: Action<IContent<T>, T[]>;
->>>>>>> develop
     next: Thunk<IContent<T>>;
 }
 
@@ -35,11 +27,7 @@ export const contentState = <T extends Content>(
 ): IContent<T> => {
     return {
         item: undefined,
-<<<<<<< HEAD
         collection: undefined,
-=======
-        items: [],
->>>>>>> develop
 
         loading: false,
         params: new QueryParameters(0, 20, "title", "Asc"),
@@ -59,12 +47,7 @@ export const contentState = <T extends Content>(
             actions.setLoading(true);
 
             const state = helpers.getState();
-<<<<<<< HEAD
             actions.set(await getAllMethod(state.params, state.filters));
-=======
-            const result = await getAllMethod(state.params, state.filters);
-            actions.set(result.items);
->>>>>>> develop
             actions.setLoading(false);
         }),
         getById: thunk(async (actions: Actions<IContent<T>>, payload: number, helpers) => {
@@ -76,17 +59,10 @@ export const contentState = <T extends Content>(
             actions.setLoading(false);
         }),
         add: action((state: IContent<T>, payload: T) => {
-<<<<<<< HEAD
             state.collection.items.push(payload);
         }),
         set: action((state: IContent<T>, payload: QueryResult<T>) => {
             state.collection = payload;
-=======
-            state.items.push(payload);
-        }),
-        set: action((state: IContent<T>, payload: T[]) => {
-            state.items = payload;
->>>>>>> develop
         }),
         next: thunk(async (actions: Actions<IContent<T>>,_, helpers) => {
             actions.setLoading(true);
