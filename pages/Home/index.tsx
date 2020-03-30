@@ -1,5 +1,6 @@
 import "reflect-metadata";
 
+import * as Sentry from "@sentry/node";
 import { Col, Icon, Row } from "antd";
 import { NextPage } from "next";
 import Head from "next/dist/next-server/lib/head";
@@ -9,6 +10,12 @@ import { withAuthentication } from "../../src/Domain/Authentication";
 import { WithMenu } from "../../src/Layouts";
 import Layout from "../../src/Layouts/Layout";
 import { AppContext } from "../../src/Store/AppContext";
+
+Sentry.addBreadcrumb({
+    category: "pages/Home",
+    message: `Preparing app (${process.browser ? 'browser' : 'server'})`,
+    level: Sentry.Severity.Debug,
+});
 
 const HomePage: NextPage = () => (
     <Layout>

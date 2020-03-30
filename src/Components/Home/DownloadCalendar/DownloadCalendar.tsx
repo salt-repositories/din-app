@@ -1,4 +1,4 @@
-import { Button, Col, DatePicker, Divider, Icon, Row, Tag, Tooltip } from "antd";
+import { Button, Col, DatePicker, Divider, Icon, Row, Skeleton, Tag, Tooltip } from "antd";
 import { RangePickerValue } from "antd/lib/date-picker/interface";
 import { Actions } from "easy-peasy";
 import moment, { Moment } from "moment";
@@ -8,7 +8,6 @@ import { Movie } from "../../../Domain/Models/Movies";
 import { TvShowCalendar } from "../../../Domain/Models/TvShow";
 import { IRootState, useStoreActions, useStoreState } from "../../../Store";
 import { MovieModal, TvShowModal } from "../../Shared/Modals";
-import { Spinner } from "../../Shared/Spinner";
 
 const rowIndexes = [7, 15, 23];
 
@@ -137,49 +136,67 @@ export const DownloadCalendar: React.FC = (): JSX.Element => {
                     <Divider className="divider"/>
                     <Row>
                         <Col span={24}>
-                            {movieCalendarLoading || tvShowCalendarLoading ? (
-                                <Spinner/>
-                            ) : (
-                                getData().map((item: [Moment, (Movie | TvShowCalendar)[]], index: number) => (
-                                    <div className={rowIndexes.includes(index) && "ant-row date-card-row"}
-                                         key={item[0].unix()}>
-                                        <Col span={3} className="date-card">
-                                            <span
-                                                className={
-                                                    item[0].format("DD-MM-YYYY") === moment().format("DD-MM-YYYY") && "today"}
-                                            >
-                                                {item[0].date()}
-                                            </span>
-                                            <Divider className="divider"/>
-                                            <Scrollbars
-                                                universal={true}
-                                                autoHeight={true}
-                                                className="content"
-                                            >
-                                                <div className="item-container">
-                                                    {item[1].map((content) => (
-                                                        <Row key={content.id}>
-                                                            <Tag
-                                                                className="item"
-                                                                color={
-                                                                    content instanceof Movie
-                                                                        ? content.downloaded ? "green" : "red"
-                                                                        : content.hasFile ? "green" : "red"
-                                                                }
-                                                                onClick={() => openItemModal(content)}
-                                                            >
-                                                                {content instanceof Movie
-                                                                    ? `${content.title} - (${content.year})`
-                                                                    : `${content.tvShow.title} - (S${content.seasonNumber}E${content.episodeNumber}) - ${content.title}`
-                                                                }
-                                                            </Tag>
-                                                        </Row>
-                                                    ))}
-                                                </div>
-                                            </Scrollbars>
-                                        </Col>
-                                    </div>
-                                ))
+                            {getData().map((item: [Moment, (Movie | TvShowCalendar)[]], index: number) => {
+                                    const rows = Math.floor(Math.random() * 4) + 1;
+                                    const width = [];
+
+                                    for (let i = 0; i < rows; i++) {
+                                        width.push(Math.floor(Math.random() * 60) + 30);
+                                    }
+
+                                    return (
+                                        <div className={rowIndexes.includes(index) && "ant-row date-card-row"}
+                                             key={item[0].unix()}>
+                                            <Col span={3} className="date-card">
+                                        <span
+                                            className={
+                                                item[0].format("DD-MM-YYYY") === moment().format("DD-MM-YYYY") && "today"}
+                                        >
+                                            {item[0].date()}
+                                        </span>
+                                                <Divider className="divider"/>
+                                                <Scrollbars
+                                                    universal={true}
+                                                    autoHeight={true}
+                                                    className="content"
+                                                >
+                                                    <div className="item-container">
+                                                        {
+                                                            movieCalendarLoading && tvShowCalendarLoading ? (
+                                                                <Skeleton
+                                                                    className="skeleton-loading"
+                                                                    active={true}
+                                                                    title={false}
+                                                                    paragraph={{
+                                                                        rows,
+                                                                        width,
+                                                                    }}
+                                                                />
+                                                            ) : (
+                                                                item[1].map((content) => (
+                                                                    <Row key={content.id}>
+                                                                        <Tag
+                                                                            className="item"
+                                                                            color={
+                                                                                content instanceof Movie
+                                                                                    ? content.downloaded ? "green" : "red"
+                                                                                    : content.hasFile ? "green" : "red"
+                                                                            }
+                                                                            onClick={() => openItemModal(content)}
+                                                                        >
+                                                                            {content instanceof Movie
+                                                                                ? `${content.title} - (${content.year})`
+                                                                                : `${content.tvShow.title} - (S${content.seasonNumber}E${content.episodeNumber}) - ${content.title}`
+                                                                            }
+                                                                        </Tag>
+                                                                    </Row>
+                                                                )))}
+                                                    </div>
+                                                </Scrollbars>
+                                            </Col>
+                                        </div>
+                                    );
+                                }
                             )}
                         </Col>
                     </Row>
@@ -245,6 +262,11 @@ export const DownloadCalendar: React.FC = (): JSX.Element => {
                     
                     :global(.content-calendar-container .date-card .item-container) {
                         max-height: 5em;
+                    }
+                    
+                    :global(.content-calendar-container .date-card .item-container .skeleton-loading .ant-skeleton-paragraph li) {
+                        background: linear-gradient(90deg, #6f6d6917 25%, #ff8d1c99 37%, #6f6d6917 63%);
+                        background-size: 400% 100%;
                     }
                     
                     :global(.content-calendar-container .date-card .item-container .item:hover) {

@@ -131,7 +131,7 @@ const authenticateWithRefreshToken = async (refreshToken: string, context?: AppC
 
         context
             ? destroyCookie(context, "token")
-            : destroyCookie({}, "token");
+            : destroyCookie(undefined, "token");
 
         context
             ? await redirectToLogin(context)

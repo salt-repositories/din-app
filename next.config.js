@@ -1,5 +1,6 @@
 require("dotenv").config();
 
+const withSourceMaps = require("@zeit/next-source-maps")();
 const path = require("path");
 const Dotenv = require("dotenv-webpack");
 const lessToJS = require("less-vars-to-js");
@@ -10,12 +11,16 @@ const theme = lessToJS(
     fs.readFileSync(path.resolve(__dirname, "./assets/theme.less"), "utf8")
 );
 
-module.exports = withLess({
+module.exports = withSourceMaps(withLess({
     lessLoaderOptions: {
         javascriptEnabled: true,
         modifyVars: theme,
     },
     webpack: (config, {isServer}) => {
+        if (!isServer) {
+            config.resolve.alias["@sentry/node"] = "@sentry/browser";
+        }
+
         if (isServer) {
             const antStyles = /antd\/.*?\/style.*?/;
             const origExternals = [...config.externals];
@@ -46,5 +51,5 @@ module.exports = withLess({
 
         return config
     },
-});
+}));
 

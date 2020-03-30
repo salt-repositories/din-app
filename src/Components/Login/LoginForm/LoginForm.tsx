@@ -41,7 +41,7 @@ export const LoginForm = (props: IProps) => {
 
         values.rememberUsername
             ? setCookie({}, "username", values.username, {})
-            : destroyCookie({}, "username");
+            : destroyCookie(undefined, "username");
 
         setTokenCookie(response);
         logEvent("Authentication", "login");

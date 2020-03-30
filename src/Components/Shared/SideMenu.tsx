@@ -20,7 +20,7 @@ export const SideMenu = (): JSX.Element => {
     };
 
     const logout = () => {
-        destroyCookie({}, "token");
+        destroyCookie(undefined, "token");
         Router.push("/");
     };
 
