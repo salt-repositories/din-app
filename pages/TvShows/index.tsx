@@ -27,6 +27,7 @@ const TvShowsPage: NextPage = () => (
 );
 
 TvShowsPage.getInitialProps = async (context: AppContext): Promise<IProps> => {
+    context.store.dispatch.main.menu.setActiveMenuKey("TvShows");
 
     return {};
 };

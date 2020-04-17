@@ -1,11 +1,13 @@
 import { createStore, createTypedHooks } from "easy-peasy";
-import { componentsState, IComponentsState } from "./Modules/Components";
-import { IMainState, mainState } from "./Modules/Main";
-import { IMovieState, movieState } from "./Modules/Movie";
-import { IQueueState, queueState } from "./Modules/Queue";
-import { ITvShowState, tvShowState } from "./Modules/TvShow";
+import { authenticationState, IAuthenticationState } from "./Authentication";
+import { componentsState, IComponentsState } from "./Components";
+import { IMainState, mainState } from "./Main";
+import { IMovieState, movieState } from "./Movie";
+import { IQueueState, queueState } from "./Queue";
+import { ITvShowState, tvShowState } from "./TvShow";
 
 export interface IRootState {
+    authentication: Readonly<IAuthenticationState>;
     main: Readonly<IMainState>;
     movie: Readonly<IMovieState>;
     tvShow: Readonly<ITvShowState>;
@@ -14,6 +16,7 @@ export interface IRootState {
 }
 
 export const storeStructure: IRootState = {
+    authentication: authenticationState,
     main: mainState,
     movie: movieState,
     tvShow: tvShowState,
@@ -22,7 +25,7 @@ export const storeStructure: IRootState = {
 };
 
 export const initializeStore = (initialState) => {
-    return createStore(storeStructure, initialState);
+    return createStore(storeStructure, { initialState });
 };
 
 const typedHooks = createTypedHooks<IRootState>();

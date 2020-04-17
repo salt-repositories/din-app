@@ -1,54 +1,27 @@
 import { Badge, Button, Icon, Switch } from "antd";
-import { Formik , FormikHelpers } from "formik";
+import { Actions } from "easy-peasy";
+import { Formik } from "formik";
 import { Form, Input } from "formik-antd";
-import Router from "next/router";
 import { destroyCookie, setCookie } from "nookies";
-import React, { useState } from "react";
-import { setTokenCookie } from "../../../Domain/Authentication";
-import { ApiClientProvider } from "../../../Domain/Client";
-import { ApiException } from "../../../Domain/Client/Exceptions/ApiException";
-import { Token } from "../../../Domain/Models";
-import { logEvent } from "../../../Domain/Utils";
-import { useStoreActions } from "../../../Store";
+import React from "react";
+import { IRootState, useStoreActions, useStoreState } from "../../../Store";
 import { ILoginSchema, loginSchema } from "./Schema";
 
 interface IProps {
     username: string;
 }
 
-const apiClient = ApiClientProvider.getClient();
-
 export const LoginForm = (props: IProps) => {
-    const [loading, setLoading] = useState<boolean>(false);
+    const loading = useStoreState((state: IRootState) => state.authentication.loginLoading);
+    const login = useStoreActions((actions: Actions<IRootState>) => actions.authentication.login);
     const showForgotPasswordModal = useStoreActions((action) => action.components.forgotPassword.setVisible);
 
-    const handleLogin = async (values: ILoginSchema, formikActions: FormikHelpers<any>) => {
-        setLoading(true);
-
-        let response: Token = new Token();
-
-        try {
-            response = await apiClient.v1.authentication.getTokenByCredentials(values.username, values.password);
-        } catch (error) {
-            if (error instanceof ApiException) {
-                formikActions.setFieldError("password", error.errorObject.message);
-            }
-
-            return;
-        } finally {
-            setLoading(false);
-        }
-
+    const formSubmit = async (values: ILoginSchema) => {
         values.rememberUsername
             ? setCookie({}, "username", values.username, {})
             : destroyCookie(undefined, "username");
 
-        setTokenCookie(response);
-        logEvent("Authentication", "login");
-
-        await Router.push("/Home");
-
-        setLoading(false);
+        await login({ username: values.username, password: values.password })
     };
 
     return (
@@ -57,14 +30,14 @@ export const LoginForm = (props: IProps) => {
                 <div className="login-col">
                 <Formik
                     validationSchema={loginSchema}
-                    onSubmit={handleLogin}
+                    onSubmit={formSubmit}
                     initialValues={{
                         username: props.username ? props.username : "",
                         password: "",
                         rememberUsername: !!props.username,
                     }}
                 >
-                    {({ handleSubmit, handleChange, values, setFieldValue }) => (
+                    {({ handleSubmit, values, setFieldValue }) => (
                         <Form noValidate onSubmit={handleSubmit} className="login-form">
                             <div className="title-wrapper">
                                 <Badge className="title">DIN</Badge>

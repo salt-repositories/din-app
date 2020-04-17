@@ -1,28 +1,12 @@
-import { Icon, Menu  } from "antd";
-import { SelectParam } from "antd/es/menu";
+import { Icon, Menu } from "antd";
 import { Actions } from "easy-peasy";
-import Router from "next/router";
-import { destroyCookie } from "nookies";
+import Link from "next/link";
 import React from "react";
 import { IRootState, useStoreActions, useStoreState } from "../../Store";
 
 export const SideMenu = (): JSX.Element => {
     const activeMenuKey = useStoreState((state: IRootState) => state.main.menu.activeMenuKey);
-    const setActiveMenuKey = useStoreActions((actions: Actions<IRootState>) => actions.main.menu.setActiveMenuKey);
-
-    const onSelect = (param: SelectParam) => {
-        if (param.key === "Logout") {
-            return logout();
-        }
-
-        setActiveMenuKey(param.key);
-        Router.push(`/${param.key}`);
-    };
-
-    const logout = () => {
-        destroyCookie(undefined, "token");
-        Router.push("/");
-    };
+    const logout = useStoreActions((actions: Actions<IRootState>) => actions.authentication.logout);
 
     return (
         <>
@@ -30,33 +14,44 @@ export const SideMenu = (): JSX.Element => {
                 className="side-menu"
                 defaultSelectedKeys={[activeMenuKey]}
                 mode="inline"
-                onSelect={onSelect}
             >
                 <Menu.Item key="Home" className="menu-item">
-                    <span>
-                        <Icon type="home" className="icon"/>
-                        Home
-                    </span>
+                    <Link href="/Home">
+                        <a>
+                            <Icon type="home" className="icon"/>
+                            Home
+                        </a>
+                    </Link>
                 </Menu.Item>
                 <Menu.Item key="Me" className="menu-item">
-                    <span>
-                        <Icon type="user" className="icon"/>
-                        Me
-                    </span>
+                    <Link href="/Me">
+                        <a>
+                            <Icon type="user" className="icon"/>
+                            Me
+                        </a>
+                    </Link>
                 </Menu.Item>
                 <Menu.Item key="Movies" className="menu-item">
-                    <span>
-                        <Icon type="video-camera" className="icon"/>
-                        Movies
-                    </span>
+                    <Link href="/Movies">
+                        <a>
+                            <Icon type="video-camera" className="icon"/>
+                            Movies
+                        </a>
+                    </Link>
                 </Menu.Item>
                 <Menu.Item key="TvShows" className="menu-item">
-                    <span>
-                        <Icon type="desktop" className="icon"/>
-                        Tv Shows
-                    </span>
+                    <Link href="/TvShows">
+                        <a>
+                            <Icon type="desktop" className="icon"/>
+                            Tv Shows
+                        </a>
+                    </Link>
                 </Menu.Item>
-                <Menu.Item key="Logout" className="menu-item logout">
+                <Menu.Item
+                    key="Logout"
+                    className="menu-item logout"
+                    onClick={() => logout()}
+                >
                     <span>
                         <Icon type="logout" className="icon"/>
                         Logout
@@ -84,15 +79,19 @@ export const SideMenu = (): JSX.Element => {
                     }
                     
                     :global(.side-menu .ant-menu-item) {
-                        color: #f1f2f3;
                         padding-left: 10px !important;
                     }
                     
-                    :global(.side-menu .ant-menu-item:hover) {
+                    :global(.side-menu .ant-menu-item a) {
+                        color: #f1f2f3;
+                    }
+                    
+                    
+                    :global(.side-menu .ant-menu-item a:hover) {
                         color: #ee9e4f;
                     }
                     
-                    :global(.side-menu .ant-menu-item-selected) {
+                    :global(.side-menu .ant-menu-item-selected a) {
                         color: #ff8d1c;
                     }
                     

@@ -1,6 +1,6 @@
 import { Card } from "antd";
 import { Actions } from "easy-peasy";
-import { default as React, useEffect } from "react";
+import { default as React } from "react";
 import { Waypoint } from "react-waypoint";
 import { TvShow } from "../../../Domain/Models/TvShow";
 import { IRootState, useStoreActions, useStoreState } from "../../../Store";
@@ -11,16 +11,7 @@ import { Poster } from "./Poster";
 export const TvShowsContainer: React.FC = (): JSX.Element => {
     const recentlyAddedTvShows = useStoreState((state: IRootState) => state.tvShow.recentlyAddedTvShows.items);
     const loading = useStoreState((state: IRootState) => state.tvShow.recentlyAddedTvShows.loading);
-
-    const getRecentlyAddedTvShows = useStoreActions((actions: Actions<IRootState>) =>
-        actions.tvShow.recentlyAddedTvShows.getRecentlyAdded);
     const next = useStoreActions((actions: Actions<IRootState>) => actions.tvShow.recentlyAddedTvShows.next);
-
-    useEffect(() => {
-        if (recentlyAddedTvShows.length <= 0 && !loading) {
-            getRecentlyAddedTvShows();
-        }
-    }, []);
 
     return (
         <>

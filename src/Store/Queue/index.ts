@@ -1,18 +1,19 @@
 import { deserialize } from "class-transformer";
-import { action, Action, thunk, Thunk } from "easy-peasy";
-import { Queue } from "../../../Domain/Models/Content";
-import { ContentHub, HubProvider } from "../../../Domain/SignalR/Concrete";
+import { action, Action, Actions, thunk, Thunk } from "easy-peasy";
+import { Queue } from "../../Domain/Models/Content";
+import { ContentHub, HubProvider } from "../../Domain/SignalR/Concrete";
+import { IRootState } from "../index";
 
 export interface IQueueState {
     currentQueue: Queue[];
-    getCurrentQueue: Thunk<IQueueState>;
+    getCurrentQueue: Thunk<IQueueState, void, any, IRootState>;
     setCurrentQueue: Action<IQueueState, Queue[]>;
 }
 
 export const queueState: IQueueState = {
     currentQueue: [],
-    getCurrentQueue: thunk(async (actions) => {
-        const contentHub: ContentHub = HubProvider(ContentHub);
+    getCurrentQueue: thunk(async (actions: Actions<IQueueState>, _, { getStoreState }) => {
+        const contentHub: ContentHub = HubProvider(getStoreState().authentication.token.accessToken, ContentHub);
         await contentHub.getCurrentQueue((json: string) => {
             actions.setCurrentQueue(deserialize(Queue, json) as unknown as Queue[]);
         });

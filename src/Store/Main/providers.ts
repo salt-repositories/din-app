@@ -1,5 +1,5 @@
-import { BackgroundImage } from "../../../Domain/Models/Media";
-import { AppContext } from "../../AppContext";
+import { BackgroundImage } from "../../Domain/Models/Media";
+import { AppContext } from "../AppContext";
 
 export const getBackgrounds = async (context: AppContext) => {
     let backgrounds: BackgroundImage[] = context.store.getState().main.backgroundImages.items;

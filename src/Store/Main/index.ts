@@ -1,13 +1,13 @@
-import { action, Action, thunk, Thunk } from "easy-peasy";
-import { ApiClientProvider } from "../../../Domain/Client";
-import { BackgroundImage } from "../../../Domain/Models";
+import { action, Action, Actions, thunk, Thunk } from "easy-peasy";
+import { BackgroundImage } from "../../Domain/Models";
+import { HttpClient } from "../../Domain/Utils";
 
 export * from "./providers";
 
 export interface IBackgroundState {
     items: BackgroundImage[];
     getBackgroundImages: Thunk<IBackgroundState>;
-    addBackgroundImages: Action<IBackgroundState, BackgroundImage[]>;
+    setBackgroundImages: Action<IBackgroundState, BackgroundImage[]>;
 }
 
 export interface ICarouselState {
@@ -29,12 +29,14 @@ export interface IMainState {
 export const mainState: IMainState = {
     backgroundImages: {
         items: [],
-        getBackgroundImages: thunk(async (actions) => {
-            const apiClient = ApiClientProvider.getClient();
-            const backgrounds = await apiClient.v1.media.getBackgrounds();
-            actions.addBackgroundImages(backgrounds);
+        getBackgroundImages: thunk(async (actions: Actions<IBackgroundState>) => {
+            const response = await HttpClient.get("/v1/media/backgrounds", {
+                type: BackgroundImage
+            }) as unknown as BackgroundImage[];
+
+            actions.setBackgroundImages(response);
         }),
-        addBackgroundImages: action((state: IBackgroundState, payload: BackgroundImage[]) => {
+        setBackgroundImages: action((state: IBackgroundState, payload: BackgroundImage[]) => {
             state.items.push(...payload);
         }),
     },
