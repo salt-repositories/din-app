@@ -1,3 +1,5 @@
+import "reflect-metadata";
+
 import * as Sentry from "@sentry/node";
 import Error from "next/error";
 import React from "react";

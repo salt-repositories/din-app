@@ -1,3 +1,5 @@
+import "reflect-metadata";
+
 import { Col, Icon, Row } from "antd";
 import { NextPage } from "next";
 import Head from "next/head";
