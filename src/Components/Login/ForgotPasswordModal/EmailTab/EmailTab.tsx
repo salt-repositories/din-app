@@ -1,9 +1,9 @@
 import { Icon } from "antd";
+import { Actions } from "easy-peasy";
 import { Formik, FormikHelpers } from "formik";
 import { Form, Input } from "formik-antd";
 import React from "react";
-import { ApiClientProvider } from "../../../../Domain/Client";
-import { ApiException } from "../../../../Domain/Client/Exceptions/ApiException";
+import { IRootState, useStoreActions } from "../../../../Store";
 import { Tab } from "../Tab";
 import { emailSchema, IEmailSchema, initialValues } from "./Schema";
 
@@ -15,24 +15,16 @@ interface IProps {
     setEmail(email: string): void;
 }
 
-const apiClient = ApiClientProvider.getClient();
 
 export const EmailTab = (props: IProps): JSX.Element => {
+    const getAuthorizationCode = useStoreActions((actions: Actions<IRootState>) => actions.authentication.getAuthorizationCode);
+
     const sendForgotPasswordEmail = async (values: IEmailSchema, actions: FormikHelpers<IEmailSchema>) => {
         props.setLoading(true);
 
-        try {
-            await apiClient.v1.authentication.getAuthorizationCode(values.email);
-        } catch (error) {
-            if (error instanceof ApiException) {
-                actions.setFieldError("email", error.errorObject.message);
-            }
+        await getAuthorizationCode(values.email);
 
-            return;
-        } finally {
-            props.setLoading(false);
-        }
-
+        props.setLoading(false);
         props.setEmail(values.email);
         props.setTabIndex(1);
     };

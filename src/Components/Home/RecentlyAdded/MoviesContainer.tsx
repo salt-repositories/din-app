@@ -1,6 +1,6 @@
 import { Card, Icon } from "antd";
 import { Actions } from "easy-peasy";
-import { default as React, useEffect, useState } from "react";
+import { default as React, useState } from "react";
 import { Waypoint } from "react-waypoint";
 import { Movie } from "../../../Domain/Models/Movies";
 import { IRootState, useStoreActions, useStoreState } from "../../../Store";
@@ -12,19 +12,9 @@ import { Poster } from "./Poster";
 export const MoviesContainer: React.FC = (): JSX.Element => {
     const recentlyAddedMovies = useStoreState((state: IRootState) => state.movie.recentlyAddedMovies.items);
     const loading = useStoreState((state: IRootState) => state.movie.recentlyAddedMovies.loading);
-    const ssr = useStoreState((state: IRootState) => state.movie.recentlyAddedMovies.ssr);
-
-    const getRecentlyAddedMovies = useStoreActions((actions: Actions<IRootState>) =>
-        actions.movie.recentlyAddedMovies.getRecentlyAdded);
     const next = useStoreActions((actions: Actions<IRootState>) => actions.movie.recentlyAddedMovies.next);
 
     const [showYoutubeModal, setShowYoutubeModal] = useState<[boolean, string]>([false, undefined]);
-
-    useEffect(() => {
-        if (recentlyAddedMovies.length <= 0 && !loading && !ssr) {
-            getRecentlyAddedMovies();
-        }
-    }, []);
 
     const openYoutubeModal = (id: string): void => {
         setShowYoutubeModal([true, id]);

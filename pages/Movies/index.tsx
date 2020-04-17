@@ -28,7 +28,7 @@ const MoviesPage: NextPage = () => (
 );
 
 MoviesPage.getInitialProps = async (context: AppContext): Promise<IProps> => {
-
+    context.store.dispatch.main.menu.setActiveMenuKey("Movies");
     return {};
 };
 

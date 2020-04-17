@@ -1,5 +1,5 @@
 import { Breadcrumb } from "antd";
-import Router from "next/router";
+import Link from "next/link";
 import { default as React, ReactNode } from "react";
 import { Scrollbars } from 'react-custom-scrollbars';
 import { SideMenu } from "../Components/Shared/SideMenu";
@@ -18,18 +18,17 @@ interface IProps {
 export const WithMenu: React.FC<IProps> = (props: IProps) => (
     <>
         <SideMenu/>
-        <Breadcrumb className="breadcrumb">
-            {props.crumbs.map((crumb: ICrumb) => (
-                <Breadcrumb.Item key={crumb.path}>
-                        <span
-                            onClick={() => Router.push(crumb.path)}
-                            style={{cursor: "pointer"}}
-                        >
-                            {crumb.icon ?? crumb.name}
-                        </span>
-                </Breadcrumb.Item>
-            ))}
-        </Breadcrumb>
+        <div className="header">
+            <Breadcrumb className="breadcrumb">
+                {props.crumbs.map((crumb: ICrumb) => (
+                    <Breadcrumb.Item key={crumb.path}>
+                        <Link href={crumb.path}>
+                            <a>{crumb.icon ?? crumb.name}</a>
+                        </Link>
+                    </Breadcrumb.Item>
+                ))}
+            </Breadcrumb>
+        </div>
         <Scrollbars
             universal={true}
             autoHeight={true}
@@ -39,6 +38,15 @@ export const WithMenu: React.FC<IProps> = (props: IProps) => (
         </Scrollbars>
         <style jsx>
             {`
+                .header {
+                    position: fixed;
+                    top: 0;
+                    left: 100px;
+                    box-shadow: 0 3px 6px 0 rgba(0,0,0,.15);
+                    width: 100%;
+                    height: 45px;
+                }
+                
                  :global(.breadcrumb) {
                     position: fixed;
                     top: 12px;

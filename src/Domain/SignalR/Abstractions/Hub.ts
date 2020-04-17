@@ -1,18 +1,17 @@
 import * as signalR from "@aspnet/signalr";
 import { HubConnection } from "@aspnet/signalr";
-import { getToken } from "../../Authentication";
 
 export abstract class Hub {
     private connection: HubConnection;
     private listeners: string[];
 
-    protected constructor(endpoint: string) {
+    protected constructor(accessToken: string, endpoint: string) {
         this.connection = new signalR.HubConnectionBuilder()
             .withUrl(`${process.env.API_URL}/hubs/${endpoint}`,
                 {
                     skipNegotiation: true,
                     transport: signalR.HttpTransportType.WebSockets,
-                    accessTokenFactory: async () => (await getToken()).accessToken,
+                    accessTokenFactory: () => accessToken,
                 })
             .build();
         this.listeners = [];

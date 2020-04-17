@@ -9,6 +9,7 @@ import { CurrentQueue, DownloadCalendar, RecentlyAdded } from "../../src/Compone
 import { withAuthentication } from "../../src/Domain/Authentication";
 import { WithMenu } from "../../src/Layouts";
 import Layout from "../../src/Layouts/Layout";
+import { IRootState } from "../../src/Store";
 import { AppContext } from "../../src/Store/AppContext";
 
 Sentry.addBreadcrumb({
@@ -41,9 +42,14 @@ const HomePage: NextPage = () => (
 );
 
 HomePage.getInitialProps = async (context: AppContext): Promise<void> => {
-    context.store.dispatch.movie.recentlyAddedMovies.setSsr(true);
-    context.store.dispatch.movie.recentlyAddedMovies.getRecentlyAdded();
-    context.store.dispatch.tvShow.recentlyAddedTvShows.getRecentlyAdded();
+    context.store.dispatch.main.menu.setActiveMenuKey("Home");
+
+    const state: IRootState = context.store.getState();
+
+    await Promise.all([
+        state.movie.recentlyAddedMovies.items.length === 0 ? context.store.dispatch.movie.recentlyAddedMovies.getRecentlyAdded() : null,
+        state.tvShow.recentlyAddedTvShows.items.length === 0 ? context.store.dispatch.tvShow.recentlyAddedTvShows.getRecentlyAdded() : null,
+    ]);
 };
 
 export default withAuthentication(HomePage);

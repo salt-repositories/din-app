@@ -10,7 +10,7 @@ import { withAuthentication } from "../../src/Domain/Authentication";
 import { BackgroundImage } from "../../src/Domain/Models/Media";
 import Layout from "../../src/Layouts/Layout";
 import { AppContext } from "../../src/Store/AppContext";
-import { getBackgrounds } from "../../src/Store/Modules/Main";
+import { getBackgrounds } from "../../src/Store/Main";
 
 interface IProps {
     username: string;

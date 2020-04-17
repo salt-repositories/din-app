@@ -6,7 +6,10 @@ import { IncomingMessage } from "http";
 import get from 'lodash.get';
 import withRedux from "next-redux-wrapper";
 import App from "next/app";
+import Head from "next/head";
+import Router from "next/router";
 import { parseCookies } from "nookies";
+import NProgress from 'nprogress';
 import React, { ErrorInfo } from "react";
 import "../src/Domain/Utils/Sentry";
 import { initializeStore, IRootState } from "../src/Store";
@@ -19,7 +22,10 @@ interface IProps {
     store: Store<IRootState>;
     err: Error;
 }
+
 const fileLabel = 'pages/_app';
+Router.events.on("routeChangeStart", () => NProgress.start());
+Router.events.on("routeChangeComplete", () => NProgress.done());
 
 class MyApp extends App<IProps> {
     public static async getInitialProps(props) {
@@ -39,7 +45,7 @@ class MyApp extends App<IProps> {
         });
 
         if (req) {
-            const { headers }: IncomingMessage = req;
+            const {headers}: IncomingMessage = req;
 
             Sentry.configureScope((scope) => {
                 scope.setContext('headers', headers);
@@ -85,9 +91,15 @@ class MyApp extends App<IProps> {
         });
 
         return (
-            <StoreProvider store={store}>
-                <Component {...modifiedPageProps} />
-            </StoreProvider>
+            <>
+                <Head>
+                    <link rel="stylesheet" type="text/css" href="/static/nprogress.css" />
+                    <title>DIN</title>
+                </Head>
+                <StoreProvider store={store}>
+                    <Component {...modifiedPageProps} />
+                </StoreProvider>
+            </>
         );
     }
 }

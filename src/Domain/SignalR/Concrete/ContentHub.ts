@@ -1,8 +1,8 @@
 import { Hub } from "../Abstractions";
 
 export class ContentHub extends Hub {
-    constructor() {
-        super("content");
+    constructor(accessToken: string) {
+        super(accessToken, "content");
     }
 
     public async getCurrentQueue(callback: (response: string) => void): Promise<void> {

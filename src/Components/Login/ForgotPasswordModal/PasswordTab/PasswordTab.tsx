@@ -1,9 +1,9 @@
 import { Icon } from "antd";
+import { Actions } from "easy-peasy";
 import { Formik, FormikHelpers } from "formik";
 import { Form, Input } from "formik-antd";
 import React from "react";
-import { ApiClientProvider } from "../../../../Domain/Client";
-import { ApiException } from "../../../../Domain/Client/Exceptions/ApiException";
+import { IRootState, useStoreActions } from "../../../../Store";
 import { Tab } from "../Tab";
 import { initialValues, IPasswordSchema, passwordSchema } from "./Schema";
 
@@ -29,32 +29,20 @@ const AuthCodeSvg = () => (
     </svg>
 );
 
-const apiClient = ApiClientProvider.getClient();
-
 export const PasswordTab = (props: IProps): JSX.Element => {
+    const changePassword = useStoreActions((actions: Actions<IRootState>) => actions.authentication.changePassword);
     const AuthCodeIcon = (p) => <Icon component={AuthCodeSvg} {...p}/>;
 
     const changeAccountPassword = async (values: IPasswordSchema, actions: FormikHelpers<IPasswordSchema>) => {
-        try {
-            props.setLoading(true);
+        props.setLoading(true);
 
-            await apiClient.v1.authentication.changeAccountPassword(
-                props.email,
-                values.password,
-                values.authorizationCode,
-            );
-        } catch (error) {
-            if (error instanceof ApiException) {
-                error.errorObject.message.includes("password")
-                    ? actions.setFieldError("password", error.errorObject.message)
-                    : actions.setFieldError("authorizationCode", error.errorObject.message);
-            }
+        await changePassword({
+            email: props.email,
+            password: values.password,
+            authorizationCode: values.authorizationCode,
+        });
 
-            return;
-        } finally {
-            props.setLoading(false);
-        }
-
+        props.setLoading(false);
         props.setTabIndex(2);
     };
 
