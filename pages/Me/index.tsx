@@ -1,6 +1,6 @@
 import "reflect-metadata";
 
-import { Button, Icon } from "antd";
+import { Icon } from "antd";
 import { NextPage } from "next";
 import Head from "next/head";
 import React from "react";

@@ -2,7 +2,6 @@ import "reflect-metadata";
 
 import * as Sentry from "@sentry/node";
 import { Col, Icon, Row } from "antd";
-import moment from "moment";
 import { NextPage } from "next";
 import Head from "next/dist/next-server/lib/head";
 import React from "react";
