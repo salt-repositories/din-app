@@ -37,7 +37,7 @@ export const PasswordTab = (props: IProps): JSX.Element => {
         await changePassword({
             email: props.email,
             password: values.password,
-            authorizationCode: values.authorizationCode,
+            authorization_code: values.authorizationCode,
         });
 
         props.setTabIndex(2);

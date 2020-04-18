@@ -28,7 +28,7 @@ export interface IAuthenticationState {
 
     changePasswordLoading: boolean;
     setChangePasswordLoading: Action<IAuthenticationState, boolean>;
-    changePassword: Thunk<IAuthenticationState, { email: string, password: string, authorizationCode: string }>;
+    changePassword: Thunk<IAuthenticationState, { email: string, password: string, authorization_code: string }>;
 }
 
 export const authenticationState: IAuthenticationState = {
