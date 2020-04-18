@@ -2,7 +2,7 @@ import { Icon, Menu } from "antd";
 import { Actions } from "easy-peasy";
 import Link from "next/link";
 import React from "react";
-import { IRootState, useStoreActions, useStoreState } from "../../Store";
+import { IRootState, useStoreActions, useStoreState } from "../../../Store";
 
 export const SideMenu = (): JSX.Element => {
     const activeMenuKey = useStoreState((state: IRootState) => state.main.menu.activeMenuKey);

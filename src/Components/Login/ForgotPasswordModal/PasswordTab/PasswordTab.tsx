@@ -1,17 +1,15 @@
 import { Icon } from "antd";
 import { Actions } from "easy-peasy";
-import { Formik, FormikHelpers } from "formik";
+import { Formik } from "formik";
 import { Form, Input } from "formik-antd";
 import React from "react";
-import { IRootState, useStoreActions } from "../../../../Store";
+import { IRootState, useStoreActions, useStoreState } from "../../../../Store";
 import { Tab } from "../Tab";
 import { initialValues, IPasswordSchema, passwordSchema } from "./Schema";
 
 interface IProps {
-    loading: boolean;
     email: string;
     handleClose(): void;
-    setLoading(value: boolean): void;
     setTabIndex(value: number): void;
 }
 
@@ -31,18 +29,17 @@ const AuthCodeSvg = () => (
 
 export const PasswordTab = (props: IProps): JSX.Element => {
     const changePassword = useStoreActions((actions: Actions<IRootState>) => actions.authentication.changePassword);
+    const loading = useStoreState((state: IRootState) => state.authentication.changePasswordLoading);
+
     const AuthCodeIcon = (p) => <Icon component={AuthCodeSvg} {...p}/>;
 
-    const changeAccountPassword = async (values: IPasswordSchema, actions: FormikHelpers<IPasswordSchema>) => {
-        props.setLoading(true);
-
+    const changeAccountPassword = async (values: IPasswordSchema) => {
         await changePassword({
             email: props.email,
             password: values.password,
             authorizationCode: values.authorizationCode,
         });
 
-        props.setLoading(false);
         props.setTabIndex(2);
     };
 
@@ -56,7 +53,7 @@ export const PasswordTab = (props: IProps): JSX.Element => {
                 {({ handleSubmit }) => (
                     <Form onSubmit={handleSubmit}>
                         <Tab
-                            loading={props.loading}
+                            loading={loading}
                             submitText="Change password"
                             closeCallback={props.handleClose}
                         >

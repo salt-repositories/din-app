@@ -5,7 +5,7 @@ import { Movie } from "../../../Domain/Models/Movies";
 import { ImdbIcon, PlexIcon } from "../../Home/RecentlyAdded/Icons";
 import { Poster } from "../../Home/RecentlyAdded/Poster";
 import { Spinner } from "../Spinner";
-import { YoutubeModal } from "../YoutubeModal";
+import { YoutubeModal } from "./YoutubeModal";
 
 interface IProps {
     visible: boolean;

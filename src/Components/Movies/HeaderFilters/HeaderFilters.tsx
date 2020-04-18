@@ -1,56 +1,69 @@
-import { Select } from "antd";
-import { Form } from "antd";
+import { Select, Tag } from "antd";
 import { Actions } from "easy-peasy";
-import React, { useEffect } from "react";
-import { IRootState, useStoreActions, useStoreState } from "../../../Store";
+import React from "react";
+import { IRootState, useStoreActions } from "../../../Store";
 
-export const HeaderFilters = () => {
-    // TODO
-    // const movies = useStoreState((state: IRootState) => state.movie.movies.items);
+interface IProps {
+    totalCount: number;
+}
 
-    const {
-        sortBy,
-        sortDirection,
-    } = useStoreState((state: IRootState) => ({
-        sortBy: state.movie.movies.params.sortBy,
-        sortDirection: state.movie.movies.params.sortDirection,
-    }));
-
-    const setParamProp = useStoreActions((actions: Actions<IRootState>) => actions.movie.movies.setParamProp);
-    // const setFilterProp = useStoreActions((actions: Actions<IRootState>) => actions.movie.movies.setFilterProp);
-
+export const HeaderFilters: React.FC<IProps> = (props: IProps) => {
     const getMovies = useStoreActions((actions: Actions<IRootState>) => actions.movie.movies.get);
-    // const next = useStoreActions((actions: Actions<IRootState>) => actions.movie.movies.next);
-
-    useEffect(() => {
-        getMovies();
-    }, [sortBy, sortDirection]);
+    const setParamProp = useStoreActions((actions: Actions<IRootState>) => actions.movie.movies.setParamProp);
 
     const paramsOnChange = (prop: string, value: string) => {
+        setParamProp(["skip", 0]);
+        setParamProp(["take", 50]);
         setParamProp([prop, value]);
+        getMovies();
     };
 
     return (
         <>
-            <div>
-                <Form
-                    layout="inline"
-                >
-                    <Form.Item label="By">
-                        <Select defaultValue="title" onChange={(value: string) => paramsOnChange("sortBy", value)}>
-                            <Select.Option value="title">Title</Select.Option>
-                            <Select.Option value="year">Year</Select.Option>
-                            <Select.Option value="added">Date added</Select.Option>
-                        </Select>
-                    </Form.Item>
-                    <Form.Item>
-                        <Select defaultValue="Asc" onChange={(value: string) => paramsOnChange("sortDirection", value)}>
-                            <Select.Option value="Asc">Ascending</Select.Option>
-                            <Select.Option value="Desc">Descending</Select.Option>
-                        </Select>
-                    </Form.Item>
-                </Form>
+            <div className="header-filters">
+                <Select defaultValue="title" onChange={(value: string) => paramsOnChange("sortBy", value)}>
+                    <Select.Option value="title">Title</Select.Option>
+                    <Select.Option value="year">Year</Select.Option>
+                    <Select.Option value="added">Date added</Select.Option>
+                </Select>
+                <Select defaultValue="Asc" onChange={(value: string) => paramsOnChange("sortDirection", value)}>
+                    <Select.Option value="Asc">Ascending</Select.Option>
+                    <Select.Option value="Desc">Descending</Select.Option>
+                </Select>
+                <Tag color="orange">{props.totalCount}</Tag>
             </div>
+            <style jsx>
+                {`
+                    .header-filters {
+                        z-index: 2;
+                        position: fixed;
+                        width: 100%;
+                        margin: -5px 0 0 -20px;
+                        height: 4em;
+                        background-color: #2b2b2ba8;
+                        box-shadow: 0 3px 6px 0 rgba(0,0,0,.15);
+                    }
+                    
+                    .header-filters > :global(div) {
+                        margin: 10px;
+                    }
+                    
+                    .header-filters :global(.ant-select-selection) {
+                        color: #fff;
+                        border: unset;
+                        background: unset;
+                    }
+                    
+                    .header-filters :global(.ant-select-selection > div) {
+                        margin-right: 30px
+                    }
+                    
+                    .header-filters :global(.ant-select-selection i) {
+                        margin-left: 5px;
+                        color: #fff;
+                    }
+                `}
+            </style>
         </>
     );
 };

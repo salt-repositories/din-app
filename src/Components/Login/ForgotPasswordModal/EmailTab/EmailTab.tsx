@@ -3,14 +3,12 @@ import { Actions } from "easy-peasy";
 import { Formik, FormikHelpers } from "formik";
 import { Form, Input } from "formik-antd";
 import React from "react";
-import { IRootState, useStoreActions } from "../../../../Store";
+import { IRootState, useStoreActions, useStoreState } from "../../../../Store";
 import { Tab } from "../Tab";
 import { emailSchema, IEmailSchema, initialValues } from "./Schema";
 
 interface IProps {
-    loading: boolean;
     handleClose(): void;
-    setLoading(value: boolean): void;
     setTabIndex(index: number): void;
     setEmail(email: string): void;
 }
@@ -18,13 +16,10 @@ interface IProps {
 
 export const EmailTab = (props: IProps): JSX.Element => {
     const getAuthorizationCode = useStoreActions((actions: Actions<IRootState>) => actions.authentication.getAuthorizationCode);
+    const loading = useStoreState((state: IRootState) => state.authentication.getAuthorizationCodeLoading);
 
     const sendForgotPasswordEmail = async (values: IEmailSchema, actions: FormikHelpers<IEmailSchema>) => {
-        props.setLoading(true);
-
         await getAuthorizationCode(values.email);
-
-        props.setLoading(false);
         props.setEmail(values.email);
         props.setTabIndex(1);
     };
@@ -39,7 +34,7 @@ export const EmailTab = (props: IProps): JSX.Element => {
                 {({ handleSubmit }) => (
                     <Form onSubmit={handleSubmit}>
                         <Tab
-                            loading={props.loading}
+                            loading={loading}
                             submitText="Send email"
                             closeCallback={props.handleClose}
                         >

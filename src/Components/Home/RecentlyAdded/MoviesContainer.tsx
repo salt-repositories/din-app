@@ -4,8 +4,8 @@ import { default as React, useState } from "react";
 import { Waypoint } from "react-waypoint";
 import { Movie } from "../../../Domain/Models/Movies";
 import { IRootState, useStoreActions, useStoreState } from "../../../Store";
+import { YoutubeModal } from "../../Shared/Modals";
 import { Spinner } from "../../Shared/Spinner";
-import { YoutubeModal } from "../../Shared/YoutubeModal";
 import { ImdbIcon, PlexIcon } from "./Icons";
 import { Poster } from "./Poster";
 

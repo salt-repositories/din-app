@@ -10,11 +10,9 @@ export const ForgotPasswordModal = () => {
 
     const visible = useStoreState((state: IRootState) => state.components.forgotPassword.visible);
     const currentTab = useStoreState((state: IRootState) => state.components.forgotPassword.currentTab);
-    const loading = useStoreState((state: IRootState) => state.components.forgotPassword.loading);
 
     const setVisible = useStoreActions((actions) => actions.components.forgotPassword.setVisible);
     const setCurrentTab = useStoreActions((actions) => actions.components.forgotPassword.setCurrentTab);
-    const setLoading = useStoreActions((actions) => actions.components.forgotPassword.setLoading);
 
     const handleClose = () => {
         setVisible(false);
@@ -39,9 +37,7 @@ export const ForgotPasswordModal = () => {
                     key="0"
                 >
                     <EmailTab
-                        loading={loading}
                         handleClose={handleClose}
-                        setLoading={setLoading}
                         setTabIndex={setCurrentTab}
                         setEmail={setEmail}
                     />
@@ -51,9 +47,7 @@ export const ForgotPasswordModal = () => {
                 >
                     <PasswordTab
                         email={email}
-                        loading={loading}
                         handleClose={handleClose}
-                        setLoading={setLoading}
                         setTabIndex={setCurrentTab}
                     />
                 </Tabs.TabPane>

@@ -2,7 +2,7 @@ import { Breadcrumb } from "antd";
 import Link from "next/link";
 import { default as React, ReactNode } from "react";
 import { Scrollbars } from 'react-custom-scrollbars';
-import { SideMenu } from "../Components/Shared/SideMenu";
+import { SideMenu } from "../Components/Shared/Menus/SideMenu";
 
 interface ICrumb {
     path: string;

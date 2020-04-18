@@ -10,8 +10,8 @@ export interface IContent<T extends Content> {
     params: QueryParameters;
     filters: Filters;
 
-    setParamProp: Action<IContent<T>, [string, string]>;
-    setFilterProp: Action<IContent<T>, [string, string]>;
+    setParamProp: Action<IContent<T>, [string, any]>;
+    setFilterProp: Action<IContent<T>, [string, any]>;
 
     getLoading: boolean;
     get: Thunk<IContent<T>, void, any, IRootState, Promise<QueryResult<T>>>;
@@ -92,7 +92,7 @@ export const contentState = <T extends Content>(
             actions.setNextLoading(true);
 
             const state = getState();
-            state.params.skip += 20;
+            state.params.skip += state.params.take;
 
             const response = await getAllMethod(getStoreState().authentication.token.accessToken, state.params, state.filters);
             response.items.map((item) => actions.appendCollection(item));
@@ -103,7 +103,6 @@ export const contentState = <T extends Content>(
         }),
         appendCollection: action((state: IContent<T>, payload: T) => {
             state.collection.items.push(payload);
-            state.collection.totalCount = state.collection.items.length;
         }),
         setNextLoading: action((state: IContent<T>, payload: boolean) => {
             state.nextLoading = payload;

@@ -1,9 +1,9 @@
 import { Expose } from "class-transformer";
 
 export abstract class Search {
-    @Expose({ name: "name"})
+    @Expose({ name: "title"})
     public title: string;
-    @Expose({ name: "original_name" })
+    @Expose({ name: "original_title" })
     public originalTitle: string;
     @Expose({ name: "tmdb_id" })
     public tmdbId: number;
