@@ -1,3 +1,5 @@
+import "reflect-metadata";
+
 import { Button, Checkbox, Col, Icon, Input, message, Row } from "antd";
 import { Actions } from "easy-peasy";
 import { NextPage } from "next";
