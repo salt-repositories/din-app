@@ -17,7 +17,7 @@ export interface IAuthenticationState {
 
     loginLoading: boolean;
     setLoginLoading: Action<IAuthenticationState, boolean>;
-    login: Thunk<IAuthenticationState, { username: string, password: string }>;
+    login: Thunk<IAuthenticationState, object>;
 
     logout: Thunk<IAuthenticationState>;
     reset: Action<IAuthenticationState>;

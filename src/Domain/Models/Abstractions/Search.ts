@@ -1,7 +1,7 @@
 import { Expose } from "class-transformer";
 
 export abstract class Search {
-    @Expose({ name: "title"})
+    @Expose({ name: "title" })
     public title: string;
     @Expose({ name: "original_title" })
     public originalTitle: string;

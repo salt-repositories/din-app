@@ -1,26 +1,41 @@
-import { Select, Tag } from "antd";
-import { Actions } from "easy-peasy";
-import React from "react";
-import { IRootState, useStoreActions } from "../../../Store";
+import { Input, Select, Tag } from "antd";
+import React, { useEffect, useState } from "react";
+import { useDebounce } from "use-debounce";
 
 interface IProps {
+    getMethod: any;
+    setParamsPropMethod: (value: [string, any]) => void;
+    setFiltersPropMethod: (value: [string, any]) => void;
     totalCount: number;
 }
 
 export const HeaderFilters: React.FC<IProps> = (props: IProps) => {
-    const getMovies = useStoreActions((actions: Actions<IRootState>) => actions.movie.movies.get);
-    const setParamProp = useStoreActions((actions: Actions<IRootState>) => actions.movie.movies.setParamProp);
+
+
+    const [query, setQuery] = useState<string>("");
+    const [debouncedQuery] = useDebounce(query, 800);
+
+    const resetSkipAndTake = () => {
+        props.setParamsPropMethod(["skip", 0]);
+        props.setParamsPropMethod(["take", 50]);
+    };
+
+    useEffect(() => {
+        props.setFiltersPropMethod(["title", debouncedQuery]);
+        resetSkipAndTake();
+        props.getMethod();
+    }, [debouncedQuery]);
 
     const paramsOnChange = (prop: string, value: string) => {
-        setParamProp(["skip", 0]);
-        setParamProp(["take", 50]);
-        setParamProp([prop, value]);
-        getMovies();
+        resetSkipAndTake();
+        props.setParamsPropMethod([prop, value]);
+        props.getMethod();
     };
 
     return (
         <>
             <div className="header-filters">
+                <Tag color="orange">{props.totalCount}</Tag>
                 <Select defaultValue="title" onChange={(value: string) => paramsOnChange("sortBy", value)}>
                     <Select.Option value="title">Title</Select.Option>
                     <Select.Option value="year">Year</Select.Option>
@@ -30,7 +45,12 @@ export const HeaderFilters: React.FC<IProps> = (props: IProps) => {
                     <Select.Option value="Asc">Ascending</Select.Option>
                     <Select.Option value="Desc">Descending</Select.Option>
                 </Select>
-                <Tag color="orange">{props.totalCount}</Tag>
+                <Input.Search
+                    className="search-input"
+                    placeholder="Search by title"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                />
             </div>
             <style jsx>
                 {`
@@ -48,6 +68,10 @@ export const HeaderFilters: React.FC<IProps> = (props: IProps) => {
                         margin: 10px;
                     }
                     
+                    .header-filters > :global(span) {
+                        margin: 10px;
+                    }
+                    
                     .header-filters :global(.ant-select-selection) {
                         color: #fff;
                         border: unset;
@@ -60,6 +84,19 @@ export const HeaderFilters: React.FC<IProps> = (props: IProps) => {
                     
                     .header-filters :global(.ant-select-selection i) {
                         margin-left: 5px;
+                        color: #fff;
+                    }
+                    
+                    .header-filters :global(.search-input) {
+                        width: 20em;
+                    }
+                    
+                    .header-filters :global(.search-input input) {
+                        background: #575757;
+                        color: #fff;
+                    }
+                    
+                    .header-filters :global(.search-input i) {
                         color: #fff;
                     }
                 `}

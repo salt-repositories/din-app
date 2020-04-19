@@ -1,5 +1,3 @@
-import "reflect-metadata";
-
 import { Button, Checkbox, Col, Icon, Input, message, Row } from "antd";
 import { Actions } from "easy-peasy";
 import { NextPage } from "next";
@@ -10,24 +8,24 @@ import { ContentCard } from "../../src/Components/Shared/Cards/ContentCard";
 import { FooterBar } from "../../src/Components/Shared/FooterBar/FooterBar";
 import { Spinner } from "../../src/Components/Shared/Spinner";
 import { withAuthentication } from "../../src/Domain/Authentication";
-import { Movie, MovieSearch } from "../../src/Domain/Models/Movies";
+import { TvShow, TvShowSearch } from "../../src/Domain/Models/TvShow";
 import { WithMenu } from "../../src/Layouts";
 import Layout from "../../src/Layouts/Layout";
 import { IRootState, useStoreActions, useStoreState } from "../../src/Store";
 import { AppContext } from "../../src/Store/AppContext";
 
-const AddMoviePage: NextPage = () => {
-    const results = useStoreState((state: IRootState) => state.movie.search.results);
-    const searchLoading = useStoreState((state: IRootState) => state.movie.search.loading);
-    const addLoading = useStoreState((state: IRootState) => state.movie.addToSystemLoading);
+const AddTvShowPage: NextPage = () => {
+    const results = useStoreState((state: IRootState) => state.tvShow.search.results);
+    const searchLoading = useStoreState((state: IRootState) => state.tvShow.search.loading);
+    const addLoading = useStoreState((state: IRootState) => state.tvShow.addToSystemLoading);
 
-    const search = useStoreActions((actions: Actions<IRootState>) => actions.movie.search.search);
-    const addMovie = useStoreActions((actions: Actions<IRootState>) => actions.movie.addToSystem);
+    const search = useStoreActions((actions: Actions<IRootState>) => actions.tvShow.search.search);
+    const addTvShow = useStoreActions((actions: Actions<IRootState>) => actions.tvShow.addToSystem);
 
     const [title, setTitle] = useState<string>("");
     const [debouncedTitle] = useDebounce(title, 800);
 
-    const [selectedMovies, setSelectedMovies] = useState<MovieSearch[]>([]);
+    const [selectedTvShows, setSelectedTvShows] = useState<TvShowSearch[]>([]);
 
     useEffect(() => {
         if (debouncedTitle !== "") {
@@ -35,37 +33,37 @@ const AddMoviePage: NextPage = () => {
         }
     }, [debouncedTitle]);
 
-    const selectMovie = (e) => {
+    const selectTvShow = (e) => {
         e.target.checked
-            ? setSelectedMovies([...selectedMovies, e.target.value])
-            : setSelectedMovies(selectedMovies.filter((item) => item !== e.target.value));
+            ? setSelectedTvShows([...selectedTvShows, e.target.value])
+            : setSelectedTvShows(selectedTvShows.filter((item) => item !== e.target.value));
     };
 
-    const addMoviesToSystem = async () => {
-        for (const item of selectedMovies) {
-            const result = await addMovie(item);
+    const addTvShowToSystem = async () => {
+        for (const item of selectedTvShows) {
+            const result = await addTvShow(item);
 
-            if (result instanceof Movie) {
-                message.success(`Added movie [${result.title}]`);
+            if (result instanceof TvShow) {
+                message.success(`Added TvShow [${result.title}]`);
             }
         }
 
-        setSelectedMovies([]);
+        setSelectedTvShows([]);
     };
 
     return (
         <Layout>
             <Head>
-                <title>Add Movie</title>
+                <title>Add TvShow</title>
             </Head>
             <WithMenu
-                crumbs={[{path: "/Movies", icon: <Icon type="video-camera"/>}, {path: "/Movies/Add", name: "Add"}]}>
+                crumbs={[{path: "/TvShows", icon: <Icon type="desktop"/>}, {path: "/TvShows/Add", name: "Add"}]}>
                 <Col span={24}>
                     <Row className="search-input-row">
                         <Col span={8} offset={7}>
                             <Input.Search
                                 className="search-input"
-                                placeholder="Enter the title of the movie"
+                                placeholder="Enter the title of the tv show"
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
                             />
@@ -80,13 +78,14 @@ const AddMoviePage: NextPage = () => {
 
                                 return (
                                     <ContentCard
+                                        key={result.tmdbId}
                                         item={result}
                                         info={
                                             <>
                                                 <Row>
                                                     <Col span={8}>
                                                           <span style={{ fontSize: "12px", color: "#ff8d1c99" }}>
-                                                            {result.releaseDate.year()}
+                                                            {result.firstAirDate.year()}
                                                         </span>
                                                     </Col>
                                                     <Col span={12}>
@@ -100,7 +99,7 @@ const AddMoviePage: NextPage = () => {
                                                     defaultChecked={added}
                                                     disabled={added}
                                                     value={result}
-                                                    onChange={selectMovie}
+                                                    onChange={selectTvShow}
                                                 >
                                                     {added ? "Aleady added" : "Add" }
                                                 </Checkbox>
@@ -117,12 +116,13 @@ const AddMoviePage: NextPage = () => {
                             buttons={[
                                 (
                                     <Button
-                                        disabled={selectedMovies.length <= 0}
+                                        key="add-tvshows"
+                                        disabled={selectedTvShows.length <= 0}
                                         loading={addLoading}
-                                        onClick={() => addMoviesToSystem()}
+                                        onClick={() => addTvShowToSystem()}
                                     >
-                                        [{selectedMovies.length}]
-                                        Add selected movies
+                                        [{selectedTvShows.length}]
+                                        Add selected tv shows
                                     </Button>
                                 )
                             ]}
@@ -161,8 +161,8 @@ const AddMoviePage: NextPage = () => {
     );
 };
 
-AddMoviePage.getInitialProps = async (context: AppContext) => {
-    context.store.dispatch.main.menu.setActiveMenuKey("Movies");
+AddTvShowPage.getInitialProps = async (context: AppContext) => {
+    context.store.dispatch.main.menu.setActiveMenuKey("TvShows");
 };
 
-export default withAuthentication(AddMoviePage);
+export default withAuthentication(AddTvShowPage);

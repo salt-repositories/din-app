@@ -21,7 +21,9 @@ export const LoginForm = (props: IProps) => {
             ? setCookie({}, "username", values.username, {})
             : destroyCookie(undefined, "username");
 
-        await login({ username: values.username, password: values.password })
+        await login(values.username.includes("@")
+         ? { email: values.username, password: values.password }
+         : { username: values.username, password: values.password });
     };
 
     return (

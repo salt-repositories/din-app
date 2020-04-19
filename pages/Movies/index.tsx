@@ -29,6 +29,10 @@ const MoviesPage: NextPage = () => {
     const nextLoading = useStoreState((state: IRootState) => state.movie.movies.nextLoading);
     const next = useStoreActions((actions: Actions<IRootState>) => actions.movie.movies.next);
 
+    const getMovies = useStoreActions((actions: Actions<IRootState>) => actions.movie.movies.get);
+    const setParamProp = useStoreActions((actions: Actions<IRootState>) => actions.movie.movies.setParamProp);
+    const setFilterProp = useStoreActions((actions: Actions<IRootState>) => actions.movie.movies.setFilterProp);
+
     const [showYoutubeModal, setShowYoutubeModal] = useState<[boolean, string]>([false, undefined]);
 
     const openYoutubeModal = (id: string): void => {
@@ -44,7 +48,11 @@ const MoviesPage: NextPage = () => {
                 <Col span={24}>
                     <YoutubeModal data={showYoutubeModal} setData={setShowYoutubeModal}/>
                     <Row>
-                        <HeaderFilters totalCount={movies.totalCount}/>
+                        <HeaderFilters
+                            getMethod={getMovies}
+                            setParamsPropMethod={setParamProp}
+                            setFiltersPropMethod={setFilterProp}
+                            totalCount={movies.totalCount}/>
                     </Row>
                     <Row style={{marginTop: "5em"}}>
                         {getLoading ? (
