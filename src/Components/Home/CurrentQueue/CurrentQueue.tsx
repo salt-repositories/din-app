@@ -23,7 +23,7 @@ const QueueRow = (props: IQueueRowProps): JSX.Element => {
         <Row
             className="queue-item"
         >
-            <Col xs={7} offset={1}>{props.item.content.title}</Col>
+            <Col xs={7} offset={1} className="title">{props.item.content.title}</Col>
             <Col xs={1} offset={1}>
                 {
                     props.item.status === "Paused"
@@ -97,6 +97,11 @@ export const CurrentQueue = (): JSX.Element => {
                     :global(.queue-item > div) {
                         line-height: 50px;
                         color: #fff;
+                    }
+                    
+                    :global(.queue-item .title) {
+                        overflow: hidden;
+                        text-overflow: ellipsis;
                     }
                                        
                     :global(.queue-item .logo) {

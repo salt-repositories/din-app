@@ -93,6 +93,12 @@ const TvShowsPage: NextPage = () => {
 TvShowsPage.getInitialProps = async (context: AppContext): Promise<IProps> => {
     context.store.dispatch.main.menu.setActiveMenuKey("TvShows");
 
+    if (context.store.getState().tvShow.tvShows.collection.items.length < 50) {
+        context.store.dispatch.tvShow.tvShows.setParamProp(["skip", 0]);
+        context.store.dispatch.tvShow.tvShows.setParamProp(["take", 50]);
+        await context.store.dispatch.tvShow.tvShows.get();
+    }
+
     return {};
 };
 
