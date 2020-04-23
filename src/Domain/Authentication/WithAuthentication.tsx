@@ -46,6 +46,7 @@ const handleAuthentication = async (context: AppContext) => {
 
     if (!newToken) {
         console.log("invalid refresh token");
+        destroyCookie(context, "token");
         return redirectToLogin(context);
     }
 

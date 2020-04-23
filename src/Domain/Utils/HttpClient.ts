@@ -73,13 +73,17 @@ export class HttpClient {
                 try {
                     responseBody = await response.json();
                 } catch (error) {
-                    message.error(`Unexpected HTTP status code ${response.status}`);
+                    if (process.browser) {
+                        message.error(`Unexpected HTTP status code ${response.status}`);
+                    }
 
                     return;
                 }
 
                 if (responseBody.message) {
-                    message.error(responseBody.message);
+                    if (process.browser) {
+                        message.error(responseBody.message);
+                    }
 
                     if (responseBody.errors) {
                         return plainToClass(ValidationError, responseBody.errors as []);

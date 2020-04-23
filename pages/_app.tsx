@@ -74,7 +74,7 @@ class MyApp extends App<IProps> {
     public render(): JSX.Element {
         const {store, Component, pageProps, err, router} = this.props;
         const modifiedPageProps = {...pageProps, ...err};
-
+        
         Sentry.configureScope((scope) => {
             scope.setContext('router', {
                 route: router.route,

@@ -3,20 +3,20 @@ import { Content, Search } from "../../Domain/Models/Abstractions";
 import { Filters, QueryParameters, QueryResult } from "../../Domain/Models/Querying";
 import { IRootState } from "../index";
 
-interface SearchResult<TModel extends Content, TSearch extends Search> {
+export interface ISearchResult<TModel extends Content, TSearch extends Search> {
     current: TModel[];
     searchResults: TSearch[];
 }
 
 export interface ISearch<TModel extends Content, TSearch extends Search> {
-    results: SearchResult<TModel, TSearch>;
+    results: ISearchResult<TModel, TSearch>;
 
     loading: boolean;
     params: QueryParameters;
     filters: Filters;
 
-    search: Thunk<ISearch<TModel, TSearch>, string, any, IRootState, Promise<SearchResult<TModel, TSearch>>>;
-    setResults: Action<ISearch<TModel, TSearch>, SearchResult<TModel, TSearch>>;
+    search: Thunk<ISearch<TModel, TSearch>, string, any, IRootState, Promise<ISearchResult<TModel, TSearch>>>;
+    setResults: Action<ISearch<TModel, TSearch>, ISearchResult<TModel, TSearch>>;
     setLoading: Action<ISearch<TModel, TSearch>, boolean>;
 }
 

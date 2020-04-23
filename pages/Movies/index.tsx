@@ -14,8 +14,7 @@ import { YoutubeModal } from "../../src/Components/Shared/Modals";
 import { Spinner } from "../../src/Components/Shared/Spinner";
 import { withAuthentication } from "../../src/Domain/Authentication";
 import { Movie } from "../../src/Domain/Models/Movies";
-import { WithMenu } from "../../src/Layouts";
-import Layout from "../../src/Layouts/Layout";
+import { Layout, WithMenu } from "../../src/Layouts";
 import { IRootState, useStoreActions, useStoreState } from "../../src/Store";
 import { AppContext } from "../../src/Store/AppContext";
 

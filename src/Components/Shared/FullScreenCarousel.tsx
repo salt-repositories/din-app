@@ -3,6 +3,7 @@ import { Actions } from "easy-peasy";
 import React, { useEffect } from "react";
 import { BackgroundImage } from "../../Domain/Models";
 import { IRootState, useStoreActions, useStoreState } from "../../Store";
+import { MINIMAL_WIDTH } from "./consts";
 
 interface IProps {
     backgrounds: BackgroundImage[];
@@ -12,6 +13,7 @@ const FullScreenCarousel = (props: IProps): JSX.Element => {
     const ref = React.createRef<Carousel>();
     const carouselIndex = useStoreState((state: IRootState) => state.main.carousel.carouselIndex);
     const setCarouselIndex = useStoreActions((actions: Actions<IRootState>) => actions.main.carousel.setCarouselIndex);
+    const windowWidth = useStoreState((state: IRootState) => state.main.windowWidth);
 
     useEffect(() => {
         ref.current.goTo(carouselIndex, true);
@@ -52,6 +54,9 @@ const FullScreenCarousel = (props: IProps): JSX.Element => {
 
                     .full-image {
                         width: 100vw;
+                        height: ${windowWidth < MINIMAL_WIDTH ? "110vh" : ""};
+                        object-fit: ${windowWidth < MINIMAL_WIDTH ? "cover" : "unset"};
+                        object-position: ${windowWidth < MINIMAL_WIDTH ? "100% 0" : "unset"};
                     }
                     
                     :global(.carousel-item) {

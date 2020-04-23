@@ -13,8 +13,7 @@ import { FooterBar } from "../../src/Components/Shared/FooterBar/FooterBar";
 import { Spinner } from "../../src/Components/Shared/Spinner";
 import { withAuthentication } from "../../src/Domain/Authentication";
 import { TvShow } from "../../src/Domain/Models/TvShow";
-import { WithMenu } from "../../src/Layouts";
-import Layout from "../../src/Layouts/Layout";
+import { Layout, WithMenu } from "../../src/Layouts";
 import { IRootState, useStoreActions, useStoreState } from "../../src/Store";
 import { AppContext } from "../../src/Store/AppContext";
 

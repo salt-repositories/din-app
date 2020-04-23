@@ -1,10 +1,14 @@
+import { useStoreState } from "easy-peasy";
 import React, { ReactNodeArray } from "react";
+import { IRootState } from "../../../Store";
+import { MINIMAL_WIDTH } from "../consts";
 
 interface IProps {
     buttons: ReactNodeArray;
 }
 
 export const FooterBar: React.FC<IProps> = (props: IProps): JSX.Element => {
+    const currentWidth = useStoreState((state: IRootState) => state.main.windowWidth);
 
     return (
         <>
@@ -16,7 +20,7 @@ export const FooterBar: React.FC<IProps> = (props: IProps): JSX.Element => {
                     .footer-bar {
                         position: fixed;
                         bottom: 0;
-                        margin-left: -20px;
+                        margin-left: ${currentWidth > MINIMAL_WIDTH ? "-20px" : ""};
                         width: 100%;
                         height: 5em;
                         background-color: #555;

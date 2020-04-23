@@ -6,10 +6,11 @@ import { NextPage } from "next";
 import Head from "next/dist/next-server/lib/head";
 import React from "react";
 import { CurrentQueue, DownloadCalendar, RecentlyAdded } from "../../src/Components/Home";
+import { MobileHome } from "../../src/Components/Home/Mobile/MobileHome";
+import { MINIMAL_WIDTH } from "../../src/Components/Shared/consts";
 import { withAuthentication } from "../../src/Domain/Authentication";
-import { WithMenu } from "../../src/Layouts";
-import Layout from "../../src/Layouts/Layout";
-import { IRootState } from "../../src/Store";
+import { Layout, WithMenu } from "../../src/Layouts";
+import { IRootState, useStoreState } from "../../src/Store";
 import { AppContext } from "../../src/Store/AppContext";
 
 Sentry.addBreadcrumb({
@@ -18,28 +19,40 @@ Sentry.addBreadcrumb({
     level: Sentry.Severity.Debug,
 });
 
-const HomePage: NextPage = () => (
-    <Layout>
-        <Head>
-            <title>Home</title>
-        </Head>
-        <WithMenu crumbs={[{path: "/Home", icon: <Icon type="home"/>}]}>
-            <Col span={24}>
-                <Row>
-                    <Col span={15}>
-                        <DownloadCalendar/>
+const MINIMAL_QUEUE_WIDTH = 1530;
+
+const HomePage: NextPage = () => {
+    const windowWidth = useStoreState((state: IRootState) => state.main.windowWidth);
+
+    return (
+        <Layout>
+            <Head>
+                <title>Home</title>
+            </Head>
+            {windowWidth < MINIMAL_WIDTH ? (
+                <MobileHome/>
+            ) : (
+                <WithMenu crumbs={[{path: "/Home", icon: <Icon type="home"/>}]}>
+                    <Col span={24}>
+                        <Row>
+                            <Col span={15}>
+                                <DownloadCalendar/>
+                            </Col>
+                            <Col span={8} offset={1}>
+                                {windowWidth > MINIMAL_QUEUE_WIDTH && (
+                                    <CurrentQueue/>
+                                )}
+                            </Col>
+                        </Row>
+                        <Row>
+                            <RecentlyAdded/>
+                        </Row>
                     </Col>
-                    <Col span={8} offset={1}>
-                        <CurrentQueue/>
-                    </Col>
-                </Row>
-                <Row>
-                    <RecentlyAdded/>
-                </Row>
-            </Col>
-        </WithMenu>
-    </Layout>
-);
+                </WithMenu>
+            )}
+        </Layout>
+    );
+};
 
 HomePage.getInitialProps = async (context: AppContext): Promise<void> => {
     context.store.dispatch.main.menu.setActiveMenuKey("Home");

@@ -5,6 +5,7 @@ import { Form, Input } from "formik-antd";
 import { destroyCookie, setCookie } from "nookies";
 import React from "react";
 import { IRootState, useStoreActions, useStoreState } from "../../../Store";
+import { MINIMAL_WIDTH } from "../../Shared/consts";
 import { ILoginSchema, loginSchema } from "./Schema";
 
 interface IProps {
@@ -13,6 +14,7 @@ interface IProps {
 
 export const LoginForm = (props: IProps) => {
     const loading = useStoreState((state: IRootState) => state.authentication.loginLoading);
+    const windowWidth = useStoreState((state: IRootState) => state.main.windowWidth);
     const login = useStoreActions((actions: Actions<IRootState>) => actions.authentication.login);
     const showForgotPasswordModal = useStoreActions((action) => action.components.forgotPassword.setVisible);
 
@@ -109,10 +111,10 @@ export const LoginForm = (props: IProps) => {
                     
                     :global(.login-col) {
                         border-radius: 10px;
-                        padding: 50px 55px 50px;
+                        padding: ${windowWidth < MINIMAL_WIDTH ? "50px 20px 20px" : "50px 55px 50px"};
                         background: white;
                         opacity: .9;
-                        width: 500px;
+                        width: ${windowWidth < MINIMAL_WIDTH ? "300px" : "500px"};
                     }
 
                     :global(.login-form) {
@@ -167,6 +169,10 @@ export const LoginForm = (props: IProps) => {
                         outline: 0px !important;
                         -webkit-appearance: none;
                         box-shadow: none !important;
+                    }
+                    
+                    :global(.login-form .input-wrapper .ant-input-suffix) {
+                        ${windowWidth < MINIMAL_WIDTH && "left: 190px"}
                     }
 
                     :global(.ant-input-prefix > .icon:focus-withintf) {

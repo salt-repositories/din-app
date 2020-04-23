@@ -5,8 +5,7 @@ import { NextPage } from "next";
 import Head from "next/head";
 import React from "react";
 import { withAuthentication } from "../../src/Domain/Authentication";
-import { WithMenu } from "../../src/Layouts";
-import Layout from "../../src/Layouts/Layout";
+import { Layout, WithMenu } from "../../src/Layouts";
 import { AppContext } from "../../src/Store/AppContext";
 
 interface IProps {

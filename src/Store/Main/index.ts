@@ -24,6 +24,8 @@ export interface IMainState {
     backgroundImages: IBackgroundState;
     carousel: ICarouselState;
     menu: IMenuState;
+    windowWidth: number;
+    setWindowWidth: Action<IMainState, number>;
 }
 
 export const mainState: IMainState = {
@@ -52,4 +54,8 @@ export const mainState: IMainState = {
             state.activeMenuKey = payload;
         }),
     },
+    windowWidth: undefined,
+    setWindowWidth: action((state: IMainState, payload: number) => {
+        state.windowWidth = payload
+    }),
 };
