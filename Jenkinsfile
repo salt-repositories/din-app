@@ -9,4 +9,4 @@ Map settings = [
   sonar_key: 'din-app',
 ]
 
-tsDockerBuildAndDeploy(organization, repo, settings)
+nextDockerBuildAndDeploy(organization, repo, settings)
