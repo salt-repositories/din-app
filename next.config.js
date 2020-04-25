@@ -6,6 +6,7 @@ const Dotenv = require("dotenv-webpack");
 const lessToJS = require("less-vars-to-js");
 const fs = require("fs");
 const withLess = require("@zeit/next-less");
+const SentryWebpackPlugin = require("@sentry/webpack-plugin");
 
 const theme = lessToJS(
     fs.readFileSync(path.resolve(__dirname, "./assets/theme.less"), "utf8")
@@ -48,6 +49,18 @@ module.exports = withSourceMaps(withLess({
                 systemvars: true
             }),
         );
+
+        const {SENTRY_DSN, SENTRY_ORG, SENTRY_PROJECT, NODE_ENV} = process.env;
+
+        if (SENTRY_DSN && SENTRY_ORG && SENTRY_PROJECT && NODE_ENV === "production") {
+            config.plugins.push(
+                new SentryWebpackPlugin({
+                    include: '.next',
+                    ignore: ['node_modules'],
+                    urlPrefix: '~/_next',
+                })
+            );
+        }
 
         return config
     },

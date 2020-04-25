@@ -7,9 +7,10 @@ import get from "lodash.get";
  * Helper to avoid duplicating the init() call in every /pages/api file.
  * Also used in pages/_app for the client side, which automatically applies it for all frontend pages.
  */
+
 Sentry.init({
     dsn: process.env.SENTRY_DSN,
-    enabled: process.env.NODE_ENV !== "test",
+    enabled: process.env.NODE_ENV === "production",
     environment: process.env.NODE_ENV,
     release: `din-app@${process.env.npm_package_version}`,
 });
