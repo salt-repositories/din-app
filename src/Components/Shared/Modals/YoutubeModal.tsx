@@ -21,8 +21,8 @@ export const YoutubeModal = (props: IProps): JSX.Element => (
             <YouTube
                 videoId={props.data[1]}
                 opts={{
-                    height: 720,
-                    width: 1200,
+                    height: "720",
+                    width: "1200",
                     playerVars: {
                         autoplay: 1,
                     },
