@@ -23,7 +23,20 @@ const QueueRow = (props: IQueueRowProps): JSX.Element => {
         <Row
             className="queue-item"
         >
-            <Col xs={7} offset={1} className="title">{props.item.content.title}</Col>
+            <Col xs={7} offset={1} className="title">
+                {props.item.tvShow && (
+                    <>
+                        <Icon type="desktop"/>
+                        {` ${props.item.tvShow.title}`}
+                    </>
+                )}
+                {props.item.movie && (
+                    <>
+                        <Icon type="video-camera"/>
+                        {` ${props.item.movie.title} (${props.item.movie.year})`}
+                    </>
+                )}
+            </Col>
             <Col xs={1} offset={1}>
                 {
                     props.item.status === "Paused"
@@ -48,20 +61,41 @@ export const CurrentQueue = (): JSX.Element => {
     const queue = useStoreState((state: IRootState) => state.queue.currentQueue);
     const getCurrentQueue = useStoreActions((actions: Actions<IRootState>) => actions.queue.getCurrentQueue);
 
+    useEffect(() => {
+        getCurrentQueue();
+    }, []);
+
+
     const getPercentage = (item: Queue): number => {
         return Number((100 - (item.sizeLeft / item.size) * 100).toFixed(2));
     };
 
-    useEffect(() => {
-        getCurrentQueue();
-    }, []);
+    const formatQueue = () => {
+        const formattedQueue: Queue[] = [];
+
+        for (const q of queue) {
+            const duplicate = formattedQueue.find((item) => item.tvShow && item.tvShow.title === (q.tvShow && q.tvShow.title));
+
+            if (duplicate) {
+                duplicate.size += q.size;
+                duplicate.sizeLeft += q.sizeLeft;
+                duplicate.timeLeft += q.timeLeft;
+
+                continue;
+            }
+
+            formattedQueue.push(q);
+        }
+
+        return formattedQueue;
+    };
 
     return (
         <div className="current-queue-container">
             <h1>Current Queue</h1>
             <Col span={24} className="vertical-container">
                 {queue.length !== 0 && (
-                    queue.map((item: Queue) => (
+                    formatQueue().map((item: Queue) => (
                         <QueueRow key={item.id} item={item} percentage={getPercentage(item)}/>
                     ))
                 )}
@@ -69,8 +103,8 @@ export const CurrentQueue = (): JSX.Element => {
             <style jsx>
                 {`
                     .current-queue-container {
-                        visibility: ${queue.length === 0 && "hidden;"}
-                        height: 350px;
+                        visibility: ${queue.length === 0 && "hidden"};
+                        height: 35em;
                     }
                                       
                     .current-queue-container h1 {

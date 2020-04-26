@@ -1,13 +1,11 @@
-import { Card, Icon } from "antd";
 import { Actions } from "easy-peasy";
 import { default as React, useState } from "react";
 import { Waypoint } from "react-waypoint";
 import { Movie } from "../../../Domain/Models/Movies";
 import { IRootState, useStoreActions, useStoreState } from "../../../Store";
+import { ContentCard } from "../../Shared/Cards/ContentCard";
 import { YoutubeModal } from "../../Shared/Modals";
 import { Spinner } from "../../Shared/Spinner";
-import { ImdbIcon, PlexIcon } from "./Icons";
-import { Poster } from "./Poster";
 
 export const MoviesContainer: React.FC = (): JSX.Element => {
     const recentlyAddedMovies = useStoreState((state: IRootState) => state.movie.recentlyAddedMovies.items);
@@ -26,40 +24,11 @@ export const MoviesContainer: React.FC = (): JSX.Element => {
             {recentlyAddedMovies.length > 0 ? (
                 <>
                     {recentlyAddedMovies.map((item: Movie) => (
-                        <Card
+                        <ContentCard
                             key={item.id}
-                            className="container-item"
-                            cover={<Poster item={item} noPlexMatchMessage="This movies has not been downloaded"/>}
-                        >
-                            <Card.Meta
-                                title={item.title}
-                                description={item.year}
-                            />
-                            <span
-                                className="trailer-link"
-                                onClick={() => openYoutubeModal(item.youtubeTrailerId)}
-                            >
-                                <Icon type="youtube" className="logo"/>
-                                Trailer
-                            </span>
-                            {item.plexUrl ? (
-                                <span
-                                    className="plex-link"
-                                    onClick={() => window.open(item.plexUrl)}
-                                >
-                                    <PlexIcon className="logo"/>
-                                    Plex
-                                </span>
-                            ) : (
-                                <span
-                                    className="imdb-link"
-                                    onClick={() => window.open(`https://imdb.com/title/${item.imdbId}`)}
-                                >
-                                    <ImdbIcon className="logo"/>
-                                    IMDb
-                                </span>
-                            )}
-                        </Card>
+                            item={item}
+                            openYoutubeModal={openYoutubeModal}
+                        />
                     ))}
                     <div className="container-item">
                         {loading && (

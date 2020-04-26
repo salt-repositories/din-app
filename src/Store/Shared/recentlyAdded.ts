@@ -18,12 +18,13 @@ export interface IRecentlyAdded<TModel extends Content> {
 
 export const recentlyAdded = <TModel extends Content>(
     getModelMethod: (accessToken: string, params: QueryParameters, filters: any) => Promise<QueryResult<TModel>>,
+    filters: Filters,
 ): IRecentlyAdded<TModel> => {
     return {
         items: [],
         loading: false,
 
-        filters: new Filters(null, null, null, null, true, true),
+        filters,
         queryParams: new QueryParameters(0, 20, "Added", "Desc"),
 
         setLoading: action((state: IRecentlyAdded<TModel>, payload: boolean) => {

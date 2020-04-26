@@ -1,6 +1,7 @@
 import { Expose, Transform, Type } from "class-transformer";
 import moment, { Moment } from "moment";
-import { Content } from "../Abstractions/Content";
+import { Movie } from "../Movies";
+import { TvShow } from "../TvShow";
 
 export class Queue {
     public id: number;
@@ -17,6 +18,9 @@ export class Queue {
     @Expose({ name: "download_id" })
     public downloadId: string;
     public protocol: string;
-    @Type(() => Content)
-    public content: Content;
+    @Type(() => Movie)
+    public movie: Movie;
+    @Type(() => TvShow)
+    @Expose({ name: "tv_show" })
+    public tvShow: TvShow
 }

@@ -35,6 +35,7 @@ const AddTvShowPage: NextPage = () => {
                         results={results}
                         searchString="Enter the title of the tv show"
                         addString="Add Tv Shows"
+                        addedString="Added tv show"
                     />
                 </Col>
             </WithMenu>

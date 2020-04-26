@@ -1,7 +1,7 @@
 import { serialize } from "class-transformer";
 import { action, Action, Actions, thunk, Thunk } from "easy-peasy";
 import { ValidationError } from "../../Domain/Models/Exeptions";
-import { QueryParameters } from "../../Domain/Models/Querying";
+import { Filters, QueryParameters } from "../../Domain/Models/Querying";
 import { TvShow, TvShowCalendar, TvShowQueryResult, TvShowSearch } from "../../Domain/Models/TvShow";
 import { HttpClient } from "../../Domain/Utils";
 import { IRootState } from "../index";
@@ -11,6 +11,7 @@ import { ISearch, searchState } from "../Shared/search";
 
 export interface ITvShowState {
     recentlyAddedTvShows: IRecentlyAdded<TvShow>;
+    toBeDownloadedTvShows: IRecentlyAdded<TvShow>;
     calendar: ICalendar<TvShowCalendar>;
     tvShows: IContent<TvShow>;
     search: ISearch<TvShow, TvShowSearch>;
@@ -30,6 +31,18 @@ export const tvShowState: ITvShowState = {
                 filters,
             });
         },
+        new Filters(null, null, "true", null, true, true),
+    ),
+    toBeDownloadedTvShows: recentlyAdded<TvShow>(
+        (accessToken, params, filters) => {
+            return HttpClient.get("/v1/tvshows", {
+                type: TvShowQueryResult,
+                accessToken,
+                queryParameters: params,
+                filters,
+            });
+        },
+        new Filters(null, null, "false", null, true, true),
     ),
     calendar: calendar<TvShowCalendar>(
         (accessToken: string, from: string, till: string) => {

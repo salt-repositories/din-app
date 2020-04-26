@@ -3,7 +3,7 @@ import { default as React, useState } from "react";
 import Scrollbars from "react-custom-scrollbars";
 import { Movie } from "../../../Domain/Models/Movies";
 import { ImdbIcon, PlexIcon } from "../../Home/RecentlyAdded/Icons";
-import { Poster } from "../../Home/RecentlyAdded/Poster";
+import { Poster } from "../Cards/Poster";
 import { Spinner } from "../Spinner";
 import { YoutubeModal } from "./YoutubeModal";
 

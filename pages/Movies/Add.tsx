@@ -35,6 +35,7 @@ const AddMoviePage: NextPage = () => {
                         results={results}
                         searchString="Enter the title of the movie"
                         addString="Add Movies"
+                        addedString="Added movie"
                     />
                 </Col>
             </WithMenu>

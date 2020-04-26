@@ -2,7 +2,7 @@ import { serialize } from "class-transformer";
 import { action, Action, Actions, thunk, Thunk } from "easy-peasy";
 import { ValidationError } from "../../Domain/Models/Exeptions";
 import { Movie, MovieQueryResult, MovieSearch } from "../../Domain/Models/Movies";
-import { QueryParameters } from "../../Domain/Models/Querying";
+import { Filters, QueryParameters } from "../../Domain/Models/Querying";
 import { HttpClient } from "../../Domain/Utils";
 import { IRootState } from "../index";
 import { calendar, ICalendar, IRecentlyAdded, recentlyAdded } from "../Shared";
@@ -11,6 +11,7 @@ import { ISearch, searchState } from "../Shared/search";
 
 export interface IMovieState {
     recentlyAddedMovies: IRecentlyAdded<Movie>,
+    toBeDownloadedMovies: IRecentlyAdded<Movie>,
     calendar: ICalendar<Movie>;
     movies: IContent<Movie>;
     search: ISearch<Movie, MovieSearch>;
@@ -29,7 +30,19 @@ export const movieState: IMovieState = {
                 queryParameters: params,
                 filters,
             });
-        }
+        },
+        new Filters(null, null, "true", null, true, true),
+    ),
+    toBeDownloadedMovies: recentlyAdded<Movie>(
+        (accessToken , params, filters) => {
+            return HttpClient.get("/v1/movies", {
+                type: MovieQueryResult,
+                accessToken,
+                queryParameters: params,
+                filters,
+            });
+        },
+        new Filters(null, null, "false", null, true, true),
     ),
     calendar: calendar<Movie>(
         (accessToken: string, from: string, till: string) => {

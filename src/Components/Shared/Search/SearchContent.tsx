@@ -2,7 +2,7 @@ import { Button, Checkbox, Col, Input, message, Row } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 import { Content, Search } from "../../../Domain/Models/Abstractions";
-import { Movie, MovieSearch } from "../../../Domain/Models/Movies";
+import { MovieSearch } from "../../../Domain/Models/Movies";
 import { TvShowSearch } from "../../../Domain/Models/TvShow";
 import { IRootState, useStoreState } from "../../../Store";
 import { ISearchResult } from "../../../Store/Shared/search";
@@ -20,6 +20,7 @@ interface IProps<TModel extends Content, TSearch extends Search> {
 
     searchString: string;
     addString: string;
+    addedString: string;
 }
 
 export const SearchContent: React.FC<IProps<any, any>> = <TModel extends Content, TSearch extends Search>(props: IProps<TModel, TSearch>) => {
@@ -46,8 +47,8 @@ export const SearchContent: React.FC<IProps<any, any>> = <TModel extends Content
         for (const item of selectedItems) {
             const result = await props.addMethod(item);
 
-            if (result instanceof Movie) {
-                message.success(`Added movie [${result.title}]`);
+            if (!Array.isArray(result)) {
+                message.success(`${props.addedString} [${result.title}]`);
             }
         }
 

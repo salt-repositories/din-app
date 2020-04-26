@@ -3,7 +3,7 @@ import { default as React } from "react";
 import Scrollbars from "react-custom-scrollbars";
 import { TvShow, TvShowCalendar } from "../../../Domain/Models/TvShow";
 import { ImdbIcon, PlexIcon } from "../../Home/RecentlyAdded/Icons";
-import { Poster } from "../../Home/RecentlyAdded/Poster";
+import { Poster } from "../Cards/Poster";
 import { Spinner } from "../Spinner";
 
 interface IProps {

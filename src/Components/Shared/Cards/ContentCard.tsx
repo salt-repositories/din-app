@@ -3,7 +3,7 @@ import React, { ReactNode } from "react";
 import { Content, Search } from "../../../Domain/Models/Abstractions";
 import { Movie } from "../../../Domain/Models/Movies";
 import { ImdbIcon, PlexIcon } from "../../Home/RecentlyAdded/Icons";
-import { Poster } from "../../Home/RecentlyAdded/Poster";
+import { Poster } from "./Poster";
 
 interface IProps {
     item: Content | Search;
@@ -45,7 +45,7 @@ export const ContentCard: React.FC<IProps> = (props: IProps): JSX.Element => {
                                 <PlexIcon className="logo"/>
                                 Plex
                             </span>
-                        ) : (props.item as Content).imdbId && (
+                        ) : (props.item as Content).imdbId ? (
                             <span
                                 className="imdb-link"
                                 onClick={() => window.open(`https://imdb.com/title/${(props.item as Content).imdbId}`)}
@@ -53,6 +53,8 @@ export const ContentCard: React.FC<IProps> = (props: IProps): JSX.Element => {
                                 <ImdbIcon className="logo"/>
                                 IMDb
                             </span>
+                        ) : (
+                            <span className="no-link"/>
                         )}
                     </>
                 )}
@@ -145,6 +147,11 @@ export const ContentCard: React.FC<IProps> = (props: IProps): JSX.Element => {
                         height: 12px;
                         color: #df1818;
                         margin-right: 5px;
+                    }
+                    
+                    :global(.container-item .no-link) {
+                        height: 21px;
+                        display: block;
                     }
                 `}
             </style>
