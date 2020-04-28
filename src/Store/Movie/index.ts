@@ -19,6 +19,7 @@ export interface IMovieState {
 
     addToSystemLoading: boolean;
     addToSystem: Thunk<IMovieState, MovieSearch, any, IRootState, Promise<Movie | ValidationError[]>>;
+    resetSearchResults: Action<IMovieState>;
     setAddToSystemLoading: Action<IMovieState, boolean>;
 
     history: MovieHistory[];
@@ -111,9 +112,16 @@ export const movieState: IMovieState = {
             })
         });
 
+        actions.resetSearchResults();
         actions.setAddToSystemLoading(false);
 
         return response;
+    }),
+    resetSearchResults: action((state: IMovieState) => {
+        state.search.results = {
+            current: [],
+            searchResults: [],
+        };
     }),
     setAddToSystemLoading: action((state: IMovieState, payload: boolean) => {
         state.addToSystemLoading = payload;

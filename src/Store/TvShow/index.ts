@@ -17,6 +17,7 @@ export interface ITvShowState {
 
     addToSystemLoading: boolean;
     addToSystem: Thunk<ITvShowState, TvShowSearch, any, IRootState, Promise<TvShow | ValidationError[]>>;
+    resetSearchResults: Action<ITvShowState>;
     setAddToSystemLoading: Action<ITvShowState, boolean>;
 }
 
@@ -92,6 +93,12 @@ export const tvShowState: ITvShowState = {
         actions.setAddToSystemLoading(false);
 
         return response;
+    }),
+    resetSearchResults: action((state: ITvShowState) => {
+        state.search.results = {
+            current: [],
+            searchResults: [],
+        };
     }),
     setAddToSystemLoading: action((state: ITvShowState, payload: boolean) => {
         state.addToSystemLoading = payload;

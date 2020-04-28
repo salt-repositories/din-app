@@ -70,7 +70,7 @@ export const filteredContent = <T extends Content>(
             state.collection.items.push(payload);
         }),
         setNextLoading: action((state: IFilteredContent<T>, payload: boolean) => {
-            state.getLoading = payload;
+            state.nextLoading = payload;
         }),
     };
 };
