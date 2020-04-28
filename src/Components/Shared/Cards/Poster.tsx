@@ -4,7 +4,8 @@ import { Content, Search } from "../../../Domain/Models/Abstractions";
 
 interface IProps {
     item: Content | Search;
-    noPlexMatchMessage: string;
+    altMessage: string;
+    altOnClick?: any;
     style?: CSSProperties;
 }
 
@@ -21,12 +22,13 @@ export const Poster: React.FC<IProps> = (props: IProps) => (
                 />
             </Tooltip>
         ) : (
-            <Tooltip title={props.noPlexMatchMessage}>
+            <Tooltip title={props.altMessage}>
                 <img
                     className="card-img"
                     alt=""
                     style={props.style}
                     src={props.item.posterPath ? `https://image.tmdb.org/t/p/w500/${props.item.posterPath}` : "https://i.imgur.com/kofVyyQ.png?1"}
+                    onClick={() => props.altOnClick && props.altOnClick()}
                 />
             </Tooltip>
         )}

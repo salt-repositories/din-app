@@ -5,13 +5,12 @@ import { Filters, QueryParameters } from "../../Domain/Models/Querying";
 import { TvShow, TvShowCalendar, TvShowQueryResult, TvShowSearch } from "../../Domain/Models/TvShow";
 import { HttpClient } from "../../Domain/Utils";
 import { IRootState } from "../index";
-import { calendar, ICalendar, IRecentlyAdded, recentlyAdded } from "../Shared";
+import { calendar, filteredContent, ICalendar, IFilteredContent } from "../Shared";
 import { contentState, IContent } from "../Shared/content";
 import { ISearch, searchState } from "../Shared/search";
 
 export interface ITvShowState {
-    recentlyAddedTvShows: IRecentlyAdded<TvShow>;
-    toBeDownloadedTvShows: IRecentlyAdded<TvShow>;
+    recentlyAddedTvShows: IFilteredContent<TvShow>;
     calendar: ICalendar<TvShowCalendar>;
     tvShows: IContent<TvShow>;
     search: ISearch<TvShow, TvShowSearch>;
@@ -22,7 +21,7 @@ export interface ITvShowState {
 }
 
 export const tvShowState: ITvShowState = {
-    recentlyAddedTvShows: recentlyAdded<TvShow>(
+    recentlyAddedTvShows: filteredContent<TvShow>(
         (accessToken, params, filters) => {
             return HttpClient.get("/v1/tvshows", {
                 type: TvShowQueryResult,
@@ -31,18 +30,7 @@ export const tvShowState: ITvShowState = {
                 filters,
             });
         },
-        new Filters(null, null, "true", null, true, true),
-    ),
-    toBeDownloadedTvShows: recentlyAdded<TvShow>(
-        (accessToken, params, filters) => {
-            return HttpClient.get("/v1/tvshows", {
-                type: TvShowQueryResult,
-                accessToken,
-                queryParameters: params,
-                filters,
-            });
-        },
-        new Filters(null, null, "false", null, true, true),
+        new Filters(null, null, null, null, true, true),
     ),
     calendar: calendar<TvShowCalendar>(
         (accessToken: string, from: string, till: string) => {

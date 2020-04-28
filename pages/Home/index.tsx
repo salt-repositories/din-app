@@ -5,7 +5,7 @@ import { Col, Icon, Row } from "antd";
 import { NextPage } from "next";
 import Head from "next/dist/next-server/lib/head";
 import React from "react";
-import { CurrentQueue, DownloadCalendar, RecentlyAdded } from "../../src/Components/Home";
+import { CurrentQueue, DownloadCalendar, RecentlyAdded, ToBeDownloaded } from "../../src/Components/Home";
 import { MobileHome } from "../../src/Components/Home/Mobile/MobileHome";
 import { MINIMAL_WIDTH } from "../../src/Components/Shared/consts";
 import { withAuthentication } from "../../src/Domain/Authentication";
@@ -47,6 +47,9 @@ const HomePage: NextPage = () => {
                         <Row>
                             <RecentlyAdded/>
                         </Row>
+                        <Row>
+                            <ToBeDownloaded/>
+                        </Row>
                     </Col>
                 </WithMenu>
             )}
@@ -60,8 +63,9 @@ HomePage.getInitialProps = async (context: AppContext): Promise<void> => {
     const state: IRootState = context.store.getState();
 
     await Promise.all([
-        state.movie.recentlyAddedMovies.items.length === 0 ? context.store.dispatch.movie.recentlyAddedMovies.getRecentlyAdded() : null,
-        state.tvShow.recentlyAddedTvShows.items.length === 0 ? context.store.dispatch.tvShow.recentlyAddedTvShows.getRecentlyAdded() : null,
+        state.movie.recentlyAddedMovies.collection.items.length === 0 ? context.store.dispatch.movie.recentlyAddedMovies.get() : null,
+        state.tvShow.recentlyAddedTvShows.collection.items.length === 0 ? context.store.dispatch.tvShow.recentlyAddedTvShows.get() : null,
+        state.movie.toBeDownloadedMovies.collection.items.length === 0 ? context.store.dispatch.movie.toBeDownloadedMovies.get() : null,
     ]);
 };
 

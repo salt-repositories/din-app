@@ -2,16 +2,17 @@ import { serialize } from "class-transformer";
 import { action, Action, Actions, thunk, Thunk } from "easy-peasy";
 import { ValidationError } from "../../Domain/Models/Exeptions";
 import { Movie, MovieQueryResult, MovieSearch } from "../../Domain/Models/Movies";
+import { MovieHistory } from "../../Domain/Models/Movies/MovieHistory";
 import { Filters, QueryParameters } from "../../Domain/Models/Querying";
 import { HttpClient } from "../../Domain/Utils";
 import { IRootState } from "../index";
-import { calendar, ICalendar, IRecentlyAdded, recentlyAdded } from "../Shared";
+import { calendar, filteredContent, ICalendar, IFilteredContent } from "../Shared";
 import { contentState, IContent } from "../Shared/content";
 import { ISearch, searchState } from "../Shared/search";
 
 export interface IMovieState {
-    recentlyAddedMovies: IRecentlyAdded<Movie>,
-    toBeDownloadedMovies: IRecentlyAdded<Movie>,
+    recentlyAddedMovies: IFilteredContent<Movie>,
+    toBeDownloadedMovies: IFilteredContent<Movie>,
     calendar: ICalendar<Movie>;
     movies: IContent<Movie>;
     search: ISearch<Movie, MovieSearch>;
@@ -19,10 +20,16 @@ export interface IMovieState {
     addToSystemLoading: boolean;
     addToSystem: Thunk<IMovieState, MovieSearch, any, IRootState, Promise<Movie | ValidationError[]>>;
     setAddToSystemLoading: Action<IMovieState, boolean>;
+
+    history: MovieHistory[];
+    getHistoryLoading: boolean;
+    getHistory: Thunk<IMovieState, number, any, IRootState, Promise<MovieHistory[]>>;
+    setHistory: Action<IMovieState, MovieHistory[]>;
+    setHistoryLoading: Action<IMovieState, boolean>;
 }
 
 export const movieState: IMovieState = {
-    recentlyAddedMovies: recentlyAdded<Movie>(
+    recentlyAddedMovies: filteredContent<Movie>(
         (accessToken , params, filters) => {
             return HttpClient.get("/v1/movies", {
                 type: MovieQueryResult,
@@ -33,7 +40,7 @@ export const movieState: IMovieState = {
         },
         new Filters(null, null, "true", null, true, true),
     ),
-    toBeDownloadedMovies: recentlyAdded<Movie>(
+    toBeDownloadedMovies: filteredContent<Movie>(
         (accessToken , params, filters) => {
             return HttpClient.get("/v1/movies", {
                 type: MovieQueryResult,
@@ -110,5 +117,28 @@ export const movieState: IMovieState = {
     }),
     setAddToSystemLoading: action((state: IMovieState, payload: boolean) => {
         state.addToSystemLoading = payload;
-    })
+    }),
+
+    history: [],
+    getHistoryLoading: false,
+    getHistory: thunk(async (actions: Actions<IMovieState>, payload: number, { getStoreState }) => {
+        actions.setHistoryLoading(true);
+
+        const response = await HttpClient.get(`/v1/movies/${payload}/history`, {
+            type: MovieHistory,
+            accessToken: getStoreState().authentication.token.accessToken,
+
+        }) as unknown as MovieHistory[];
+
+        actions.setHistory(response);
+        actions.setHistoryLoading(false);
+
+        return response;
+    }),
+    setHistory: action((state: IMovieState, payload: MovieHistory[]) => {
+        state.history = payload;
+    }),
+    setHistoryLoading: action((state: IMovieState, payload: boolean) => {
+        state.getHistoryLoading = payload;
+    }),
 };

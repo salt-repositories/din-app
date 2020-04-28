@@ -1,6 +1,6 @@
 import "reflect-metadata";
 
-import { Button, Icon } from "antd";
+import { Icon } from "antd";
 import { NextPage } from "next";
 import Head from "next/head";
 import React from "react";
@@ -17,11 +17,6 @@ const MePage: NextPage<IProps> = (props: IProps) => (
             <title>Me</title>
         </Head>
         <WithMenu crumbs={[{path: "/Me", icon: <Icon type="user"/>}]}>
-            <Button onClick={() => {
-                throw new Error("test")
-            }}>
-                Throw
-            </Button>
         </WithMenu>
     </Layout>
 );

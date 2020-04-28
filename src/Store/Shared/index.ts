@@ -1,2 +1,2 @@
-export * from "./recentlyAdded";
+export * from "./filteredContent";
 export * from "./calendar";

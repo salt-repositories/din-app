@@ -30,7 +30,7 @@ export const TvShowModal: React.FC<IProps> = (props: IProps) => {
                         <Col span={10}>
                             <Poster
                                 item={tvShow}
-                                noPlexMatchMessage="Not downloaded"
+                                altMessage="Not downloaded"
                                 style={{width: "100%", borderRadius: "4px"}}
                             />
                         </Col>

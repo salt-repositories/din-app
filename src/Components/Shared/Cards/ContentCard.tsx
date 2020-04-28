@@ -9,7 +9,9 @@ interface IProps {
     item: Content | Search;
     openYoutubeModal?: (id: string) => void;
     info?: ReactNode;
-    plexMessage?: string;
+    message?: string;
+    history?: boolean;
+    setShowHistoryModal?: (value: [boolean, number]) => void;
 }
 
 export const ContentCard: React.FC<IProps> = (props: IProps): JSX.Element => {
@@ -18,7 +20,13 @@ export const ContentCard: React.FC<IProps> = (props: IProps): JSX.Element => {
             <Card
                 key={props.item.title}
                 className="container-item"
-                cover={<Poster item={props.item} noPlexMatchMessage={props.plexMessage ?? "This movies has not been downloaded"}/>}
+                cover={
+                    <Poster
+                        item={props.item}
+                        altMessage={props.message ?? "This movies has not been downloaded"}
+                        altOnClick={() => props.history && props.setShowHistoryModal && (props.item as Content).id && props.setShowHistoryModal([true, (props.item as Content).id])}
+                    />
+                }
             >
                 <Card.Meta
                     title={props.item.title}

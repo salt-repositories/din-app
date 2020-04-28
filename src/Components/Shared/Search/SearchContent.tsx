@@ -103,7 +103,7 @@ export const SearchContent: React.FC<IProps<any, any>> = <TModel extends Content
                                         </Checkbox>
                                     </>
                                 }
-                                plexMessage=""
+                                message=""
                             />
                         );
                     })
