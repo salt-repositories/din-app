@@ -1,7 +1,6 @@
 import { default as React, useState } from "react";
 import { Waypoint } from "react-waypoint";
 import { Content } from "../../../Domain/Models/Abstractions";
-import { Movie } from "../../../Domain/Models/Movies";
 import { ContentCard } from "../Cards/ContentCard";
 import { YoutubeModal } from "../Modals";
 import { HistoryModal } from "../Modals";
@@ -38,7 +37,7 @@ export const HorizontalCardContainer: React.FC<IProps<Content>> = <T extends Con
                         <ContentCard
                             key={item.id}
                             item={item}
-                            openYoutubeModal={item instanceof Movie && openYoutubeModal}
+                            openYoutubeModal={openYoutubeModal}
                             message="Show history"
                             history={props.history}
                             setShowHistoryModal={setShowHistoryModal}

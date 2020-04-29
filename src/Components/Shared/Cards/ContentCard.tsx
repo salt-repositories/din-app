@@ -39,7 +39,7 @@ export const ContentCard: React.FC<IProps> = (props: IProps): JSX.Element => {
                         {(props.item as Movie).youtubeTrailerId && (
                             <span
                                 className="trailer-link"
-                                onClick={() => props.openYoutubeModal((props.item as Movie).youtubeTrailerId)}
+                                onClick={() => props.openYoutubeModal && props.openYoutubeModal((props.item as Movie).youtubeTrailerId)}
                             >
                                 <Icon type="youtube" className="logo"/>
                                 Trailer
