@@ -2,6 +2,7 @@ import { createStore, createTypedHooks } from "easy-peasy";
 import { authenticationState, IAuthenticationState } from "./Authentication";
 import { componentsState, IComponentsState } from "./Components";
 import { IMainState, mainState } from "./Main";
+import { IMeState, meState } from "./Me";
 import { IMovieState, movieState } from "./Movie";
 import { IQueueState, queueState } from "./Queue";
 import { ITvShowState, tvShowState } from "./TvShow";
@@ -13,6 +14,7 @@ export interface IRootState {
     tvShow: Readonly<ITvShowState>;
     components: Readonly<IComponentsState>;
     queue: Readonly<IQueueState>;
+    me: Readonly<IMeState>;
 }
 
 export const storeStructure: IRootState = {
@@ -22,6 +24,7 @@ export const storeStructure: IRootState = {
     tvShow: tvShowState,
     components: componentsState,
     queue: queueState,
+    me: meState,
 };
 
 export const initializeStore = (initialState) => {

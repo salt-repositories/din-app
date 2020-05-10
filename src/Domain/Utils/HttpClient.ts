@@ -50,15 +50,11 @@ export class HttpClient {
             }
 
             if (params.queryParameters) {
-                const qp = Object.entries(params.queryParameters).concat(Object.entries(params.filters));
-                let first = true;
+                url = this.buildHttpQueryParameters(url, params.queryParameters)
+            }
 
-                for (const [name, value] of qp) {
-                    if (value) {
-                        url += `${first ? "?" : "&"}${name.toLowerCase()}=${value}`;
-                        first = false;
-                    }
-                }
+            if (params.filters) {
+                url = this.buildHttpQueryParameters(url, params.filters)
             }
 
             const response = await fetch(url, {
@@ -100,5 +96,17 @@ export class HttpClient {
             console.log(error);
             Sentry.captureException(error);
         }
+    }
+
+    private static buildHttpQueryParameters(url: string, object: any) {
+        const qp = Object.entries(object);
+
+        for (const [name, value] of qp) {
+            if (value || (Array.isArray(value) && value.length)) {
+                url += `${!url.includes("?") ? "?" : "&"}${name.toLowerCase()}=${value}`;
+            }
+        }
+
+        return url;
     }
 }

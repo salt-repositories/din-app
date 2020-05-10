@@ -4,11 +4,12 @@ import React from "react";
 interface IProps {
     marginTop?: number;
     marginBottom?: number;
+    hideText?: boolean;
 }
 
 export const Spinner = (props: IProps): JSX.Element => (
     <Spin
-        tip="Loading..."
+        tip={!props.hideText ? "Loading..." : ""}
         indicator={<Icon type="loading" style={{fontSize: "50px"}}/>}
         style={{
             display: "block",
