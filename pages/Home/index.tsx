@@ -60,13 +60,9 @@ const HomePage: NextPage = () => {
 HomePage.getInitialProps = async (context: AppContext): Promise<void> => {
     context.store.dispatch.main.menu.setActiveMenuKey("Home");
 
-    const state: IRootState = context.store.getState();
-
-    await Promise.all([
-        state.movie.recentlyAddedMovies.collection.items.length === 0 ? context.store.dispatch.movie.recentlyAddedMovies.get() : null,
-        state.tvShow.recentlyAddedTvShows.collection.items.length === 0 ? context.store.dispatch.tvShow.recentlyAddedTvShows.get() : null,
-        state.movie.toBeDownloadedMovies.collection.items.length === 0 ? context.store.dispatch.movie.toBeDownloadedMovies.get() : null,
-    ]);
+    await context.store.dispatch.movie.recentlyAddedMovies.get();
+    await context.store.dispatch.tvShow.recentlyAddedTvShows.get();
+    await context.store.dispatch.movie.toBeDownloadedMovies.get();
 };
 
 export default withAuthentication(HomePage);

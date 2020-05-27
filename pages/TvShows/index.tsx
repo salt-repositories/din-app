@@ -95,7 +95,7 @@ TvShowsPage.getInitialProps = async (context: AppContext): Promise<IProps> => {
     if (context.store.getState().tvShow.tvShows.collection.items.length < 50) {
         context.store.dispatch.tvShow.tvShows.setParamProp(["skip", 0]);
         context.store.dispatch.tvShow.tvShows.setParamProp(["take", 50]);
-        await context.store.dispatch.tvShow.tvShows.get();
+        context.store.dispatch.tvShow.tvShows.get();
     }
 
     return {};

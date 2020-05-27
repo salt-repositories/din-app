@@ -101,7 +101,7 @@ MoviesPage.getInitialProps = async (context: AppContext): Promise<IProps> => {
     if (context.store.getState().movie.movies.collection.items.length < 50) {
         context.store.dispatch.movie.movies.setParamProp(["skip", 0]);
         context.store.dispatch.movie.movies.setParamProp(["take", 50]);
-        await context.store.dispatch.movie.movies.get();
+        context.store.dispatch.movie.movies.get();
     }
     return {};
 };
