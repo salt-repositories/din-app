@@ -8,7 +8,7 @@ import { AddedContent } from "../../src/Components/Me/AddedContent/AddedContent"
 import { UserInfo } from "../../src/Components/Me/UserInfo/UserInfo";
 import { withAuthentication } from "../../src/Domain/Authentication";
 import { Layout, WithMenu } from "../../src/Layouts";
-import { AppContext } from "../../src/Store/AppContext";
+import { AppContext } from "../../src/Store";
 
 interface IProps {
 }

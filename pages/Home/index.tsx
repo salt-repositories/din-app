@@ -1,7 +1,7 @@
 import "reflect-metadata";
 
-import * as Sentry from "@sentry/node";
-import { Col, Icon, Row } from "antd";
+import { HomeOutlined } from "@ant-design/icons/lib";
+import { Col, Row } from "antd";
 import { NextPage } from "next";
 import Head from "next/dist/next-server/lib/head";
 import React from "react";
@@ -11,13 +11,7 @@ import { MINIMAL_WIDTH } from "../../src/Components/Shared/consts";
 import { withAuthentication } from "../../src/Domain/Authentication";
 import { Layout, WithMenu } from "../../src/Layouts";
 import { IRootState, useStoreState } from "../../src/Store";
-import { AppContext } from "../../src/Store/AppContext";
-
-Sentry.addBreadcrumb({
-    category: "pages/Home",
-    message: `Preparing app (${process.browser ? 'browser' : 'server'})`,
-    level: Sentry.Severity.Debug,
-});
+import { AppContext } from "../../src/Store";
 
 const MINIMAL_QUEUE_WIDTH = 1530;
 
@@ -32,7 +26,7 @@ const HomePage: NextPage = () => {
             {windowWidth < MINIMAL_WIDTH ? (
                 <MobileHome/>
             ) : (
-                <WithMenu crumbs={[{path: "/Home", icon: <Icon type="home"/>}]}>
+                <WithMenu crumbs={[{path: "/Home", icon: <HomeOutlined/>}]}>
                     <Col span={24}>
                         <Row>
                             <Col span={15}>

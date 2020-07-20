@@ -1,17 +1,15 @@
-import * as Sentry from "@sentry/node";
 import { message } from "antd";
 import { plainToClass } from "class-transformer";
 import { ClassType } from "class-transformer/ClassTransformer";
-import fetch from "isomorphic-unfetch";
+import { globalStore } from "../../../pages/_app";
 import { ValidationError } from "../Models/Exeptions";
 import { QueryParameters } from "../Models/Querying";
 
 type Method = "GET" | "POST" | "DELETE" | "PATCH";
 
 export interface IRequestParameters<T> {
-    type?: ClassType<T>;
+    type: ClassType<T>;
     accessToken?: string;
-    body?: string;
     queryParameters?: QueryParameters;
     filters?: any;
 }
@@ -22,25 +20,25 @@ export class HttpClient {
         "Content-Type": "application/json",
     };
 
-    public static async get<T>(url: string, params?: IRequestParameters<T>): Promise<T> {
-        return this.request("GET", url, params) as Promise<T>;
+    public static get<T>(path: string, params?: IRequestParameters<T>): Promise<T> {
+        return this.request("GET", path, params) as Promise<T>;
     }
 
-    public static async post<T>(url: string, params: IRequestParameters<T>): Promise<T | ValidationError[]> {
-        return this.request("POST", url, params);
+    public static post<T>(path: string, params: IRequestParameters<T>, body: string): Promise<T | ValidationError[]> {
+        return this.request("POST", path, params, body) as Promise<T | ValidationError[]>;
     }
 
-    public static async patch<T>(url: string, params: IRequestParameters<T>): Promise<T | ValidationError[]> {
-        return this.request("PATCH", url, params);
+    public static patch<T>(path: string, params: IRequestParameters<T>, body: string): Promise<T | ValidationError[]> {
+        return this.request("PATCH", path, params, body) as Promise<T | ValidationError[]>;
     }
 
-    public static async delete<T>(url: string, params?: IRequestParameters<T>): Promise<T> {
-        return this.request("DELETE", url, params) as Promise<T>;
+    public static delete<T>(path: string, params: IRequestParameters<T>): Promise<boolean> {
+        return this.request("DELETE", path, params) as Promise<boolean>;
     }
 
-    private static async request<T>(method: Method, url: string, params: IRequestParameters<T> = {}): Promise<T | ValidationError[]> {
+    private static async request<T>(method: Method, path: string, params: IRequestParameters<T>, body?: string): Promise<boolean | T | ValidationError[]> {
         try {
-            url = `${process.env.API_URL}${url}`;
+            let requestUrl = `${process.env.NEXT_PUBLIC_API_URL}${path}`;
 
             if (params.accessToken) {
                 this.headers = {
@@ -50,18 +48,33 @@ export class HttpClient {
             }
 
             if (params.queryParameters) {
-                url = this.buildHttpQueryParameters(url, params.queryParameters)
+                requestUrl = this.buildHttpQueryParameters(requestUrl, params.queryParameters)
             }
 
             if (params.filters) {
-                url = this.buildHttpQueryParameters(url, params.filters)
+                requestUrl = this.buildHttpQueryParameters(requestUrl, params.filters)
             }
 
-            const response = await fetch(url, {
+            const response = await fetch(requestUrl, {
                 headers: this.headers,
                 method,
-                body: params.body ?? null
+                body: body ?? null
             });
+
+            if (response.status === 401 && params.accessToken) {
+                console.log("token expired on cold new request ---> refreshing")
+
+                const newToken = await globalStore.dispatch.authentication.refreshToken();
+
+                if (newToken) {
+                    return await this.request(method, path, {
+                        ...params,
+                        accessToken: newToken,
+                    }, body);
+                }
+
+                return false;
+            }
 
             if (response.status < 200 || response.status > 299) {
                 let responseBody;
@@ -73,7 +86,7 @@ export class HttpClient {
                         message.error(`Unexpected HTTP status code ${response.status}`);
                     }
 
-                    return;
+                    return false;
                 }
 
                 if (responseBody.message) {
@@ -85,16 +98,23 @@ export class HttpClient {
                         return plainToClass(ValidationError, responseBody.errors as []);
                     }
 
-                    return;
+                    return false;
                 }
+            }
+
+            if (method === "DELETE") {
+                return response.status === 204;
+            }
+
+            if (response.status === 204) {
+                return true;
             }
 
             return params.type
                 ? plainToClass(params.type, await response.json())
-                : null;
+                : await response.json();
         } catch (error) {
             console.log(error);
-            Sentry.captureException(error);
         }
     }
 

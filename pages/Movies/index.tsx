@@ -16,7 +16,7 @@ import { withAuthentication } from "../../src/Domain/Authentication";
 import { Movie } from "../../src/Domain/Models/Movies";
 import { Layout, WithMenu } from "../../src/Layouts";
 import { IRootState, useStoreActions, useStoreState } from "../../src/Store";
-import { AppContext } from "../../src/Store/AppContext";
+import { AppContext } from "../../src/Store";
 
 interface IProps {
 

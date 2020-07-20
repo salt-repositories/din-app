@@ -9,8 +9,7 @@ import FullScreenCarousel from "../../src/Components/Shared/FullScreenCarousel";
 import { withAuthentication } from "../../src/Domain/Authentication";
 import { BackgroundImage } from "../../src/Domain/Models/Media";
 import { Layout } from "../../src/Layouts";
-import { AppContext } from "../../src/Store/AppContext";
-import { getBackgrounds } from "../../src/Store/Main";
+import { AppContext } from "../../src/Store";
 
 interface IProps {
     username: string;
@@ -33,12 +32,10 @@ const LoginPage: NextPage<IProps> = (props: IProps): JSX.Element => (
 );
 
 LoginPage.getInitialProps = async (context: AppContext): Promise<IProps> => {
-    const promise = getBackgrounds(context);
-    const {username} = parseCookies(context);
+    const { username } = parseCookies(context);
+    await context.store.dispatch.main.backgroundImages.getBackgroundImages();
 
-    const backgrounds = await promise;
-
-    return {username, backgrounds};
+    return { username, backgrounds: context.store.getState().main.backgroundImages.items };
 };
 
 export default withAuthentication(LoginPage);

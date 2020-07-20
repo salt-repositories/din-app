@@ -2,7 +2,8 @@ import { serialize } from "class-transformer";
 import { action, Action, Actions, thunk, Thunk } from "easy-peasy";
 import jwtDecode from "jwt-decode";
 import Router from "next/router";
-import { destroyCookie, setCookie } from "nookies";
+import { destroyCookie, parseCookies, setCookie } from "nookies";
+import { globalContext } from "../../../pages/_app";
 import { Token } from "../../Domain/Models/Authentication";
 import { HttpClient } from "../../Domain/Utils";
 
@@ -15,10 +16,13 @@ export interface IAuthenticationState {
     setIdentity: Action<IAuthenticationState, string>;
     setEmail: Action<IAuthenticationState, string>;
 
+    getToken: Thunk<IAuthenticationState>;
+
     loginLoading: boolean;
     setLoginLoading: Action<IAuthenticationState, boolean>;
     login: Thunk<IAuthenticationState, object>;
 
+    refreshToken: Thunk<IAuthenticationState>;
     logout: Thunk<IAuthenticationState>;
     reset: Action<IAuthenticationState>;
 
@@ -37,13 +41,43 @@ export const authenticationState: IAuthenticationState = {
     email: undefined,
 
     setToken: action((state: IAuthenticationState, payload: Token) => {
+        if (!payload) {
+            destroyCookie(globalContext, "token");
+            state.token = undefined;
+
+            return;
+        }
+
+        const {Identity, Email} = jwtDecode(payload.accessToken);
         state.token = payload;
+        state.identity = Identity;
+        state.email = Email;
+
+        destroyCookie(globalContext, "token");
+        setCookie(globalContext, "token", serialize(payload, {ignoreDecorators: true}), {
+            path: "/",
+            sameSite: "strict",
+            maxAge: 3600 * 24 * 35,
+        });
     }),
     setIdentity: action((state: IAuthenticationState, payload: string) => {
         state.identity = payload;
     }),
     setEmail: action((state: IAuthenticationState, payload: string) => {
         state.email = payload;
+    }),
+
+    getToken: thunk((actions: Actions<IAuthenticationState>, _, {getState}) => {
+        const state = getState();
+
+        if (state.token) {
+            return state.token;
+        }
+
+        const serializedToken = parseCookies(globalContext).token;
+        return serializedToken
+            ? JSON.parse(serializedToken) as Token
+            : undefined;
     }),
 
     loginLoading: false,
@@ -55,28 +89,40 @@ export const authenticationState: IAuthenticationState = {
 
         const response = await HttpClient.post("/v1/authentication/token", {
             type: Token,
-            body: serialize(payload)
-        });
+            noAuth: true
+        }, serialize(payload));
 
         if (response instanceof Token) {
-            const { Identity, Email } = jwtDecode(response.accessToken);
-            actions.setIdentity(Identity);
-            actions.setEmail(Email);
-
-            setCookie(undefined, "token", serialize(response, { ignoreDecorators: true }), {
-                maxAge: 3600 * 24 * 35,
-            });
+            actions.setToken(response);
 
             await Router.push("/Home");
         }
 
-        actions.setLoginLoading(false)
+        actions.setLoginLoading(false);
+    }),
+
+    refreshToken: thunk(async (actions: Actions<IAuthenticationState>) => {
+        const currentToken = actions.getToken();
+
+        const newToken = await HttpClient.get(`/auth/refresh/${currentToken.refreshToken}`, {
+            type: Token,
+            noAuth: true
+        });
+
+        if (newToken instanceof Token) {
+            actions.setToken(newToken);
+
+            return newToken.accessToken;
+        }
+
+        await actions.logout();
     }),
 
     logout: thunk(async (actions: Actions<IAuthenticationState>) => {
         actions.setToken(undefined);
-        destroyCookie(undefined, "token");
-        Router.push("/");
+        destroyCookie(globalContext, "token");
+
+        await Router.push("/");
     }),
     reset: action(() => ({
         ...authenticationState
@@ -85,7 +131,9 @@ export const authenticationState: IAuthenticationState = {
     getAuthorizationCodeLoading: false,
     getAuthorizationCode: thunk(async (actions: Actions<IAuthenticationState>, payload: string) => {
         actions.setGetAuthorizationCodeLoading(true);
+
         await HttpClient.get(`/v1/authentication/authorization_code?email=${payload}`);
+
         actions.setGetAuthorizationCodeLoading(false);
     }),
     setGetAuthorizationCodeLoading: action((state: IAuthenticationState, payload: boolean) => {
@@ -99,10 +147,7 @@ export const authenticationState: IAuthenticationState = {
     changePassword: thunk(async (actions: Actions<IAuthenticationState>, payload) => {
         actions.setChangePasswordLoading(true);
 
-        await HttpClient.post("/v1/authentication/change_password", {
-            type: null,
-            body: serialize(payload),
-        });
+        await HttpClient.post("/v1/authentication/change_password", undefined, serialize(payload));
 
         actions.setChangePasswordLoading(false);
     })

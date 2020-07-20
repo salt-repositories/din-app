@@ -9,7 +9,7 @@ import { SearchContent } from "../../src/Components/Shared/Search/SearchContent"
 import { withAuthentication } from "../../src/Domain/Authentication";
 import { Layout, WithMenu } from "../../src/Layouts";
 import { IRootState, useStoreActions, useStoreState } from "../../src/Store";
-import { AppContext } from "../../src/Store/AppContext";
+import { AppContext } from "../../src/Store";
 
 const AddTvShowPage: NextPage = () => {
     const results = useStoreState((state: IRootState) => state.tvShow.search.results);

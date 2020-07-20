@@ -7,7 +7,7 @@ export abstract class Hub {
 
     protected constructor(accessToken: string, endpoint: string) {
         this.connection = new signalR.HubConnectionBuilder()
-            .withUrl(`${process.env.API_URL}/hubs/${endpoint}`,
+            .withUrl(`${process.env.NEXT_PUBLIC_API_URL}/hubs/${endpoint}`,
                 {
                     skipNegotiation: true,
                     transport: signalR.HttpTransportType.WebSockets,
@@ -28,7 +28,10 @@ export abstract class Hub {
 
     protected async callMethod(method: string) {
         await this.openConnection();
-        await this.connection.send(method);
+
+        if (this.isConnected()) {
+            await this.connection.send(method);
+        }
     }
 
     protected createListener(method: string, func: (response) => void) {

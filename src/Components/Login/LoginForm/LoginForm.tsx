@@ -1,4 +1,5 @@
-import { Badge, Button, Icon, Switch } from "antd";
+import { KeyOutlined, UserOutlined } from "@ant-design/icons/lib";
+import { Badge, Button, Switch } from "antd";
 import { Actions } from "easy-peasy";
 import { Formik } from "formik";
 import { Form, Input } from "formik-antd";
@@ -42,7 +43,11 @@ export const LoginForm = (props: IProps) => {
                     }}
                 >
                     {({ handleSubmit, values, setFieldValue }) => (
-                        <Form noValidate onSubmit={handleSubmit} className="login-form">
+                        <Form
+                            onSubmitCapture={handleSubmit}
+                            className="login-form"
+                            layout="vertical"
+                        >
                             <div className="title-wrapper">
                                 <Badge className="title">DIN</Badge>
                             </div>
@@ -55,7 +60,7 @@ export const LoginForm = (props: IProps) => {
                                     name="username"
                                     type="text"
                                     placeholder="Type your username or email"
-                                    prefix={<Icon className="icon" type="user"/>}
+                                    prefix={<UserOutlined className="icon"/>}
                                 />
                             </Form.Item>
                             <Form.Item
@@ -66,7 +71,7 @@ export const LoginForm = (props: IProps) => {
                                 <Input.Password
                                     name="password"
                                     placeholder="Type your password"
-                                    prefix={<Icon type="key"/>}
+                                    prefix={<KeyOutlined/>}
 
                                 />
                             </Form.Item>
@@ -142,6 +147,18 @@ export const LoginForm = (props: IProps) => {
                         width: 100%;
                         border-bottom: 2px solid #d9d9d9;
                         margin-bottom: 2rem;
+                    }
+                    
+                    :global(.input-wrapper .ant-input-affix-wrapper) {
+                        border: none !important;
+                    }
+                    
+                    :global(.input-wrapper .ant-input-affix-wrapper-focused) {
+                        border: none;
+                    }
+                    
+                    :global(.input-wrapper .ant-form-item-has-error .ant-input-affix-wrapper-focused) {
+                        border: none;
                     }
 
                     :global(.input-wrapper label) {

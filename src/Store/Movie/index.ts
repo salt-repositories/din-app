@@ -104,13 +104,12 @@ export const movieState: IMovieState = {
         const response = await HttpClient.post("/v1/movies", {
             type: Movie,
             accessToken: getStoreState().authentication.token.accessToken,
-            body: serialize({
-                tmdb_id: payload.tmdbId,
-                title: payload.title,
-                year: payload.releaseDate.year(),
-                poster_path: payload.posterPath,
-            })
-        });
+        }, serialize({
+            tmdb_id: payload.tmdbId,
+            title: payload.title,
+            year: payload.releaseDate.year(),
+            poster_path: payload.posterPath,
+        }));
 
         actions.resetSearchResults();
         actions.setAddToSystemLoading(false);

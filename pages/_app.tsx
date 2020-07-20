@@ -1,21 +1,16 @@
+import "antd/dist/antd.css";
 import "reflect-metadata";
 
-import * as Sentry from '@sentry/node';
 import { Store, StoreProvider } from "easy-peasy";
-import { IncomingMessage } from "http";
-import get from 'lodash.get';
-import withRedux from "next-redux-wrapper";
 import App from "next/app";
 import Head from "next/head";
 import Router from "next/router";
-import { parseCookies } from "nookies";
 import NProgress from 'nprogress';
-import React, { ErrorInfo } from "react";
-import "../src/Domain/Utils/Sentry";
-import { initializeStore, IRootState } from "../src/Store";
-import { AppContext } from "../src/Store/AppContext";
+import React from "react";
+import { AppContext, IRootState, withStore } from "../src/Store";
 
 export let globalContext: AppContext;
+export let globalStore: Store<IRootState>;
 
 interface IProps {
     Component: React.Component;
@@ -23,35 +18,16 @@ interface IProps {
     err: Error;
 }
 
-const fileLabel = 'pages/_app';
 Router.events.on("routeChangeStart", () => NProgress.start());
 Router.events.on("routeChangeComplete", () => NProgress.done());
 
 class MyApp extends App<IProps> {
     public static async getInitialProps(props) {
         const {ctx, Component} = props;
-        const {req} = ctx;
+        const { store } = ctx;
 
         globalContext = ctx;
-
-        Sentry.configureScope((scope) => {
-            scope.setContext('cookies', parseCookies(ctx));
-        });
-
-        Sentry.addBreadcrumb({
-            category: fileLabel,
-            message: `Preparing app (${process.browser ? 'browser' : 'server'})`,
-            level: Sentry.Severity.Debug,
-        });
-
-        if (req) {
-            const {headers}: IncomingMessage = req;
-
-            Sentry.configureScope((scope) => {
-                scope.setContext('headers', headers);
-            });
-        }
-
+        globalStore = store;
 
         const pageProps = Component.getInitialProps
             ? await Component.getInitialProps(ctx)
@@ -59,36 +35,9 @@ class MyApp extends App<IProps> {
         return {pageProps};
     }
 
-    public componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-        Sentry.withScope((scope) => {
-            Object.keys(errorInfo).forEach((key) => {
-                scope.setExtra(key, errorInfo[key]);
-            });
-
-            Sentry.captureException(error);
-        });
-
-        super.componentDidCatch(error, errorInfo);
-    }
-
     public render(): JSX.Element {
-        const {store, Component, pageProps, err, router} = this.props;
+        const {store, Component, pageProps, err } = this.props;
         const modifiedPageProps = {...pageProps, ...err};
-        
-        Sentry.configureScope((scope) => {
-            scope.setContext('router', {
-                route: router.route,
-                pathname: router.pathname,
-                query: router.query,
-                asPath: router.asPath,
-            });
-        });
-
-        Sentry.addBreadcrumb({
-            category: fileLabel,
-            message: `Rendering app for Component "${get(Component, 'name', 'unknown')}" (${process.browser ? 'browser' : 'server'})`,
-            level: Sentry.Severity.Debug,
-        });
 
         return (
             <>
@@ -104,4 +53,4 @@ class MyApp extends App<IProps> {
     }
 }
 
-export default withRedux(initializeStore)(MyApp);
+export default withStore(MyApp);
