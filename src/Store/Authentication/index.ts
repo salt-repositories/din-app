@@ -89,7 +89,6 @@ export const authenticationState: IAuthenticationState = {
 
         const response = await HttpClient.post("/v1/authentication/token", {
             type: Token,
-            noAuth: true
         }, serialize(payload));
 
         if (response instanceof Token) {
@@ -105,8 +104,7 @@ export const authenticationState: IAuthenticationState = {
         const currentToken = actions.getToken();
 
         const newToken = await HttpClient.get(`/auth/refresh/${currentToken.refreshToken}`, {
-            type: Token,
-            noAuth: true
+            type: Token
         });
 
         if (newToken instanceof Token) {

@@ -1,5 +1,5 @@
-import "antd/dist/antd.css";
 import "reflect-metadata";
+import "../src/Style/antd.css";
 
 import { Store, StoreProvider } from "easy-peasy";
 import App from "next/app";

@@ -49,13 +49,30 @@ export const Layout: React.FC<IProps> = (props: IProps) => {
             {props.children}
             <style jsx global>
                 {`
-                        body {
-                            position: relative;
-                            font-family: 'Roboto', sans-serif;
-                            background-color: #000000a8;
-                            overflow: hidden;
-                        }
-                    `}
+                    body {
+                        position: relative;
+                        font-family: 'Roboto', sans-serif;
+                        background-color: #000000a8;
+                        overflow: hidden;
+                    }
+                    
+                    :global(.ant-input-prefix) {
+                        margin-right: 10px;
+                    }
+                    
+                    :global(.input-wrapper .ant-input-affix-wrapper) {
+                        border: none !important;
+                        box-shadow: none;
+                    }
+                    
+                    :global(.input-wrapper .ant-input-affix-wrapper-focused) {
+                        border: none;
+                    }
+                    
+                    :global(.input-wrapper .ant-form-item-has-error .ant-input-affix-wrapper-focused) {
+                        border: none;
+                    }
+                `}
             </style>
         </div>
     );

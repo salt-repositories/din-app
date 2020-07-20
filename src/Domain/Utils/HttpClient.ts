@@ -8,7 +8,7 @@ import { QueryParameters } from "../Models/Querying";
 type Method = "GET" | "POST" | "DELETE" | "PATCH";
 
 export interface IRequestParameters<T> {
-    type: ClassType<T>;
+    type?: ClassType<T>;
     accessToken?: string;
     queryParameters?: QueryParameters;
     filters?: any;
@@ -36,7 +36,7 @@ export class HttpClient {
         return this.request("DELETE", path, params) as Promise<boolean>;
     }
 
-    private static async request<T>(method: Method, path: string, params: IRequestParameters<T>, body?: string): Promise<boolean | T | ValidationError[]> {
+    private static async request<T>(method: Method, path: string, params: IRequestParameters<T> = {}, body?: string): Promise<boolean | T | ValidationError[]> {
         try {
             let requestUrl = `${process.env.NEXT_PUBLIC_API_URL}${path}`;
 

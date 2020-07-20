@@ -148,24 +148,12 @@ export const LoginForm = (props: IProps) => {
                         border-bottom: 2px solid #d9d9d9;
                         margin-bottom: 2rem;
                     }
-                    
-                    :global(.input-wrapper .ant-input-affix-wrapper) {
-                        border: none !important;
-                    }
-                    
-                    :global(.input-wrapper .ant-input-affix-wrapper-focused) {
-                        border: none;
-                    }
-                    
-                    :global(.input-wrapper .ant-form-item-has-error .ant-input-affix-wrapper-focused) {
-                        border: none;
-                    }
 
                     :global(.input-wrapper label) {
                         font-size: 14px;
                         color: #3d495e;
                         line-height: 1.5;
-                        padding-left: 7px;
+                        padding-left: 10px;
                     }
 
                     :global(.input-wrapper input) {
@@ -174,7 +162,7 @@ export const LoginForm = (props: IProps) => {
                         line-height: 1.2;
                         display: block;
                         width: 100%;
-                        height: 55px;
+                        height: 45px;
                         background: 0 0;
                         padding: 0 7px 0 43px;
                         outline: none;

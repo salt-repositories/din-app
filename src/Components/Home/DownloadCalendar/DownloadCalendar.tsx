@@ -1,5 +1,5 @@
-import { Button, Col, DatePicker, Divider, Icon, Row, Skeleton, Tag, Tooltip } from "antd";
-import { RangePickerValue } from "antd/lib/date-picker/interface";
+import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons/lib";
+import { Button, Col, DatePicker, Divider, Row, Skeleton, Tag, Tooltip } from "antd";
 import { Actions } from "easy-peasy";
 import moment, { Moment } from "moment";
 import { default as React, useEffect, useState } from "react";
@@ -53,7 +53,7 @@ export const DownloadCalendar: React.FC = (): JSX.Element => {
         return data;
     };
 
-    const datePickerOnChange = (dates: RangePickerValue): void => {
+    const datePickerOnChange = (dates): void => {
         setDateRange({from: dates[0], till: dates[1]});
     };
 
@@ -114,12 +114,12 @@ export const DownloadCalendar: React.FC = (): JSX.Element => {
                             <Button.Group>
                                 <Tooltip title="previous">
                                     <Button onClick={previous}>
-                                        <Icon type="left"/>
+                                        <ArrowLeftOutlined/>
                                     </Button>
                                 </Tooltip>
                                 <Tooltip title="next">
                                     <Button onClick={next}>
-                                        <Icon type="right"/>
+                                        <ArrowRightOutlined/>
                                     </Button>
                                 </Tooltip>
                             </Button.Group>
