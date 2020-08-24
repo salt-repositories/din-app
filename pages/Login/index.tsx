@@ -9,7 +9,7 @@ import FullScreenCarousel from "../../src/Components/Shared/FullScreenCarousel";
 import { withAuthentication } from "../../src/Domain/Authentication";
 import { BackgroundImage } from "../../src/Domain/Models/Media";
 import { Layout } from "../../src/Layouts";
-import { AppContext } from "../../src/Store";
+import { AppContext } from "../../src/Store/AppContext";
 
 interface IProps {
     username: string;

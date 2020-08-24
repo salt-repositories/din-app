@@ -39,7 +39,7 @@ export const movieState: IMovieState = {
                 filters,
             });
         },
-        new Filters(null, null, "true", null, true, true),
+        new Filters(null, null, "true", null),
     ),
     toBeDownloadedMovies: filteredContent<Movie>(
         (accessToken , params, filters) => {
@@ -50,7 +50,7 @@ export const movieState: IMovieState = {
                 filters,
             });
         },
-        new Filters(null, null, "false", null, true, true),
+        new Filters(null, null, "false", null),
     ),
     calendar: calendar<Movie>(
         (accessToken: string, from: string, till: string) => {

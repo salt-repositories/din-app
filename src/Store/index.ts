@@ -35,7 +35,3 @@ const typedHooks = createTypedHooks<IRootState>();
 export const useStoreActions = typedHooks.useStoreActions;
 export const useStoreDispatch = typedHooks.useStoreDispatch;
 export const useStoreState = typedHooks.useStoreState;
-
-
-export * from "./AppContext";
-export * from "./withStore";

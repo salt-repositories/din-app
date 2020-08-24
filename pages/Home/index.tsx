@@ -7,13 +7,11 @@ import Head from "next/dist/next-server/lib/head";
 import React from "react";
 import { CurrentQueue, DownloadCalendar, RecentlyAdded, ToBeDownloaded } from "../../src/Components/Home";
 import { MobileHome } from "../../src/Components/Home/Mobile/MobileHome";
-import { MINIMAL_WIDTH } from "../../src/Components/Shared/consts";
+import { MINIMAL_QUEUE_WIDTH, MINIMAL_WIDTH } from "../../src/Components/Shared/consts";
 import { withAuthentication } from "../../src/Domain/Authentication";
 import { Layout, WithMenu } from "../../src/Layouts";
 import { IRootState, useStoreState } from "../../src/Store";
-import { AppContext } from "../../src/Store";
-
-const MINIMAL_QUEUE_WIDTH = 1530;
+import { AppContext } from "../../src/Store/AppContext";
 
 const HomePage: NextPage = () => {
     const windowWidth = useStoreState((state: IRootState) => state.main.windowWidth);

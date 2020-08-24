@@ -1,13 +1,15 @@
 import "reflect-metadata";
-import "../src/Style/antd.css";
+import "../public/static/Styles/antd.css";
 
 import { Store, StoreProvider } from "easy-peasy";
 import App from "next/app";
 import Head from "next/head";
 import Router from "next/router";
-import NProgress from 'nprogress';
+import NProgress from "nprogress";
 import React from "react";
-import { AppContext, IRootState, withStore } from "../src/Store";
+import { IRootState } from "../src/Store";
+import { AppContext } from "../src/Store/AppContext";
+import { withStore } from "../src/Store/withStore";
 
 export let globalContext: AppContext;
 export let globalStore: Store<IRootState>;
@@ -42,7 +44,7 @@ class MyApp extends App<IProps> {
         return (
             <>
                 <Head>
-                    <link rel="stylesheet" type="text/css" href="/static/nprogress.css" />
+                    <link rel="stylesheet" type="text/css" href="/static/Styles/nprogress.css" />
                     <title>DIN</title>
                 </Head>
                 <StoreProvider store={store}>

@@ -94,7 +94,14 @@ export const authenticationState: IAuthenticationState = {
         if (response instanceof Token) {
             actions.setToken(response);
 
-            await Router.push("/Home");
+            if (process.browser) {
+                await Router.push("/Home");
+
+                return;
+            }
+
+            globalContext.res.writeHead(302, { Location: "/Home" })
+            globalContext.res.end();
         }
 
         actions.setLoginLoading(false);
@@ -103,11 +110,11 @@ export const authenticationState: IAuthenticationState = {
     refreshToken: thunk(async (actions: Actions<IAuthenticationState>) => {
         const currentToken = actions.getToken();
 
-        const newToken = await HttpClient.get(`/auth/refresh/${currentToken.refreshToken}`, {
+        const newToken = await HttpClient.get(`/v1/authentication/refresh/${currentToken.refreshToken}`, {
             type: Token
         });
 
-        if (newToken instanceof Token) {
+        if (newToken && newToken instanceof Token) {
             actions.setToken(newToken);
 
             return newToken.accessToken;
@@ -120,7 +127,14 @@ export const authenticationState: IAuthenticationState = {
         actions.setToken(undefined);
         destroyCookie(globalContext, "token");
 
-        await Router.push("/");
+        if (process.browser) {
+            await Router.push("/");
+
+            return;
+        }
+
+        globalContext.res.writeHead(302, { Location: "/" })
+        globalContext.res.end();
     }),
     reset: action(() => ({
         ...authenticationState

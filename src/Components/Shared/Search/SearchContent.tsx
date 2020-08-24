@@ -73,9 +73,10 @@ export const SearchContent: React.FC<IProps<any, any>> = <TModel extends Content
                 ) : (
                     props.results.searchResults.map((result) => {
                         const added = props.results.current.find((item) => item.title === result.title) !== undefined;
-
                         return (
                             <ContentCard
+                                key={result.title}
+                                message="none"
                                 item={result}
                                 info={
                                     <>
@@ -103,7 +104,6 @@ export const SearchContent: React.FC<IProps<any, any>> = <TModel extends Content
                                         </Checkbox>
                                     </>
                                 }
-                                message=""
                             />
                         );
                     })
@@ -132,7 +132,7 @@ export const SearchContent: React.FC<IProps<any, any>> = <TModel extends Content
                         position: fixed;
                         width: 100%;
                         height: 4em;
-                        margin: ${currentWidth > MINIMAL_WIDTH ? "-5px 0 0 -20px" : ""};
+                        margin: ${currentWidth > MINIMAL_WIDTH ? "-60px 0 0 -20px" : ""};
                         background-color: #2b2b2ba8;
                         box-shadow: 0 3px 6px 0 rgba(0,0,0,.15);
                     }
@@ -141,9 +141,22 @@ export const SearchContent: React.FC<IProps<any, any>> = <TModel extends Content
                         margin-top: 10px;
                     }
                     
+                    :global(.search-input-row .search-input) {
+                        background: #575757;
+                        border: none;
+                    }
+                    
                     :global(.search-input-row .search-input input) {
                         background: #575757;
                         color: #fff;
+                    }
+                    
+                    :global(.search-input-row .search-input .ant-input-suffix span) {
+                        color: #fff;
+                    }
+                    
+                    :global(.search-input-row .search-input .ant-input-search-icon::before) {
+                        border: none;
                     }
                     
                     :global(.search-input-row .search-input i) {

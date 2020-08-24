@@ -2,7 +2,7 @@ import jwtDecode from "jwt-decode";
 import moment from "moment";
 import React from "react";
 import { globalStore } from "../../../pages/_app";
-import { AppContext } from "../../Store";
+import { AppContext } from "../../Store/AppContext";
 import { Token } from "../Models/Authentication";
 
 export const withAuthentication = (Page) => {

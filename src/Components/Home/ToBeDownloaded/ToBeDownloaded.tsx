@@ -14,6 +14,7 @@ export const ToBeDownloaded: React.FC = () => {
             "Movies",
             <HorizontalCardContainer
                 items={movies.items}
+                message="Show history"
                 nextLoading={nextMoviesLoading}
                 nextFunction={nextMovies}
                 history={true}

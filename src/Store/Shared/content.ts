@@ -41,7 +41,7 @@ export const contentState = <T extends Content>(
         },
 
         params: new QueryParameters(0, 20, "title", "Asc"),
-        filters: new Filters(null, null, null, null, true, true),
+        filters: new Filters(null, null, null, null),
 
         setParamProp: action((state: IContent<T>, payload: [string, string]) => {
             state.params[payload[0]] = payload[1];

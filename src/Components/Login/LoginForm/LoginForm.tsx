@@ -120,6 +120,7 @@ export const LoginForm = (props: IProps) => {
                         background: white;
                         opacity: .9;
                         width: ${windowWidth < MINIMAL_WIDTH ? "300px" : "500px"};
+                        z-index: 2;
                     }
 
                     :global(.login-form) {

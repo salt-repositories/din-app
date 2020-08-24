@@ -1,6 +1,6 @@
 import { Table } from "antd";
-import { PaginationConfig } from "antd/es/pagination";
-import { SorterResult } from "antd/es/table";
+import { SorterResult } from "antd/es/table/interface";
+import { Key, TableCurrentDataSource, TablePaginationConfig } from "antd/lib/table/interface";
 import { Actions } from "easy-peasy";
 import React, { useEffect } from "react";
 import { IRootState, useStoreActions, useStoreState } from "../../../Store";
@@ -33,7 +33,7 @@ export const AddedContent: React.FC = (): JSX.Element => {
         }
     };
 
-    const handleTableChange = (pagination: PaginationConfig, filters: Partial<Record<keyof IAddedContentRow, string[]>>, sorters: SorterResult<IAddedContentRow>) => {
+    const handleTableChange = (pagination: TablePaginationConfig, filters: Record<string, Key[] | null>, sorters: SorterResult<IAddedContentRow>, extra: TableCurrentDataSource<IAddedContentRow>) => {
         if (filters) {
             setFilters(filters);
         }
@@ -92,10 +92,18 @@ export const AddedContent: React.FC = (): JSX.Element => {
                         width: 80%;
                     }
                     
+                    :global(.added-content-table .ant-table) {
+                        background: unset;
+                    }
+                    
                     :global(.added-content-table .ant-table-title) {
                         font-size: 25px;
                         color: #ff8d1c;
                         text-shadow: 1px 1px 1px #000;
+                    }
+                    
+                    :global(.added-content-table td.ant-table-column-sort) {
+                        background: unset;
                     }
                     
                     :global(.added-content-table .ant-table-thead tr th) {
@@ -126,7 +134,7 @@ export const AddedContent: React.FC = (): JSX.Element => {
                         color: #ff8d1c;
                     }
                     
-                    :global(.added-content-table .ant-pagination li > a) {
+                    :global(.added-content-table .ant-pagination li > button) {
                         background: #00000024;
                         border-color: #0000005e;
                         color: #ff8d1c99;

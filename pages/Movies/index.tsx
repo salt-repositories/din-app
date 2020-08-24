@@ -1,6 +1,7 @@
 import "reflect-metadata";
 
-import { Button, Col, Icon, Row } from "antd";
+import { PlusSquareOutlined, VideoCameraOutlined } from "@ant-design/icons/lib";
+import { Button, Col, Row } from "antd";
 import { Actions } from "easy-peasy";
 import { NextPage } from "next";
 import Head from "next/head";
@@ -16,7 +17,7 @@ import { withAuthentication } from "../../src/Domain/Authentication";
 import { Movie } from "../../src/Domain/Models/Movies";
 import { Layout, WithMenu } from "../../src/Layouts";
 import { IRootState, useStoreActions, useStoreState } from "../../src/Store";
-import { AppContext } from "../../src/Store";
+import { AppContext } from "../../src/Store/AppContext";
 
 interface IProps {
 
@@ -43,7 +44,7 @@ const MoviesPage: NextPage = () => {
             <Head>
                 <title>Movies</title>
             </Head>
-            <WithMenu crumbs={[{path: "/Movies", icon: <Icon type="video-camera"/>}]}>
+            <WithMenu crumbs={[{path: "/Movies", icon: <VideoCameraOutlined/>}]}>
                 <Col span={24}>
                     <YoutubeModal data={showYoutubeModal} setData={setShowYoutubeModal}/>
                     <Row>
@@ -81,7 +82,7 @@ const MoviesPage: NextPage = () => {
                                     <Button key="add-movie">
                                         <Link href="/Movies/Add">
                                             <a>
-                                                <Icon type="plus-square"/>
+                                                <PlusSquareOutlined/>
                                                 Add Movie
                                             </a>
                                         </Link>

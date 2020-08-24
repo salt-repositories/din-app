@@ -31,7 +31,7 @@ export const tvShowState: ITvShowState = {
                 filters,
             });
         },
-        new Filters(null, null, null, null, true, true),
+        new Filters(null, null, null, null),
     ),
     calendar: calendar<TvShowCalendar>(
         (accessToken: string, from: string, till: string) => {

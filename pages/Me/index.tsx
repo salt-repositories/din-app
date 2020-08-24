@@ -1,6 +1,6 @@
 import "reflect-metadata";
 
-import { Icon } from "antd";
+import { UserOutlined } from "@ant-design/icons/lib";
 import { NextPage } from "next";
 import Head from "next/head";
 import React from "react";
@@ -8,7 +8,7 @@ import { AddedContent } from "../../src/Components/Me/AddedContent/AddedContent"
 import { UserInfo } from "../../src/Components/Me/UserInfo/UserInfo";
 import { withAuthentication } from "../../src/Domain/Authentication";
 import { Layout, WithMenu } from "../../src/Layouts";
-import { AppContext } from "../../src/Store";
+import { AppContext } from "../../src/Store/AppContext";
 
 interface IProps {
 }
@@ -18,7 +18,7 @@ const MePage: NextPage<IProps> = (props: IProps) => (
         <Head>
             <title>Me</title>
         </Head>
-        <WithMenu crumbs={[{path: "/Me", icon: <Icon type="user"/>}]}>
+        <WithMenu crumbs={[{path: "/Me", icon: <UserOutlined/>}]}>
             <UserInfo/>
             <AddedContent/>
         </WithMenu>

@@ -23,7 +23,6 @@ export const FooterBar: React.FC<IProps> = (props: IProps): JSX.Element => {
                         margin-left: ${currentWidth > MINIMAL_WIDTH ? "-20px" : ""};
                         width: 100%;
                         height: 5em;
-                        background-color: #555;
                         box-shadow: 0 -3px 6px 0 rgba(0,0,0,.15);
                     }
                     
@@ -37,7 +36,7 @@ export const FooterBar: React.FC<IProps> = (props: IProps): JSX.Element => {
                         color: #ff8d1c;
                     }
                     
-                    .footer-bar :global(button a i) {
+                    .footer-bar :global(button a span) {
                         margin-right: .8em;
                     }
                 `}

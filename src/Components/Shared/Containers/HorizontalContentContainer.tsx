@@ -19,19 +19,19 @@ export const HorizontalContentContainer: React.FC<IProps> = (props: IProps): JSX
                 <Select
                     defaultValue={select}
                     className="select"
-                    onChange={setSelect}
+                    onChange={(value) => setSelect(value)}
                 >
                     {props.selectOptions.map((option: [string, ReactNode]) => (
-                        <Select.Option value={option[0]}>{option[0]}</Select.Option>
+                        <Select.Option key={option[0]} value={option[0]}>{option[0]}</Select.Option>
                     ))}
                 </Select>
             </Row>
             <div className="horizontal-container">
                 <Row className="row">
                     {props.selectOptions.map((option) => (
-                        <>
+                        <div key={option[0]}>
                             {select === option[0] && option[1]}
-                        </>
+                        </div>
                     ))}
                 </Row>
             </div>
@@ -39,6 +39,7 @@ export const HorizontalContentContainer: React.FC<IProps> = (props: IProps): JSX
                 {`
                     :global(.horizontal-content-container) {
                         height: 100%;
+                        width: 100%;
                     }
                   
                     :global(.horizontal-content-container .card-title) {
@@ -50,25 +51,29 @@ export const HorizontalContentContainer: React.FC<IProps> = (props: IProps): JSX
                     }
                     
                     :global(.horizontal-content-container .select) {
-                        float: left;
-                        margin-top: 0.15em;
-                        font-size: 25px;
+                        margin-top: 10px
+                    }
+                    
+                    :global(.horizontal-content-container .select .ant-select-selector) {
+                        height: 2em;
+                        background: unset;
+                        border: unset;
+                    }
+                    
+                    :global(.horizontal-content-container .ant-select:not(.ant-select-borderless).ant-select-focused .ant-select-selector) {
+                        border: unset;
+                        box-shadow: unset;
+                    }
+                    
+                    :global(.horizontal-content-container .select .ant-select-arrow) {
+                        display: none;
+                    }
+                    
+                    :global(.horizontal-content-container .select .ant-select-selection-item) {
                         color: #ff8d1c;
                         text-shadow: 1px 1px 1px #000;
-                    }
-                    
-                    :global(.horizontal-content-container .select .ant-select-selection:focus, .ant-select-selection:active) {
-                        box-shadow: none;
-                    }
-                    
-                    :global(.horizontal-content-container .select .ant-select-selection) {
-                        background: transparent;
-                        border: transparent;
-                    }
-                     
-                    :global(.horizontal-content-container .select .ant-select-arrow) {
-                       color: #ff8d1c;
-                       right: 5px;
+                        line-height: 20px;
+                        font-size: 25px;
                     }
                     
                     :global(.horizontal-container) {
