@@ -1,4 +1,5 @@
-import { Card, Icon } from "antd";
+import { YoutubeOutlined } from "@ant-design/icons/lib";
+import { Card } from "antd";
 import React, { ReactNode } from "react";
 import { Content, Search } from "../../../Domain/Models/Abstractions";
 import { Movie } from "../../../Domain/Models/Movies";
@@ -23,8 +24,8 @@ export const ContentCard: React.FC<IProps> = (props: IProps): JSX.Element => {
                 cover={
                     <Poster
                         item={props.item}
-                        altMessage={props.message ?? "This movies has not been downloaded"}
-                        altOnClick={() => props.history && props.setShowHistoryModal && (props.item as Content).id && props.setShowHistoryModal([true, (props.item as Content).id])}
+                        altMessage={props.message}
+                        altOnClick={() => props.history && props.setShowHistoryModal && (props.item as Content).id && props.setShowHistoryModal([true, (props.item as Content).systemId])}
                     />
                 }
             >
@@ -41,7 +42,7 @@ export const ContentCard: React.FC<IProps> = (props: IProps): JSX.Element => {
                                 className="trailer-link"
                                 onClick={() => props.openYoutubeModal && props.openYoutubeModal((props.item as Movie).youtubeTrailerId)}
                             >
-                                <Icon type="youtube" className="logo"/>
+                                <YoutubeOutlined className="logo"/>
                                 Trailer
                             </span>
                         )}
@@ -86,7 +87,7 @@ export const ContentCard: React.FC<IProps> = (props: IProps): JSX.Element => {
                         height: 185px;
                     }
                     
-                    :global(.container-item .plex:hover) {
+                    :global(.container-item:hover) {
                         cursor: pointer
                     }
                     

@@ -1,4 +1,5 @@
-import { Avatar, Card, Col, Descriptions, Icon, Row, Skeleton, Statistic } from "antd";
+import { DesktopOutlined, VideoCameraOutlined } from "@ant-design/icons/lib";
+import { Avatar, Card, Col, Descriptions, Row, Skeleton, Statistic } from "antd";
 import { Actions } from "easy-peasy";
 import React, { useEffect, useState } from "react";
 import { IRootState, useStoreActions, useStoreState } from "../../../Store";
@@ -72,7 +73,7 @@ export const UserInfo: React.FC = (): JSX.Element => {
                                     value={amountOfMovies}
                                     precision={0}
                                     valueStyle={{ color: "#ff8d1c99" }}
-                                    prefix={<Icon type="video-camera" />}
+                                    prefix={<VideoCameraOutlined/>}
                                 />
                             </Card>
                         </Col>
@@ -83,7 +84,7 @@ export const UserInfo: React.FC = (): JSX.Element => {
                                     value={amountOfTvShows}
                                     precision={0}
                                     valueStyle={{ color: "#ff8d1c99" }}
-                                    prefix={<Icon type="desktop" />}
+                                    prefix={<DesktopOutlined/>}
                                 />
                             </Card>
                         </Col>

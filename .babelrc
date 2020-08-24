@@ -5,7 +5,8 @@
   "plugins": [
     ["@babel/plugin-proposal-decorators", { "legacy": true }],
     ["@babel/plugin-proposal-class-properties", { "loose" : true }],
-    ["import", { "libraryName": "antd", "libraryDirectory": "lib","style": true }]
+    ["import", { "libraryName": "antd", "libraryDirectory": "es","style": "index.css" }],
+    ["import", { "libraryName": "@ant-design/icons", "libraryDirectory": "es/icons", "camel2DashComponentName": false }, "@ant-design/icons"]
   ],
   "ignore": ["node_modules"]
 }

@@ -1,4 +1,5 @@
-import { Badge, Button, Icon, Switch } from "antd";
+import { KeyOutlined, UserOutlined } from "@ant-design/icons/lib";
+import { Badge, Button, Switch } from "antd";
 import { Actions } from "easy-peasy";
 import { Formik } from "formik";
 import { Form, Input } from "formik-antd";
@@ -42,7 +43,11 @@ export const LoginForm = (props: IProps) => {
                     }}
                 >
                     {({ handleSubmit, values, setFieldValue }) => (
-                        <Form noValidate onSubmit={handleSubmit} className="login-form">
+                        <Form
+                            onSubmitCapture={handleSubmit}
+                            className="login-form"
+                            layout="vertical"
+                        >
                             <div className="title-wrapper">
                                 <Badge className="title">DIN</Badge>
                             </div>
@@ -55,7 +60,7 @@ export const LoginForm = (props: IProps) => {
                                     name="username"
                                     type="text"
                                     placeholder="Type your username or email"
-                                    prefix={<Icon className="icon" type="user"/>}
+                                    prefix={<UserOutlined className="icon"/>}
                                 />
                             </Form.Item>
                             <Form.Item
@@ -66,7 +71,7 @@ export const LoginForm = (props: IProps) => {
                                 <Input.Password
                                     name="password"
                                     placeholder="Type your password"
-                                    prefix={<Icon type="key"/>}
+                                    prefix={<KeyOutlined/>}
 
                                 />
                             </Form.Item>
@@ -115,6 +120,7 @@ export const LoginForm = (props: IProps) => {
                         background: white;
                         opacity: .9;
                         width: ${windowWidth < MINIMAL_WIDTH ? "300px" : "500px"};
+                        z-index: 2;
                     }
 
                     :global(.login-form) {
@@ -148,7 +154,7 @@ export const LoginForm = (props: IProps) => {
                         font-size: 14px;
                         color: #3d495e;
                         line-height: 1.5;
-                        padding-left: 7px;
+                        padding-left: 10px;
                     }
 
                     :global(.input-wrapper input) {
@@ -157,7 +163,7 @@ export const LoginForm = (props: IProps) => {
                         line-height: 1.2;
                         display: block;
                         width: 100%;
-                        height: 55px;
+                        height: 45px;
                         background: 0 0;
                         padding: 0 7px 0 43px;
                         outline: none;

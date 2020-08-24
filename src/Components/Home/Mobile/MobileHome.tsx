@@ -1,4 +1,5 @@
-import { Button, Icon, Row } from "antd";
+import { DesktopOutlined, LogoutOutlined, UserOutlined, VideoCameraOutlined } from "@ant-design/icons/lib";
+import { Button, Row } from "antd";
 import { Actions } from "easy-peasy";
 import Link from "next/link";
 import React from "react";
@@ -11,7 +12,7 @@ export const MobileHome: React.FC = () => {
         <>
             <Row>
                 <a onClick={() => logout()} className="logout-span">
-                    <Icon type="logout"/> Logout
+                    <LogoutOutlined/> Logout
                 </a>
             </Row>
             <Row>
@@ -19,7 +20,7 @@ export const MobileHome: React.FC = () => {
                     <Button>
                         <Link href="/Movies/Add">
                             <a>
-                                <Icon type="video-camera"/><br/>
+                                <VideoCameraOutlined/><br/>
                                 Add Movies
                             </a>
                         </Link>
@@ -29,7 +30,7 @@ export const MobileHome: React.FC = () => {
                     <Button>
                         <Link href="/TvShows/Add">
                             <a>
-                                <Icon type="desktop"/><br/>
+                                <DesktopOutlined/><br/>
                                 Add Tv Shows
                             </a>
                         </Link>
@@ -39,7 +40,7 @@ export const MobileHome: React.FC = () => {
                     <Button>
                         <Link href="/Me">
                             <a>
-                                <Icon type="user"/><br/>
+                                <UserOutlined/><br/>
                                 Me
                             </a>
                         </Link>
@@ -67,7 +68,7 @@ export const MobileHome: React.FC = () => {
                         width: 10em;
                         height: 10em;
                         border-radius: 50%;
-                        background: #575757;
+                        background: transparent;
                         color: #fff;
                         border-color: #ff8d1c;
                     }

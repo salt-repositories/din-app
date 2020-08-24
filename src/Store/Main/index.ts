@@ -2,8 +2,6 @@ import { action, Action, Actions, thunk, Thunk } from "easy-peasy";
 import { BackgroundImage } from "../../Domain/Models";
 import { HttpClient } from "../../Domain/Utils";
 
-export * from "./providers";
-
 export interface IBackgroundState {
     items: BackgroundImage[];
     getBackgroundImages: Thunk<IBackgroundState>;

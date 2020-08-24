@@ -3,7 +3,9 @@ import moment, { Moment } from "moment";
 import { Rating } from "../Content/Rating";
 
 export abstract class Content {
-    public id: number;
+    public id: string;
+    @Expose({ name: "system_id" })
+    public systemId: number;
     @Expose({ name: "imdb_id" })
     public imdbId: string;
     public title: string;

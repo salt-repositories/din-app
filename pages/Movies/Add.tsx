@@ -1,6 +1,7 @@
 import "reflect-metadata";
 
-import { Col, Icon } from "antd";
+import { VideoCameraOutlined } from "@ant-design/icons/lib";
+import { Col } from "antd";
 import { Actions } from "easy-peasy";
 import { NextPage } from "next";
 import Head from "next/head";
@@ -25,7 +26,7 @@ const AddMoviePage: NextPage = () => {
                 <title>Add Movie</title>
             </Head>
             <WithMenu
-                crumbs={[{path: "/Movies", icon: <Icon type="video-camera"/>}, {path: "/Movies/Add", name: "Add"}]}>
+                crumbs={[{path: "/Movies", icon: <VideoCameraOutlined/>}, {path: "/Movies/Add", name: "Add"}]}>
                 <Col span={24}>
                     <SearchContent
                         searchMethod={search}

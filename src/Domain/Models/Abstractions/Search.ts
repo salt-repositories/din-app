@@ -1,4 +1,5 @@
-import { Expose } from "class-transformer";
+import { Expose, Transform } from "class-transformer";
+import { Rating } from "../Content/Rating";
 
 export abstract class Search {
     @Expose({ name: "title" })

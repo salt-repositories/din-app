@@ -1,4 +1,5 @@
-import { Icon, Modal, Timeline } from "antd";
+import { CloudDownloadOutlined, VideoCameraOutlined } from "@ant-design/icons/lib";
+import { Modal, Timeline } from "antd";
 import { Actions } from "easy-peasy";
 import moment from "moment";
 import React, { useEffect } from "react";
@@ -59,10 +60,10 @@ export const HistoryModal = (props: IProps): JSX.Element => {
                 {getHistoryLoading ? (
                     <Spinner/>
                 ) : (
-                    <Timeline pending={pending()} pendingDot={<Icon type="cloud-download" />}>
+                    <Timeline pending={pending()} pendingDot={<CloudDownloadOutlined/>}>
                         {history.length > 0 ? (
                             history.map((item) => (
-                                <Timeline.Item>
+                                <Timeline.Item key={item.id}>
                                     <p>{`${parseEvent(item)} - ${item.date.calendar(null, {sameElse: "DD/MM/YYYY"})}`}</p>
                                     {item.eventType === "grabbed" && (
                                         <p
@@ -72,7 +73,7 @@ export const HistoryModal = (props: IProps): JSX.Element => {
                                                 left: "15px",
                                             }}
                                         >
-                                            <Icon type="video-camera" style={{marginRight: "10px"}}/>
+                                            <VideoCameraOutlined style={{marginRight: "10px"}}/>
                                             {item.sourceTitle}
                                         </p>
                                     )}

@@ -1,7 +1,7 @@
 import { Breadcrumb } from "antd";
 import { useStoreState } from "easy-peasy";
 import Link from "next/link";
-import { default as React, ReactNode } from "react";
+import { default as React } from "react";
 import { Scrollbars } from 'react-custom-scrollbars';
 import { MINIMAL_WIDTH } from "../Components/Shared/consts";
 import { SideMenu } from "../Components/Shared/Menus";
@@ -10,7 +10,7 @@ import { IRootState } from "../Store";
 interface ICrumb {
     path: string;
     name?: string;
-    icon?: ReactNode;
+    icon?: React.ReactNode;
 }
 
 interface IProps {
@@ -45,7 +45,7 @@ export const WithMenu: React.FC<IProps> = (props: IProps) => {
                 {props.children}
             </Scrollbars>
             <style jsx>
-                {`
+            {`
                 .header {
                     position: fixed;
                     top: 0;
@@ -54,15 +54,28 @@ export const WithMenu: React.FC<IProps> = (props: IProps) => {
                     width: 100%;
                     height: 45px;
                 }
-                
-                 :global(.breadcrumb) {
+            
+                div.header :global(.breadcrumb) {
                     position: fixed;
                     top: 12px;
                     left: ${currentWidth > MINIMAL_WIDTH ? "120px" : "20px"};
-                 }
-                 
+                }
+                
+                .header :global(.breadcrumb > span > span) {
+                    color: #fff;
+                }
+                
+                .header :global(.breadcrumb > span > span > a) {
+                    color: #fff;
+                }
+                
+                .header :global(.breadcrumb > span > span > a:hover) {
+                    color: #ff8d1c;
+                }
+             
                 :global(.main-content) {
-                    margin: ${currentWidth > MINIMAL_WIDTH ? "50px 20px 20px 120px" : "45px 0"};
+                    top: 50px;
+                    margin: ${currentWidth > MINIMAL_WIDTH ? "0 20px 20px 120px" : "45px 0"};
                     max-height: 100% !important;
                     width: unset !important;
                 }

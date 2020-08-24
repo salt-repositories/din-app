@@ -1,6 +1,7 @@
 import "reflect-metadata";
 
-import { Col, Icon } from "antd";
+import { DesktopOutlined } from "@ant-design/icons/lib";
+import { Col } from "antd";
 import { Actions } from "easy-peasy";
 import { NextPage } from "next";
 import Head from "next/head";
@@ -25,7 +26,7 @@ const AddTvShowPage: NextPage = () => {
                 <title>Add TvShow</title>
             </Head>
             <WithMenu
-                crumbs={[{path: "/TvShows", icon: <Icon type="desktop"/>}, {path: "/TvShows/Add", name: "Add"}]}>
+                crumbs={[{path: "/TvShows", icon: <DesktopOutlined/>}, {path: "/TvShows/Add", name: "Add"}]}>
                 <Col span={24}>
                     <SearchContent
                         searchMethod={search}

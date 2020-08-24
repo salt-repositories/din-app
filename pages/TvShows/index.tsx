@@ -1,6 +1,7 @@
 import "reflect-metadata";
 
-import { Button, Col, Icon, Row } from "antd";
+import { DesktopOutlined, PlusSquareOutlined } from "@ant-design/icons/lib";
+import { Button, Col, Row } from "antd";
 import { Actions } from "easy-peasy";
 import { NextPage } from "next";
 import Head from "next/head";
@@ -18,7 +19,6 @@ import { IRootState, useStoreActions, useStoreState } from "../../src/Store";
 import { AppContext } from "../../src/Store/AppContext";
 
 interface IProps {
-
 }
 
 const TvShowsPage: NextPage = () => {
@@ -36,7 +36,7 @@ const TvShowsPage: NextPage = () => {
             <Head>
                 <title>Tv Shows</title>
             </Head>
-            <WithMenu crumbs={[{path: "/TvShows", icon: <Icon type="desktop"/>}]}>
+            <WithMenu crumbs={[{path: "/TvShows", icon: <DesktopOutlined/>}]}>
                 <Col span={24}>
                     <Row>
                         <HeaderFilters
@@ -74,7 +74,7 @@ const TvShowsPage: NextPage = () => {
                                     <Button key="add-tvshow">
                                         <Link href="/TvShows/Add">
                                             <a>
-                                                <Icon type="plus-square"/>
+                                                <PlusSquareOutlined/>
                                                 Add Tv Show
                                             </a>
                                         </Link>

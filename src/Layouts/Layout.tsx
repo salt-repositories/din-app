@@ -46,16 +46,52 @@ export const Layout: React.FC<IProps> = (props: IProps) => {
                 <link rel="icon" href="/static/favicon.ico" type="image/x-icon"/>
                 <title>DIN</title>
             </Head>
-            {props.children}
+            <div className="fade"/>
+            <div className="grain"/>
+                {props.children}
             <style jsx global>
                 {`
-                        body {
-                            position: relative;
-                            font-family: 'Roboto', sans-serif;
-                            background-color: #000000a8;
-                            overflow: hidden;
-                        }
-                    `}
+                    body {
+                        position: relative;
+                        font-family: 'Roboto', sans-serif;
+                        background: #000000a8;
+                        overflow: hidden;
+                    }
+                    
+                    .fade {
+                        position: absolute;
+                        background-image: url("/static/Images/background_fade.png");
+                        width: 100%;
+                        height: 100%;
+                        background-size: cover;
+                        background-position: center center;
+                        background-repeat: no-repeat;
+                    }
+                    
+                    .grain {
+                        position: absolute;
+                        width: 100%;
+                        height: 100%;
+                        background: url("static/Images/background_grain.png") repeat scroll 0% 0%;
+                    }
+                                
+                    :global(.ant-input-prefix) {
+                        margin-right: 10px;
+                    }
+                    
+                    :global(.input-wrapper .ant-input-affix-wrapper) {
+                        border: none !important;
+                        box-shadow: none;
+                    }
+                    
+                    :global(.input-wrapper .ant-input-affix-wrapper-focused) {
+                        border: none;
+                    }
+                    
+                    :global(.input-wrapper .ant-form-item-has-error .ant-input-affix-wrapper-focused) {
+                        border: none;
+                    }
+                `}
             </style>
         </div>
     );

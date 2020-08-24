@@ -38,7 +38,7 @@ export const HorizontalCardContainer: React.FC<IProps<Content>> = <T extends Con
                             key={item.id}
                             item={item}
                             openYoutubeModal={openYoutubeModal}
-                            message="Show history"
+                            message={props.message}
                             history={props.history}
                             setShowHistoryModal={setShowHistoryModal}
                         />

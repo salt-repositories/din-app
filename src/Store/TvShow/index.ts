@@ -31,7 +31,7 @@ export const tvShowState: ITvShowState = {
                 filters,
             });
         },
-        new Filters(null, null, null, null, true, true),
+        new Filters(null, null, null, null),
     ),
     calendar: calendar<TvShowCalendar>(
         (accessToken: string, from: string, till: string) => {
@@ -81,14 +81,13 @@ export const tvShowState: ITvShowState = {
         const response = await HttpClient.post("/v1/tvshows", {
             type: TvShow,
             accessToken: getStoreState().authentication.token.accessToken,
-            body: serialize({
-                tvdb_id: payload.tvdbId,
-                title: payload.title ?? payload.originalTitle,
-                year: payload.firstAirDate.year(),
-                season_numbers: payload.seasons.map((season) => season.seasonNumber),
-                poster_path: payload.posterPath,
-            })
-        });
+        }, serialize({
+            tvdb_id: payload.tvdbId,
+            title: payload.title ?? payload.originalTitle,
+            year: payload.firstAirDate.year(),
+            season_numbers: payload.seasons.map((season) => season.seasonNumber),
+            poster_path: payload.posterPath,
+        }));
 
         actions.setAddToSystemLoading(false);
 

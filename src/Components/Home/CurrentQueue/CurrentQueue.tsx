@@ -1,4 +1,5 @@
-import { Col, Icon, Progress, Row } from "antd";
+import { DesktopOutlined, PauseCircleOutlined, PlayCircleOutlined, VideoCameraOutlined } from "@ant-design/icons/lib";
+import { Col, Progress, Row } from "antd";
 import { Actions } from "easy-peasy";
 import React, { useEffect } from "react";
 import { Queue } from "../../../Domain/Models";
@@ -26,13 +27,13 @@ const QueueRow = (props: IQueueRowProps): JSX.Element => {
             <Col xs={7} offset={1} className="title">
                 {props.item.tvShow && (
                     <>
-                        <Icon type="desktop"/>
+                        <DesktopOutlined/>
                         {` ${props.item.tvShow.title}`}
                     </>
                 )}
                 {props.item.movie && (
                     <>
-                        <Icon type="video-camera"/>
+                        <VideoCameraOutlined/>
                         {` ${props.item.movie.title} (${props.item.movie.year})`}
                     </>
                 )}
@@ -40,8 +41,8 @@ const QueueRow = (props: IQueueRowProps): JSX.Element => {
             <Col xs={1} offset={1}>
                 {
                     props.item.status === "Paused"
-                        ? <Icon type="pause-circle"/>
-                        : <Icon type="play-circle"/>
+                        ? <PauseCircleOutlined />
+                        : <PlayCircleOutlined />
                 }
             </Col>
             <Col xs={2}>{getSize(props.item)}</Col>
@@ -119,7 +120,7 @@ export const CurrentQueue = (): JSX.Element => {
                         scrollbar-width: none;
                         white-space: nowrap;
                         overflow-y: auto;
-                        max-height: 95%;
+                        max-height: 90%;
                     }
                     
                     :global(.queue-item) {

@@ -1,4 +1,5 @@
-import { Icon, Tag, Tooltip } from "antd";
+import { DesktopOutlined, VideoCameraOutlined } from "@ant-design/icons/lib";
+import { Tag, Tooltip } from "antd";
 import { ColumnProps } from "antd/es/table";
 import { Moment } from "moment";
 import React from "react";
@@ -14,17 +15,17 @@ export const columns: ColumnProps<IAddedContentRow>[] = [
             {text: "Tv Shows", value: "TvShow"},
         ],
         filterMultiple: false,
-        onFilter: ((value, record) => record.type.includes(value)),
+        onFilter: ((value, record) => record.type.includes(value as string)),
         render: (value: string) => (
             <>
                 {value === "Movie" &&
                 <Tooltip title="Movie">
-                    <Icon type="video-camera" style={{color: "#ff8d1c"}}/>
+                    <VideoCameraOutlined style={{color: "#ff8d1c"}}/>
                 </Tooltip>
                 }
                 {value === "TvShow" &&
                 <Tooltip title="Tv Show">
-                    <Icon type="desktop" style={{color: "#ff8d1c"}}/>
+                    <DesktopOutlined style={{color: "#ff8d1c"}}/>
                 </Tooltip>
                 }
             </>
@@ -55,7 +56,7 @@ export const columns: ColumnProps<IAddedContentRow>[] = [
             {text: "Done", value: "Done"}
         ],
         filterMultiple: false,
-        onFilter: ((value, record) => record.status.includes(value)),
+        onFilter: ((value, record) => record.status.includes(value as string)),
         render: (value: string) => (
             <>
                 {value === "NotAvailable" && <Tag color="blue">Not Available</Tag>}

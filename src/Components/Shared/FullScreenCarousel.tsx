@@ -43,7 +43,7 @@ const FullScreenCarousel = (props: IProps): JSX.Element => {
                         position: fixed;
                         top: 0;
                         overflow: hidden;
-                        z-index: -1;
+                        z-index: 1;
                     }
 
                     .full-screen-carousel {

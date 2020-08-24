@@ -1,4 +1,4 @@
-import { Icon } from "antd";
+import Icon from '@ant-design/icons/es/components/Icon';
 import React from "react";
 
 const PlexSvg = () => (

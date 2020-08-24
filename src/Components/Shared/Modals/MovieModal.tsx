@@ -1,4 +1,6 @@
-import { Button, Col, Divider, Icon, Modal, Row, Statistic } from "antd";
+import { YoutubeOutlined } from "@ant-design/icons/lib";
+import { Button, Col, Divider, Modal, Row, Statistic } from "antd";
+import moment from "moment";
 import { default as React, useState } from "react";
 import Scrollbars from "react-custom-scrollbars";
 import { Movie } from "../../../Domain/Models/Movies";
@@ -72,13 +74,13 @@ export const MovieModal: React.FC<IProps> = (props: IProps) => {
                                         <Row>
                                             <span className="header">In cinema:</span>
                                         </Row>
-                                        <span>{props.movie.inCinemas.format("DD-MM-YYYY")}</span>
+                                        <span>{moment(props.movie.inCinemas).format("DD-MM-YYYY")}</span>
                                     </Col>
                                     <Col span={8}>
                                         <Row>
                                             <span className="header">Physical release:</span>
                                         </Row>
-                                        <span>{props.movie.physicalRelease.format("DD-MM-YYYY")}</span>
+                                        <span>{moment(props.movie.physicalRelease).format("DD-MM-YYYY")}</span>
                                     </Col>
                                 </Row>
                                 <Divider/>
@@ -102,7 +104,7 @@ export const MovieModal: React.FC<IProps> = (props: IProps) => {
                                     span={8}
                                     onClick={() => openYoutubeModal(props.movie.youtubeTrailerId)}
                                 >
-                                    <Icon type="youtube" className="youtube-icon"/>
+                                    <YoutubeOutlined className="youtube-icon"/>
                                     <span>Trailer</span>
                                 </Col>
                                 {props.movie.plexUrl && (
@@ -134,7 +136,7 @@ export const MovieModal: React.FC<IProps> = (props: IProps) => {
                     }
                     
                     :global(.movie-modal .ant-modal-content) {
-                        background: #414141f0;
+                        background: #313131e0;
                         border: none;
                     }
                     

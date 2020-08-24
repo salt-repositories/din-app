@@ -1,4 +1,11 @@
-import { Icon, Menu } from "antd";
+import {
+    DesktopOutlined,
+    HomeOutlined,
+    LogoutOutlined,
+    UserOutlined,
+    VideoCameraOutlined
+} from "@ant-design/icons/lib";
+import { Menu } from "antd";
 import { Actions } from "easy-peasy";
 import Link from "next/link";
 import React from "react";
@@ -18,7 +25,7 @@ export const SideMenu = (): JSX.Element => {
                 <Menu.Item key="Home" className="menu-item">
                     <Link href="/Home">
                         <a>
-                            <Icon type="home" className="icon"/>
+                            <HomeOutlined className="icon"/>
                             Home
                         </a>
                     </Link>
@@ -26,7 +33,7 @@ export const SideMenu = (): JSX.Element => {
                 <Menu.Item key="Me" className="menu-item">
                     <Link href="/Me">
                         <a>
-                            <Icon type="user" className="icon"/>
+                            <UserOutlined className="icon"/>
                             Me
                         </a>
                     </Link>
@@ -34,7 +41,7 @@ export const SideMenu = (): JSX.Element => {
                 <Menu.Item key="Movies" className="menu-item">
                     <Link href="/Movies">
                         <a>
-                            <Icon type="video-camera" className="icon"/>
+                            <VideoCameraOutlined className="icon"/>
                             Movies
                         </a>
                     </Link>
@@ -42,7 +49,7 @@ export const SideMenu = (): JSX.Element => {
                 <Menu.Item key="TvShows" className="menu-item">
                     <Link href="/TvShows">
                         <a>
-                            <Icon type="desktop" className="icon"/>
+                            <DesktopOutlined className="icon"/>
                             Tv Shows
                         </a>
                     </Link>
@@ -53,7 +60,7 @@ export const SideMenu = (): JSX.Element => {
                     onClick={() => logout()}
                 >
                     <span>
-                        <Icon type="logout" className="icon"/>
+                        <LogoutOutlined className="icon"/>
                         Logout
                     </span>
                 </Menu.Item>

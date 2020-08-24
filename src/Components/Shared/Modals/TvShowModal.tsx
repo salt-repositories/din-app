@@ -8,7 +8,7 @@ import { Spinner } from "../Spinner";
 
 interface IProps {
     visible: boolean;
-    setVisible: (value: [boolean, TvShowCalendar]) => void;
+    setVisible: (value: [boolean, object]) => void;
     tvShow?: TvShow;
     tvShowCalendar?: TvShowCalendar;
 }
@@ -136,7 +136,7 @@ export const TvShowModal: React.FC<IProps> = (props: IProps) => {
                     }
                     
                     :global(.movie-modal .ant-modal-content) {
-                        background: #414141f0;
+                        background: #313131e0;
                         border: none;
                     }
                     
