@@ -3,4 +3,4 @@ export * from "./Statistics";
 export * from "./TvShow";
 export * from "./TvShowQueryResult";
 export * from "./TvShowSearch";
-export * from "./TvShowCalendar";
+export * from "./Episode";

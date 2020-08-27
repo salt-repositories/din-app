@@ -1,7 +1,7 @@
 import { Button, Col, Divider, Modal, Row, Statistic } from "antd";
 import { default as React } from "react";
 import Scrollbars from "react-custom-scrollbars";
-import { TvShow, TvShowCalendar } from "../../../Domain/Models/TvShow";
+import { Episode, TvShow } from "../../../Domain/Models/TvShow";
 import { ImdbIcon, PlexIcon } from "../../Home/RecentlyAdded/Icons";
 import { Poster } from "../Cards/Poster";
 import { Spinner } from "../Spinner";
@@ -10,11 +10,11 @@ interface IProps {
     visible: boolean;
     setVisible: (value: [boolean, object]) => void;
     tvShow?: TvShow;
-    tvShowCalendar?: TvShowCalendar;
+    episode?: Episode;
 }
 
 export const TvShowModal: React.FC<IProps> = (props: IProps) => {
-    const tvShow = props.tvShow ?? props.tvShowCalendar?.tvShow;
+    const tvShow = props.tvShow ?? props.episode?.tvShow;
 
     return (
         <>
@@ -45,10 +45,10 @@ export const TvShowModal: React.FC<IProps> = (props: IProps) => {
                                 </Scrollbars>
                                 <span className="year">({tvShow.year})</span>
                             </Row>
-                            {props.tvShowCalendar && (
+                            {props.episode && (
                                 <Row>
                                      <span className="content-subtitle">
-                                        S{props.tvShowCalendar.seasonNumber}E{props.tvShowCalendar.episodeNumber} - {props.tvShowCalendar.title}
+                                        S{props.episode.seasonNumber}E{props.episode.episodeNumber} - {props.episode.title}
                                     </span>
                                 </Row>
                             )}
@@ -70,12 +70,12 @@ export const TvShowModal: React.FC<IProps> = (props: IProps) => {
                                         </Row>
                                         <span>{tvShow.network}</span>
                                     </Col>
-                                    {props.tvShowCalendar && (
+                                    {props.episode && (
                                         <Col span={8}>
                                             <Row>
                                                 <span className="header">Air date:</span>
                                             </Row>
-                                            <span>{props.tvShowCalendar.airDateUtc.format("DD-MM-YYYY")}</span>
+                                            <span>{props.episode.airDate.format("DD-MM-YYYY")}</span>
                                         </Col>
                                     )}
                                     <Col span={8}>
@@ -90,8 +90,8 @@ export const TvShowModal: React.FC<IProps> = (props: IProps) => {
                                     <span className="overview-title">Overview</span>
                                     <p className="overview-body">
                                         {
-                                            props.tvShowCalendar && props.tvShowCalendar.overview
-                                                ? props.tvShowCalendar.overview
+                                            props.episode && props.episode.overview
+                                                ? props.episode.overview
                                                 : tvShow.overview
                                         }
                                     </p>

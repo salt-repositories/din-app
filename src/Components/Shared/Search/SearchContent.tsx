@@ -2,6 +2,7 @@ import { Button, Checkbox, Col, Input, message, Row } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 import { Content, Search } from "../../../Domain/Models/Abstractions";
+import { ValidationError } from "../../../Domain/Models/Exeptions";
 import { MovieSearch } from "../../../Domain/Models/Movies";
 import { TvShowSearch } from "../../../Domain/Models/TvShow";
 import { IRootState, useStoreState } from "../../../Store";
@@ -47,7 +48,7 @@ export const SearchContent: React.FC<IProps<any, any>> = <TModel extends Content
         for (const item of selectedItems) {
             const result = await props.addMethod(item);
 
-            if (!Array.isArray(result)) {
+            if (!Array.isArray(result) && !(result as unknown as ValidationError).errorMessage) {
                 message.success(`${props.addedString} [${result.title}]`);
             }
         }
@@ -71,11 +72,11 @@ export const SearchContent: React.FC<IProps<any, any>> = <TModel extends Content
                 {props.searchLoading ? (
                     <Spinner/>
                 ) : (
-                    props.results.searchResults.map((result) => {
+                    props.results.searchResults.map((result, index) => {
                         const added = props.results.current.find((item) => item.title === result.title) !== undefined;
                         return (
                             <ContentCard
-                                key={result.title}
+                                key={`${result.title}-${result.tmdbId}-${index}`}
                                 message="none"
                                 item={result}
                                 info={
@@ -114,6 +115,7 @@ export const SearchContent: React.FC<IProps<any, any>> = <TModel extends Content
                     buttons={[
                         (
                             <Button
+                                key="add-content"
                                 disabled={selectedItems.length <= 0}
                                 loading={props.addLoading}
                                 onClick={() => addItemsToSystem()}

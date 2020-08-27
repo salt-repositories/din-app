@@ -5,7 +5,7 @@ import moment, { Moment } from "moment";
 import { default as React, useEffect, useState } from "react";
 import { Scrollbars } from "react-custom-scrollbars";
 import { Movie } from "../../../Domain/Models/Movies";
-import { TvShowCalendar } from "../../../Domain/Models/TvShow";
+import { Episode } from "../../../Domain/Models/TvShow";
 import { IRootState, useStoreActions, useStoreState } from "../../../Store";
 import { MovieModal, TvShowModal } from "../../Shared/Modals";
 
@@ -29,7 +29,7 @@ export const DownloadCalendar: React.FC = (): JSX.Element => {
         getTvShowCalendarItems({ from: dateRange[0], till: dateRange[1] });
     }, [dateRange]);
 
-    const getData = (): [Moment, (Movie | TvShowCalendar)[]][] => {
+    const getData = (): [Moment, (Movie | Episode)[]][] => {
         const data = [];
 
         let currentDate = dateRange[0];
@@ -39,7 +39,7 @@ export const DownloadCalendar: React.FC = (): JSX.Element => {
                 currentDate.clone(),
                 [
                     ...movieCalendarItems.filter((movie) => movie.physicalRelease.format("DD-MM-YYYY") === currentDate.format("DD-MM-YYYY")),
-                    ...tvShowCalendarItems.filter((tvShow) => tvShow.airDateUtc.format("DD-MM-YYYY") === currentDate.format("DD-MM-YYYY"))
+                    ...tvShowCalendarItems.filter((tvShow) => tvShow.airDate.format("DD-MM-YYYY") === currentDate.format("DD-MM-YYYY"))
                 ]
             ]);
             currentDate = moment(currentDate).add(1, "day");
@@ -73,7 +73,7 @@ export const DownloadCalendar: React.FC = (): JSX.Element => {
         ]);
     };
 
-    const openItemModal = (item: Movie | TvShowCalendar): void => {
+    const openItemModal = (item: Movie | Episode): void => {
         item instanceof Movie
             ? setMovieModalVisible([true, item])
             : setTvShowModalVisible([true, item]);
@@ -89,7 +89,7 @@ export const DownloadCalendar: React.FC = (): JSX.Element => {
             <TvShowModal
                 visible={tvShowModalVisible[0]}
                 setVisible={setTvShowModalVisible}
-                tvShowCalendar={tvShowModalVisible[1] as TvShowCalendar}
+                episode={tvShowModalVisible[1] as Episode}
             />
             <div className="content-calendar-container">
                 <Row>
@@ -131,7 +131,7 @@ export const DownloadCalendar: React.FC = (): JSX.Element => {
                     </Row>
                     <Divider className="divider"/>
                     <Row>
-                        {getData().map((item: [Moment, (Movie | TvShowCalendar)[]]) => (
+                        {getData().map((item: [Moment, (Movie | Episode)[]]) => (
                             <Col span={3} className="date-card" key={item[0].unix()}>
                                 <span className={item[0].format("DD-MM-YYYY") === moment().format("DD-MM-YYYY") && "today"}>
                                     {item[0].date()}

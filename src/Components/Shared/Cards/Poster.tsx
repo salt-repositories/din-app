@@ -1,9 +1,8 @@
 import { Tooltip } from "antd";
-import { instanceOf } from "prop-types";
 import { CSSProperties, default as React, useState } from "react";
 import { Content, Search } from "../../../Domain/Models/Abstractions";
 import { Movie } from "../../../Domain/Models/Movies";
-import { TvShow, TvShowCalendar } from "../../../Domain/Models/TvShow";
+import { TvShow } from "../../../Domain/Models/TvShow";
 import { MovieModal, TvShowModal } from "../Modals";
 
 interface IProps {
@@ -29,7 +28,7 @@ export const Poster: React.FC<IProps> = (props: IProps) => {
                 setVisible={setTvShowModalVisible}
                 tvShow={tvShowModalVisible[1] as TvShow}
             />
-            {!props.altMessage || props.altMessage !== "none" ? (
+            {!props.altMessage ? (
                 <Tooltip title="View details">
                     <img
                         className="card-img plex"

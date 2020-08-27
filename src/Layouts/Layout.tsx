@@ -72,7 +72,7 @@ export const Layout: React.FC<IProps> = (props: IProps) => {
                         position: absolute;
                         width: 100%;
                         height: 100%;
-                        background: url("static/Images/background_grain.png") repeat scroll 0% 0%;
+                        background: url("/static/Images/background_grain.png") repeat scroll 0% 0%;
                     }
                                 
                     :global(.ant-input-prefix) {

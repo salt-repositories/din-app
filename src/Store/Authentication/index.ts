@@ -10,11 +10,9 @@ import { HttpClient } from "../../Domain/Utils";
 export interface IAuthenticationState {
     token: Token;
     identity: string;
-    email: string;
 
     setToken: Action<IAuthenticationState, Token>;
     setIdentity: Action<IAuthenticationState, string>;
-    setEmail: Action<IAuthenticationState, string>;
 
     getToken: Thunk<IAuthenticationState>;
 
@@ -38,7 +36,6 @@ export interface IAuthenticationState {
 export const authenticationState: IAuthenticationState = {
     token: undefined,
     identity: undefined,
-    email: undefined,
 
     setToken: action((state: IAuthenticationState, payload: Token) => {
         if (!payload) {
@@ -48,10 +45,9 @@ export const authenticationState: IAuthenticationState = {
             return;
         }
 
-        const {Identity, Email} = jwtDecode(payload.accessToken);
+        const {Identity} = jwtDecode(payload.accessToken);
         state.token = payload;
         state.identity = Identity;
-        state.email = Email;
 
         destroyCookie(globalContext, "token");
         setCookie(globalContext, "token", serialize(payload, {ignoreDecorators: true}), {
@@ -62,9 +58,6 @@ export const authenticationState: IAuthenticationState = {
     }),
     setIdentity: action((state: IAuthenticationState, payload: string) => {
         state.identity = payload;
-    }),
-    setEmail: action((state: IAuthenticationState, payload: string) => {
-        state.email = payload;
     }),
 
     getToken: thunk((actions: Actions<IAuthenticationState>, _, {getState}) => {

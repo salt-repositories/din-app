@@ -2,7 +2,7 @@ import { serialize } from "class-transformer";
 import { action, Action, Actions, thunk, Thunk } from "easy-peasy";
 import { ValidationError } from "../../Domain/Models/Exeptions";
 import { Filters, QueryParameters } from "../../Domain/Models/Querying";
-import { TvShow, TvShowCalendar, TvShowQueryResult, TvShowSearch } from "../../Domain/Models/TvShow";
+import { TvShow, Episode, TvShowQueryResult, TvShowSearch } from "../../Domain/Models/TvShow";
 import { HttpClient } from "../../Domain/Utils";
 import { IRootState } from "../index";
 import { calendar, filteredContent, ICalendar, IFilteredContent } from "../Shared";
@@ -11,7 +11,7 @@ import { ISearch, searchState } from "../Shared/search";
 
 export interface ITvShowState {
     recentlyAddedTvShows: IFilteredContent<TvShow>;
-    calendar: ICalendar<TvShowCalendar>;
+    calendar: ICalendar<Episode>;
     tvShows: IContent<TvShow>;
     search: ISearch<TvShow, TvShowSearch>;
 
@@ -33,12 +33,12 @@ export const tvShowState: ITvShowState = {
         },
         new Filters(null, null, null, null),
     ),
-    calendar: calendar<TvShowCalendar>(
+    calendar: calendar<Episode>(
         (accessToken: string, from: string, till: string) => {
             return HttpClient.get(`/v1/tvshows/calendar?from=${from}&till=${till}`, {
-                type: TvShowCalendar,
+                type: Episode,
                 accessToken,
-            }) as unknown as Promise<TvShowCalendar[]>;
+            }) as unknown as Promise<Episode[]>;
         }
     ),
     tvShows: contentState(
