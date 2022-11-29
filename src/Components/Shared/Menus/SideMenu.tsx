@@ -30,14 +30,15 @@ export const SideMenu = (): JSX.Element => {
                         </a>
                     </Link>
                 </Menu.Item>
-                <Menu.Item key="Me" className="menu-item">
-                    <Link href="/Me">
-                        <a>
-                            <UserOutlined className="icon"/>
-                            Me
-                        </a>
-                    </Link>
-                </Menu.Item>
+                {/* Not implemented */}
+                {/*<Menu.Item key="Me" className="menu-item">*/}
+                {/*    <Link href="/Me">*/}
+                {/*        <a>*/}
+                {/*            <UserOutlined className="icon"/>*/}
+                {/*            Me*/}
+                {/*        </a>*/}
+                {/*    </Link>*/}
+                {/*</Menu.Item>*/}
                 <Menu.Item key="Movies" className="menu-item">
                     <Link href="/Movies">
                         <a>

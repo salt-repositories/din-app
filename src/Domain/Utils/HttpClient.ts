@@ -32,11 +32,11 @@ export class HttpClient {
         return this.request("PATCH", path, params, body) as Promise<T | ValidationError[]>;
     }
 
-    public static delete<T>(path: string, params: IRequestParameters<T>): Promise<boolean> {
-        return this.request("DELETE", path, params) as Promise<boolean>;
+    public static delete<T>(path: string, params: IRequestParameters<T>): Promise<void> {
+        return this.request("DELETE", path, params) as Promise<void>;
     }
 
-    private static async request<T>(method: Method, path: string, params: IRequestParameters<T> = {}, body?: string): Promise<boolean | T | ValidationError[]> {
+    private static async request<T>(method: Method, path: string, params: IRequestParameters<T> = {}, body?: string): Promise<void | T | ValidationError[]> {
         try {
             let requestUrl = `${process.env.NEXT_PUBLIC_API_URL}${path}`;
 
@@ -73,7 +73,7 @@ export class HttpClient {
                     }, body);
                 }
 
-                return false;
+                return;
             }
 
             if (response.status < 200 || response.status > 299) {
@@ -86,7 +86,7 @@ export class HttpClient {
                         message.error(`Unexpected HTTP status code ${response.status}`);
                     }
 
-                    return false;
+                    return;
                 }
 
                 if (responseBody.message) {
@@ -95,19 +95,19 @@ export class HttpClient {
                     }
 
                     if (responseBody.errors) {
-                        return plainToClass(ValidationError, responseBody.errors as []);
-                    }
+                        const validationErrors = plainToClass(ValidationError, responseBody.errors as []);
 
-                    return false;
+                        if (!Array.isArray(validationErrors)) {
+                            throw new Error("Unknown error response")
+                        }
+
+                        return validationErrors;
+                    }
                 }
             }
 
-            if (method === "DELETE") {
-                return response.status === 204;
-            }
-
             if (response.status === 204) {
-                return true;
+                return;
             }
 
             return params.type

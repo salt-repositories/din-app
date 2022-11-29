@@ -36,16 +36,17 @@ export const MobileHome: React.FC = () => {
                         </Link>
                     </Button>
                 </div>
-                <div className="mobile-option">
-                    <Button>
-                        <Link href="/Me">
-                            <a>
-                                <UserOutlined/><br/>
-                                Me
-                            </a>
-                        </Link>
-                    </Button>
-                </div>
+                {/* Not Implemented */}
+                {/*<div className="mobile-option">*/}
+                {/*    <Button>*/}
+                {/*        <Link href="/Me">*/}
+                {/*            <a>*/}
+                {/*                <UserOutlined/><br/>*/}
+                {/*                Me*/}
+                {/*            </a>*/}
+                {/*        </Link>*/}
+                {/*    </Button>*/}
+                {/*</div>*/}
             </Row>
             <style jsx>
                 {`

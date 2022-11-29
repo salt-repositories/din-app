@@ -48,7 +48,7 @@ export const SearchContent: React.FC<IProps<any, any>> = <TModel extends Content
         for (const item of selectedItems) {
             const result = await props.addMethod(item);
 
-            if (!Array.isArray(result) && !(result as unknown as ValidationError).errorMessage) {
+            if (result && !Array.isArray(result) && !(result as unknown as ValidationError).errorMessage) {
                 message.success(`${props.addedString} [${result.title}]`);
             }
         }
